@@ -1,5 +1,5 @@
 
-dnl  Copyright (C) 2011 by Lorenzo Stella <lorenzo.stella77@gmail.com>
+dnl  Copyright (C) 2011 by Lorenzo Stella <lorenzo DOT stella77 AT gmail DOT com>
 
 dnl  Permission is hereby granted, free of charge, to any person obtaining a copy
 dnl  of this software and associated documentation files (the "Software"), to deal
@@ -19,42 +19,42 @@ dnl  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FRO
 dnl  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 dnl  THE SOFTWARE.
 
-AC_INIT( [PolyCEID], [0.1], [lorenzo.stella77@gmail.com] )
-#AC_CONFIG_SRCDIR( [./src/PolyCEID/PolyCEID_main.c] )
-AC_CONFIG_MACRO_DIR( [m4] )
+AC_INIT([PolyCEID],[0.1],[lorenzo DOT stella77 AT gmail DOT com])
+#AC_CONFIG_SRCDIR([./src/PolyCEID/PolyCEID_main.c])
+AC_CONFIG_MACRO_DIR([m4])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE( [-Wall -Werror foreign] )
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
-AC_ARG_ENABLE( check-symmetries, [check the symmetries] )
+AC_ARG_ENABLE([check-symmetries],AC_HELP_STRING([--enable-check-symmetries],[check the symmetries]))
 if test "${enable_check_symmetries}" == ""; then
 	enable_check_symmetries=no
 fi
 if test "${enable_check_symmetries}" == "yes"; then
-	AC_DEFINE( [__CHECK_SYMMETRIES__], 1, [set to 1 if you want to check symmetries] )	
+	AC_DEFINE([__CHECK_SYMMETRIES__],1,[set to 1 if you want to check symmetries])	
 fi
 
-AC_ARG_ENABLE( k-matrix-update, [update K_matrix] )
+AC_ARG_ENABLE([k-matrix-update],AC_HELP_STRING([--enable-k-matrix-update],[update the K_matrix]))
 if test "${enable_k_matrix_update}" == ""; then
 	enable_k_matrix_update=no
 fi
 if test "${enable_k_matrix_update}" == "yes"; then
-	AC_DEFINE( [__K_MATRIX_UPDATE__], 1, [set to 1 if you want to update the K_matrix] )	
+	AC_DEFINE([__K_MATRIX_UPDATE__],1,[set to 1 if you want to update the K_matrix])	
 fi
 
-AC_ARG_ENABLE( time-scale, [use scaled time] )
+AC_ARG_ENABLE([time-scale],AC_HELP_STRING([--enable-time-scale],[use scaled time]))
 if test "${enable_time_scale}" == ""; then
 	enable_time_scale=no
 fi
 if test "${enable_time_scale}" == "yes"; then
-	AC_DEFINE( [__TIME_SCALE__], 1, [set to 1 if you want to use scaled time] )	
+	AC_DEFINE([__TIME_SCALE__],1,[set to 1 if you want to use scaled time])	
 fi
 
-AC_ARG_ENABLE( forces_non_cons, [use non-conservative forces] )
+AC_ARG_ENABLE([forces_non_cons],AC_HELP_STRING([--enable-forces_non_cons],[use non-conservative forces]))
 if test "${enable_forces_non_cons}" == ""; then
 	enable_forces_non_cons=no
 fi
 if test "${enable_forces_non_cons}" == "yes"; then
-	AC_DEFINE( [__FORCES_NON_CONS__], 1, [set to 1 if you want to use non-conservative forces] )	
+	AC_DEFINE([__FORCES_NON_CONS__],1,[set to 1 if you want to use non-conservative forces])	
 fi
 
 AC_PROG_CC
@@ -66,8 +66,8 @@ AC_PROG_RANLIB
 ACX_BLAS 
 ACX_LAPACK 
 
-AC_CONFIG_HEADERS( [config.h] )
-AC_CONFIG_FILES( [Makefile \
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([Makefile \
                   examples/Makefile \
                   examples/example01/Makefile \
                   src/Makefile \
@@ -79,6 +79,5 @@ AC_CONFIG_FILES( [Makefile \
 		  src/PolyCEID/input/Makefile \
 		  src/PolyCEID/output/Makefile \
 		  src/PolyCEID/structures/Makefile \
-		  src/PolyCEID/utils/Makefile \
-		  ] )
+		  src/PolyCEID/utils/Makefile])
 AC_OUTPUT
