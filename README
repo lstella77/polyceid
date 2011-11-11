@@ -1,0 +1,13 @@
+
+  Basic Install:
+
+    autoreconf -i
+    ./configure
+    make
+
+  The executable PolyCEID will be found in src/PolyCEID.
+
+  Few examples can be found in examples.
+
+  Better support will be included asap
+

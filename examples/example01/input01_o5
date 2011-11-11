@@ -1,0 +1,36 @@
+output_label                  { run01_o5 }
+
+relaxation               
+
+no_spin                  
+
+no_spin_flip             
+
+normal_mode_expansion    
+
+N_atoms                       { 4 }
+
+N_levels_single               { 4 }
+
+N_electrons                   { 4 } 
+
+N_electrons_CAS               { 4 } 
+
+N_coor_red                    { 1 } 
+
+relevant_modes                { 2 }
+
+CEID_order                    { 5 }
+
+dt                            { 0.2e-2 }
+
+time_length                   { 0.7e1 }
+
+skip_write                    { 50 }
+
+FILE                          initial_condition_atoms
+
+FILE                          initial_condition_electrons
+
+FILE                          hamiltonian
+

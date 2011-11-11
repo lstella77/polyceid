@@ -1,0 +1,16 @@
+
+  4-site SSH chain, see also L.Stella et al. J. Chem. Phys. 134, 194105 (2011)
+
+  CEID order 0 run:
+
+    ../../src/PolyCEID/PolyCEID input01_o0 >& output01_o0
+
+  CEID order 5 run
+
+    ../../src/PolyCEID/PolyCEID input01_o5 >& output01_o5
+
+  To visualise the effect of resonant electron-ion coupling, open gnuplot and
+  type:
+
+  p './positions_run01_o0.dat' u 1:($4-$3) t 'CEID 0' w l lt 1, './positions_run01_o5.dat' u 1:($4-$3) t 'CEID 5' w l lt 3
+
