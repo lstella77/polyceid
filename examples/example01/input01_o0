@@ -34,3 +34,5 @@ FILE                          initial_condition_electrons
 
 FILE                          hamiltonian
 
+output                        { positions populations energy }
+

@@ -83,83 +83,213 @@ int print_observables( const constants constants, const state state, const confi
   N_chain       = constants.N_chain;
 	     
 
-  if( PRINT_POSITIONS( constants, state, config ) )                   info=1;
+  if( constants.flag_observable_all || constants.flag_observable_positions ){
 
-  if( PRINT_MOMENTA( constants, state, config ) )                     info=1;
+    if( PRINT_POSITIONS( constants, state, config ) )                   info=1;
 
-  if( PRINT_FORCES( constants, state, config ) )                      info=1;
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_MOMENTA( constants, state, config ) )                     info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_FORCES( constants, state, config ) )                      info=1;
+
+  }  
 
   if( N_chain ){
 
-    if( PRINT_POSITIONS_THERMOSTAT( constants, state, config ) )      info=1;
+    if( constants.flag_observable_all ){
 
-    if( PRINT_MOMENTA_THERMOSTAT( constants, state, config ) )        info=1;
+      if( PRINT_POSITIONS_THERMOSTAT( constants, state, config ) )      info=1;
 
-    if( PRINT_FORCES_THERMOSTAT( constants, state, config ) )         info=1;
+    }  
+
+    if( constants.flag_observable_all ){
+
+      if( PRINT_MOMENTA_THERMOSTAT( constants, state, config ) )        info=1;
+
+    }  
+
+    if( constants.flag_observable_all ){
+
+      if( PRINT_FORCES_THERMOSTAT( constants, state, config ) )         info=1;
+
+    }   
 
   }        
 
-  if( PRINT_POPULATIONS( constants, state, config ) )                 info=1;
+  if( constants.flag_observable_all || constants.flag_observable_populations ){
 
-  if( PRINT_MU_TRACE( constants, state, config ) )                    info=1;
+    if( PRINT_POPULATIONS( constants, state, config ) )                 info=1;
 
-  if( PRINT_MU_NORM( constants, state, config ) )                     info=1;
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_MU_TRACE( constants, state, config ) )                    info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_MU_NORM( constants, state, config ) )                     info=1;
+
+  }  
 
 #ifdef __DEBUG_PLUS__
 
-  if( PRINT_RHO_TRACE( constants, state, config ) )                   info=1;
+  if( constants.flag_observable_all ){
 
-  if( PRINT_RHO_NORM( constants, state, config ) )                    info=1;
+    if( PRINT_RHO_TRACE( constants, state, config ) )                   info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_RHO_NORM( constants, state, config ) )                    info=1;
+
+  }  
 
 #endif /* __DEBUG_PLUS__ */
 
-  if( PRINT_ENERGIES( constants, state ) )                            info=1;
+  if( constants.flag_observable_all || constants.flag_observable_energy ){
 
-  if( PRINT_ADIABATIC_POPULATIONS( constants, state ) )               info=1;
+    if( PRINT_ENERGIES( constants, state ) )                            info=1;
 
-  if( PRINT_ADIABATIC_PROJECTION( constants, state ) )                info=1;
+  }  
 
-  if( PRINT_PROJECTION( state ) )                                     info=1;
+  if( constants.flag_observable_all ){
 
-  if( PRINT_ADIABATIC_PES_MANY( constants, state ) )                  info=1;
+    if( PRINT_ADIABATIC_POPULATIONS( constants, state ) )               info=1;
 
-  if( PRINT_ADIABATIC_PES_SINGLE( constants, state ) )                info=1;
+  }  
 
-  if( PRINT_SINGLE_LEVEL_POPULATIONS_EHRENFEST( constants, state ) )  info=1;
+  if( constants.flag_observable_all ){
 
-  if( PRINT_SINGLE_LEVEL_POPULATIONS_ADIABATIC( constants, state ) )  info=1;
+    if( PRINT_ADIABATIC_PROJECTION( constants, state ) )                info=1;
 
-  if( PRINT_NONADIABATIC_COUPLING( constants, state ) )               info=1; 
+  }  
 
-  // if( PRINT_NONADIABATIC_RATE( constants, state ) )                   info=1; 
+  if( constants.flag_observable_all ){
 
-  if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, state ) )  info=1;
-
-  if( PRINT_ONE_BODY_ELECTRONIC_HOLE_MATRIX( constants, state ) )     info=1;
-
-  if( PRINT_ONE_BODY_ELECTRONIC_PARTICLE_MATRIX( constants, state ) ) info=1;
-
-  if( PRINT_NATURAL_ORBITALS( constants, state ) )                    info=1;
-
-  if( PRINT_HOLE_ORBITALS( constants, state ) )                       info=1;
-
-  if( PRINT_PARTICLE_ORBITALS( constants, state ) )                   info=1;
-
-  if( PRINT_ADIABATIC_STATES( constants, state ) )                    info=1;
-
-  if( PRINT_ELECTRONIC_DENSITY_STATES( constants, state ) )           info=1;
-
-  if( PRINT_IONIC_DENSITY_STATES( constants, state ) )                info=1;
-
-  if( N_levels_many > 1 ){
-
-    if( PRINT_DIPOLE_MANY( constants, state ) )                       info=1;
+    if( PRINT_PROJECTION( state ) )                                     info=1;
 
   }
 
-  if( PRINT_DIPOLE_SINGLE( constants, state ) )                       info=1;
+  if( constants.flag_observable_all ){
 
-  if( PRINT_FRAME( constants, state, config ) )                       info=1;
+    if( PRINT_ADIABATIC_PES_MANY( constants, state ) )                  info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_ADIABATIC_PES_SINGLE( constants, state ) )                info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_SINGLE_LEVEL_POPULATIONS_EHRENFEST( constants, state ) )  info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_SINGLE_LEVEL_POPULATIONS_ADIABATIC( constants, state ) )  info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_NONADIABATIC_COUPLING( constants, state ) )               info=1; 
+
+  }  
+
+  /*
+  if( constants.flag_observable_all ){
+
+    if( PRINT_NONADIABATIC_RATE( constants, state ) )                   info=1; 
+
+  }
+  */
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, state ) )  info=1;
+
+  }
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_ONE_BODY_ELECTRONIC_HOLE_MATRIX( constants, state ) )     info=1;
+
+  }
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_ONE_BODY_ELECTRONIC_PARTICLE_MATRIX( constants, state ) ) info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_NATURAL_ORBITALS( constants, state ) )                    info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_HOLE_ORBITALS( constants, state ) )                       info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_PARTICLE_ORBITALS( constants, state ) )                   info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_ADIABATIC_STATES( constants, state ) )                    info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_ELECTRONIC_DENSITY_STATES( constants, state ) )           info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_IONIC_DENSITY_STATES( constants, state ) )                info=1;
+
+  }  
+
+  if( N_levels_many > 1 && constants.flag_observable_all ){
+
+    if( PRINT_DIPOLE_MANY( constants, state ) )                         info=1;
+
+  }
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_DIPOLE_SINGLE( constants, state ) )                       info=1;
+
+  }  
+
+  if( constants.flag_observable_all ){
+
+    if( PRINT_FRAME( constants, state, config ) )                       info=1;
+
+  }  
 
 
   return info;
@@ -2029,479 +2159,605 @@ int output_files_opening( const constants constants ){
 
 
   /* xyz file */
-  strcpy(  buffer, output_label );
-  strcat(  buffer, ".xyz" );
+  if( constants.flag_observable_all ){
 
-  xyz_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( xyz_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, output_label );
+    strcat(  buffer, ".xyz" );
+
+    xyz_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( xyz_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
   }
 
 
   /* positions file */
-  strcpy(  buffer, "positions_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all || constants.flag_observable_positions ){
 
-  positions_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( positions_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "positions_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    positions_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( positions_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( positions_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( positions_file_p, constants ) ) info=1;
 
 
   /* momenta file */
-  strcpy(  buffer, "momenta_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  momenta_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( momenta_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "momenta_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    momenta_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( momenta_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( momenta_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( momenta_file_p, constants ) ) info=1;
 
 
   /* forces file */
-  strcpy(  buffer, "forces_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  forces_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( forces_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "forces_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    forces_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( forces_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( forces_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( forces_file_p, constants ) ) info=1;
 
 
   if( N_chain ){
 
     /* positions thermostat file */
-    strcpy(  buffer, "positions_thermostat_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    if( constants.flag_observable_all ){
 
-    positions_thermostat_file_p = fopen( buffer, "wt");
-    if( FILE_CHECK( positions_thermostat_file_p, output_files_opening ) ){
-      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
+      strcpy(  buffer, "positions_thermostat_" );
+      strcat(  buffer, output_label );
+      strcat(  buffer, ".dat" );
+
+      positions_thermostat_file_p = fopen( buffer, "wt");
+      if( FILE_CHECK( positions_thermostat_file_p, output_files_opening ) ){
+        fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+        fflush( stderr);
+        info=1;
+      }
+
+      // if( CONSTANTS_VERBOSE_PRINT( positions_thermostat_file_p, constants ) ) info=1;
+
     }
-
-    // if( CONSTANTS_VERBOSE_PRINT( positions_thermostat_file_p, constants ) ) info=1;
 
 
     /* momenta thermostat file */
-    strcpy(  buffer, "momenta_thermostat_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    if( constants.flag_observable_all ){
 
-    momenta_thermostat_file_p = fopen( buffer, "wt");
-    if( FILE_CHECK( momenta_thermostat_file_p, output_files_opening ) ){
-      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
+      strcpy(  buffer, "momenta_thermostat_" );
+      strcat(  buffer, output_label );
+      strcat(  buffer, ".dat" );
+
+      momenta_thermostat_file_p = fopen( buffer, "wt");
+      if( FILE_CHECK( momenta_thermostat_file_p, output_files_opening ) ){
+        fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+        fflush( stderr);
+        info=1;
+      }
+
+      // if( CONSTANTS_VERBOSE_PRINT( momenta_thermostat_file_p, constants ) ) info=1;
+
     }
-
-    // if( CONSTANTS_VERBOSE_PRINT( momenta_thermostat_file_p, constants ) ) info=1;
 
 
     /* forces thermostat file */
-    strcpy(  buffer, "forces_thermostat_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    if( constants.flag_observable_all ){
 
-    forces_thermostat_file_p = fopen( buffer, "wt");
-    if( FILE_CHECK( forces_thermostat_file_p, output_files_opening ) ){
-      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
+      strcpy(  buffer, "forces_thermostat_" );
+      strcat(  buffer, output_label );
+      strcat(  buffer, ".dat" );
+
+      forces_thermostat_file_p = fopen( buffer, "wt");
+      if( FILE_CHECK( forces_thermostat_file_p, output_files_opening ) ){
+        fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+        fflush( stderr);
+        info=1;
+      }
+
+     // if( CONSTANTS_VERBOSE_PRINT( forces_thermostat_file_p, constants ) ) info=1;
+
     }
-
-   // if( CONSTANTS_VERBOSE_PRINT( forces_thermostat_file_p, constants ) ) info=1;
 
   }
 
 
   /* populations file */
-  strcpy(  buffer, "populations_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all || constants.flag_observable_populations ){
 
-  populations_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( populations_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "populations_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    populations_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( populations_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( populations_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( populations_file_p, constants ) ) info=1;
 
 
   /* energies file */
-  strcpy(  buffer, "energies_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all || constants.flag_observable_energy ){
 
-  energies_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( energies_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "energies_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    energies_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( energies_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( energies_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( energies_file_p, constants ) ) info=1;
-
+    
 
   /* mu trace file */
-  strcpy(  buffer, "mu_trace_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  mu_trace_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( mu_trace_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "mu_trace_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    mu_trace_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( mu_trace_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( mu_trace_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( mu_trace_file_p, constants ) ) info=1;
 
 
   /* mu norm file */
-  strcpy(  buffer, "mu_norm_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  mu_norm_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( mu_norm_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "mu_norm_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    mu_norm_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( mu_norm_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( mu_norm_file_p, constants ) ) info=1;
+
   }
 
-  // if( CONSTANTS_VERBOSE_PRINT( mu_norm_file_p, constants ) ) info=1;
 
 #ifdef __DEBUG_PLUS__
 
-
   /* rho trace file */
-  strcpy(  buffer, "rho_trace_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  rho_trace_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( rho_trace_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "rho_trace_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    rho_trace_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( rho_trace_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( rho_trace_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( rho_trace_file_p, constants ) ) info=1;
 
 
   /* rho norm file */
-  strcpy(  buffer, "rho_norm_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  rho_norm_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( rho_norm_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "rho_norm_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    rho_norm_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( rho_norm_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( rho_norm_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( rho_norm_file_p, constants ) ) info=1;
 
 #endif /* __DEBUG_PLUS__ */
 
 
   /* adiabatic_populations file */
-  strcpy(  buffer, "adiabatic_populations_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  adiabatic_populations_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( adiabatic_populations_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_populations_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    adiabatic_populations_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( adiabatic_populations_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_populations_file_p, constants ) ) info=1;
+
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( adiabatic_populations_file_p, constants ) ) info=1;
 
 
   /* adiabatic_projection file */
-  strcpy(  buffer, "adiabatic_projection_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  adiabatic_projection_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( adiabatic_projection_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_projection_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    adiabatic_projection_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( adiabatic_projection_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_projection_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( adiabatic_projection_file_p, constants ) ) info=1;
 
 
   /* projection file */
-  strcpy(  buffer, "projection_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  projection_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( projection_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "projection_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    projection_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( projection_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( projection_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( projection_file_p, constants ) ) info=1;
 
 
   /* adiabatic_PES_many file */
-  strcpy(  buffer, "adiabatic_PES_many_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  adiabatic_PES_many_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( adiabatic_PES_many_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_PES_many_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    adiabatic_PES_many_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( adiabatic_PES_many_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_PES_many_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( adiabatic_PES_many_file_p, constants ) ) info=1;
 
 
   /* adiabatic_PES_single file */
-  strcpy(  buffer, "adiabatic_PES_single_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  adiabatic_PES_single_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( adiabatic_PES_single_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_PES_single_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    adiabatic_PES_single_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( adiabatic_PES_single_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_PES_single_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( adiabatic_PES_single_file_p, constants ) ) info=1;
 
 
   /* single_level_populations_Ehrenfest file */
-  strcpy(  buffer, "single_level_populations_Ehrenfest_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  single_level_populations_Ehrenfest_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( single_level_populations_Ehrenfest_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "single_level_populations_Ehrenfest_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    single_level_populations_Ehrenfest_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( single_level_populations_Ehrenfest_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( single_level_populations_Ehrenfest_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( single_level_populations_Ehrenfest_file_p, constants ) ) info=1;
 
 
   /* single_level_populations_adiabatic file */
-  strcpy(  buffer, "single_level_populations_adiabatic_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  single_level_populations_adiabatic_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( single_level_populations_adiabatic_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "single_level_populations_adiabatic_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    single_level_populations_adiabatic_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( single_level_populations_adiabatic_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( single_level_populations_adiabatic_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( single_level_populations_adiabatic_file_p, constants ) ) info=1;
 
 
   /* nonadiabatic_coupling file */
-  strcpy(  buffer, "nonadiabatic_coupling_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  nonadiabatic_coupling_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( nonadiabatic_coupling_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "nonadiabatic_coupling_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    nonadiabatic_coupling_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( nonadiabatic_coupling_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( nonadiabatic_coupling_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( nonadiabatic_coupling_file_p, constants ) ) info=1;
 
 
   /* nonadiabatic_rate file */
   /*
-  strcpy(  buffer, "nonadiabatic_rate_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  nonadiabatic_rate_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( nonadiabatic_rate_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "nonadiabatic_rate_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    nonadiabatic_rate_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( nonadiabatic_rate_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+      if( CONSTANTS_VERBOSE_PRINT( nonadiabatic_rate_file_p, constants ) ) info=1;
+
   }
-
-  if( CONSTANTS_VERBOSE_PRINT( nonadiabatic_rate_file_p, constants ) ) info=1;
   */
 
-  /* one_body_electronic_density_matrix file */
-  strcpy(  buffer, "one_body_electronic_density_matrix_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
 
-  one_body_electronic_density_matrix_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( one_body_electronic_density_matrix_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+  /* one_body_electronic_density_matrix file */
+  if( constants.flag_observable_all ){
+
+    strcpy(  buffer, "one_body_electronic_density_matrix_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    one_body_electronic_density_matrix_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( one_body_electronic_density_matrix_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_density_matrix_file_p, constants ) ) info=1;
+  
   }
 
-  // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_density_matrix_file_p, constants ) ) info=1;
-  
 
   /* one_body_electronic_hole_matrix file */
-  strcpy(  buffer, "one_body_electronic_hole_matrix_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  one_body_electronic_hole_matrix_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( one_body_electronic_hole_matrix_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "one_body_electronic_hole_matrix_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    one_body_electronic_hole_matrix_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( one_body_electronic_hole_matrix_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_hole_matrix_file_p, constants ) ) info=1;
+  
   }
 
-  // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_hole_matrix_file_p, constants ) ) info=1;
-  
 
   /* one_body_electronic_particle_matrix file */
-  strcpy(  buffer, "one_body_electronic_particle_matrix_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  one_body_electronic_particle_matrix_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( one_body_electronic_particle_matrix_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "one_body_electronic_particle_matrix_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    one_body_electronic_particle_matrix_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( one_body_electronic_particle_matrix_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_particle_matrix_file_p, constants ) ) info=1;
+  
   }
 
-  // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_particle_matrix_file_p, constants ) ) info=1;
-  
 
   /* natural_orbitals file */
-  strcpy(  buffer, "natural_orbitals_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  natural_orbitals_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( natural_orbitals_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "natural_orbitals_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    natural_orbitals_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( natural_orbitals_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( natural_orbitals_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( natural_orbitals_file_p, constants ) ) info=1;
 
 
   /* hole_orbitals file */
-  strcpy(  buffer, "hole_orbitals_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  hole_orbitals_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( hole_orbitals_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "hole_orbitals_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    hole_orbitals_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( hole_orbitals_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( hole_orbitals_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( hole_orbitals_file_p, constants ) ) info=1;
 
 
   /* particle_orbitals file */
-  strcpy(  buffer, "particle_orbitals_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  particle_orbitals_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( particle_orbitals_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "particle_orbitals_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    particle_orbitals_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( particle_orbitals_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( particle_orbitals_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( particle_orbitals_file_p, constants ) ) info=1;
 
 
   /* adiabatic_states file */
-  strcpy(  buffer, "adiabatic_states_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  adiabatic_states_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( adiabatic_states_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_states_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    adiabatic_states_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( adiabatic_states_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+   }
+
+    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_states_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( adiabatic_states_file_p, constants ) ) info=1;
 
 
   /* electronic_density_states file */
-  strcpy(  buffer, "electronic_density_states_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  electronic_density_states_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( electronic_density_states_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "electronic_density_states_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    electronic_density_states_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( electronic_density_states_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+   }
+
+    // if( CONSTANTS_VERBOSE_PRINT( electronic_density_states_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( electronic_density_states_file_p, constants ) ) info=1;
 
 
   /* ionic_density_states file */
-  strcpy(  buffer, "ionic_density_states_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  ionic_density_states_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( ionic_density_states_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "ionic_density_states_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    ionic_density_states_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( ionic_density_states_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( ionic_density_states_file_p, constants ) ) info=1;
+
   }
 
-  // if( CONSTANTS_VERBOSE_PRINT( ionic_density_states_file_p, constants ) ) info=1;
 
+  /* dipole many file */
+  if( N_levels_many > 1 &&  constants.flag_observable_all ){
 
-  if( N_levels_many > 1 ){
-
-    /* dipole many file */
     strcpy(  buffer, "dipole_many_" );
     strcat(  buffer, output_label );
     strcat(  buffer, ".dat" );
@@ -2519,18 +2775,23 @@ int output_files_opening( const constants constants ){
 
 
   /* dipole single file */
-  strcpy(  buffer, "dipole_single_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  dipole_single_file_p = fopen( buffer, "wt");
-  if( FILE_CHECK( dipole_single_file_p, output_files_opening ) ){
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "dipole_single_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    dipole_single_file_p = fopen( buffer, "wt");
+    if( FILE_CHECK( dipole_single_file_p, output_files_opening ) ){
+      fprintf( stderr, "ERROR occurred when opening file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+
+    }
+
+    // if( CONSTANTS_VERBOSE_PRINT( dipole_single_file_p, constants ) ) info=1;
+
   }
-
-  // if( CONSTANTS_VERBOSE_PRINT( dipole_single_file_p, constants ) ) info=1;
 
 
   return info;
@@ -2556,418 +2817,544 @@ int output_files_closing( const constants constants ){
 
 
   /* xyz file */
-  strcpy(  buffer, output_label );
-  strcat(  buffer, ".xyz" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( xyz_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, output_label );
+    strcat(  buffer, ".xyz" );
+
+    if( FILE_CHECK( xyz_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( xyz_file_p );
+
   }
-  fclose( xyz_file_p );
 
 
   /* positions file */
-  strcpy(  buffer, "positions_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all || constants.flag_observable_positions ){
 
-  if( FILE_CHECK( positions_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "positions_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( positions_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( positions_file_p );
+
   }
-  fclose( positions_file_p );
 
 
   /* momenta file */
-  strcpy(  buffer, "momenta_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( momenta_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "momenta_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( momenta_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( momenta_file_p );
+
   }
-  fclose( momenta_file_p );
 
 
   /* forces file */
-  strcpy(  buffer, "forces_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( forces_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "forces_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( forces_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( forces_file_p );
+
   }
-  fclose( forces_file_p );
 
 
   if( N_chain ){
 
     /* positions thermostat file */
-    strcpy(  buffer, "positions_thermostat_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    if( constants.flag_observable_all ){
 
-    if( FILE_CHECK( positions_thermostat_file_p, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
+      strcpy(  buffer, "positions_thermostat_" );
+      strcat(  buffer, output_label );
+      strcat(  buffer, ".dat" );
+
+      if( FILE_CHECK( positions_thermostat_file_p, output_files_closing ) ){
+        fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+        fflush( stderr);
+        info=1;
+      }
+      fclose( positions_thermostat_file_p );
+
     }
-    fclose( positions_thermostat_file_p );
 
 
     /* momenta thermostat file */
-    strcpy(  buffer, "momenta_thermostat_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    if( constants.flag_observable_all ){
 
-    if( FILE_CHECK( momenta_thermostat_file_p, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
+      strcpy(  buffer, "momenta_thermostat_" );
+      strcat(  buffer, output_label );
+      strcat(  buffer, ".dat" );
+
+      if( FILE_CHECK( momenta_thermostat_file_p, output_files_closing ) ){
+        fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+        fflush( stderr);
+        info=1;
+      }
+      fclose( momenta_thermostat_file_p );
+
     }
-    fclose( momenta_thermostat_file_p );
 
 
     /* forces file */
-    strcpy(  buffer, "forces_thermostat_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    if( constants.flag_observable_all ){
 
-    if( FILE_CHECK( forces_thermostat_file_p, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
+      strcpy(  buffer, "forces_thermostat_" );
+      strcat(  buffer, output_label );
+      strcat(  buffer, ".dat" );
+
+      if( FILE_CHECK( forces_thermostat_file_p, output_files_closing ) ){
+        fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+        fflush( stderr);
+        info=1;
+      }
+      fclose( forces_thermostat_file_p );
+
     }
-    fclose( forces_thermostat_file_p );
 
   }
 
 
   /* populations file */
-  strcpy(  buffer, "populations_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all || constants.flag_observable_populations ){
 
-  if( FILE_CHECK( populations_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "populations_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( populations_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( populations_file_p );
+
   }
-  fclose( populations_file_p );
 
 
   /* energies file */
-  strcpy(  buffer, "energies_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all || constants.flag_observable_energy ){
 
-  if( FILE_CHECK( energies_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "energies_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( energies_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( energies_file_p );
+
   }
-  fclose( energies_file_p );
 
 
   /* mu trace file */
-  strcpy(  buffer, "mu_trace" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( mu_trace_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "mu_trace" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( mu_trace_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( mu_trace_file_p );
+
   }
-  fclose( mu_trace_file_p );
 
 
   /* mu norm file */
-  strcpy(  buffer, "mu_norm" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( mu_norm_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
-  }
-  fclose( mu_norm_file_p );
+    strcpy(  buffer, "mu_norm" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( mu_norm_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( mu_norm_file_p );
+
+  }  
 
 #ifdef __DEBUG_PLUS__
 
-  /* rho trace file */
-  strcpy(  buffer, "rho_trace" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
 
-  if( FILE_CHECK( rho_trace_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+  /* rho trace file */
+  if( constants.flag_observable_all ){
+
+    strcpy(  buffer, "rho_trace" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( rho_trace_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( rho_trace_file_p );
+
   }
-  fclose( rho_trace_file_p );
 
 
   /* rho norm file */
-  strcpy(  buffer, "rho_norm" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( rho_norm_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "rho_norm" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( rho_norm_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( rho_norm_file_p );
+
   }
-  fclose( rho_norm_file_p );
 
 #endif /* __DEBUG_PLUS__ */
 
 
   /* adiabatic_populations file */
-  strcpy(  buffer, "adiabatic_populations" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( adiabatic_populations_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_populations" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( adiabatic_populations_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( adiabatic_populations_file_p );
+
   }
-  fclose( adiabatic_populations_file_p );
 
 
   /* adiabatic_projection file */
-  strcpy(  buffer, "adiabatic_projection" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( adiabatic_projection_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_projection" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( adiabatic_projection_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( adiabatic_projection_file_p );
+
   }
-  fclose( adiabatic_projection_file_p );
 
 
   /* projection file */
-  strcpy(  buffer, "projection" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( projection_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "projection" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( projection_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( projection_file_p );
+
   }
-  fclose( projection_file_p );
 
 
   /* adiabatic_PES_many file */
-  strcpy(  buffer, "adiabatic_PES_many_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( adiabatic_PES_many_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_PES_many_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( adiabatic_PES_many_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( adiabatic_PES_many_file_p );
+
   }
-  fclose( adiabatic_PES_many_file_p );
 
 
   /* adiabatic_PES_single file */
-  strcpy(  buffer, "adiabatic_PES_single_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( adiabatic_PES_single_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_PES_single_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( adiabatic_PES_single_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( adiabatic_PES_single_file_p );
+
   }
-  fclose( adiabatic_PES_single_file_p );
 
 
   /* single_level_populations_Ehrenfest file */
-  strcpy(  buffer, "single_level_populations_Ehrenfest_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( single_level_populations_Ehrenfest_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "single_level_populations_Ehrenfest_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( single_level_populations_Ehrenfest_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( single_level_populations_Ehrenfest_file_p );
+
   }
-  fclose( single_level_populations_Ehrenfest_file_p );
 
 
   /* single_level_populations_adiabatic file */
-  strcpy(  buffer, "single_level_populations_adiabatic_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( single_level_populations_adiabatic_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "single_level_populations_adiabatic_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( single_level_populations_adiabatic_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( single_level_populations_adiabatic_file_p );
+
   }
-  fclose( single_level_populations_adiabatic_file_p );
 
 
   /* nonadiabatic_coupling file */
-  strcpy(  buffer, "nonadiabatic_coupling_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( nonadiabatic_coupling_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "nonadiabatic_coupling_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( nonadiabatic_coupling_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( nonadiabatic_coupling_file_p );
+
   }
-  fclose( nonadiabatic_coupling_file_p );
 
 
   /* nonadiabatic_rate file */
   /*
-  strcpy(  buffer, "nonadiabatic_rate_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( nonadiabatic_rate_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "nonadiabatic_rate_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( nonadiabatic_rate_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( nonadiabatic_rate_file_p );
+
   }
-  fclose( nonadiabatic_rate_file_p );
   */
 
-  /* one_body_electronic_density_matrix file */
-  strcpy(  buffer, "one_body_electronic_density_matrix_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
 
-  if( FILE_CHECK( one_body_electronic_density_matrix_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+  /* one_body_electronic_density_matrix file */
+  if( constants.flag_observable_all ){
+
+    strcpy(  buffer, "one_body_electronic_density_matrix_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( one_body_electronic_density_matrix_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( one_body_electronic_density_matrix_file_p );
+
   }
-  fclose( one_body_electronic_density_matrix_file_p );
 
 
   /* one_body_electronic_hole_matrix file */
-  strcpy(  buffer, "one_body_electronic_hole_matrix_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( one_body_electronic_hole_matrix_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "one_body_electronic_hole_matrix_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( one_body_electronic_hole_matrix_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( one_body_electronic_hole_matrix_file_p );
+
   }
-  fclose( one_body_electronic_hole_matrix_file_p );
 
 
   /* one_body_electronic_particle_matrix file */
-  strcpy(  buffer, "one_body_electronic_particle_matrix_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( one_body_electronic_particle_matrix_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "one_body_electronic_particle_matrix_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( one_body_electronic_particle_matrix_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( one_body_electronic_particle_matrix_file_p );
+
   }
-  fclose( one_body_electronic_particle_matrix_file_p );
 
 
   /* natural_orbitals file */
-  strcpy(  buffer, "natural_orbitals_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( natural_orbitals_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "natural_orbitals_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( natural_orbitals_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( natural_orbitals_file_p );
+
   }
-  fclose( natural_orbitals_file_p );
 
 
   /* hole_orbitals file */
-  strcpy(  buffer, "hole_orbitals_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( hole_orbitals_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "hole_orbitals_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( hole_orbitals_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( hole_orbitals_file_p );
+
   }
-  fclose( hole_orbitals_file_p );
 
 
   /* particle_orbitals file */
-  strcpy(  buffer, "particle_orbitals_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( particle_orbitals_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "particle_orbitals_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( particle_orbitals_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( particle_orbitals_file_p );
+
   }
-  fclose( particle_orbitals_file_p );
 
 
   /* adiabatic_states file */
-  strcpy(  buffer, "adiabatic_states_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( adiabatic_states_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "adiabatic_states_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( adiabatic_states_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( adiabatic_states_file_p );
+
   }
-  fclose( adiabatic_states_file_p );
 
 
   /* electronic_density_states file */
-  strcpy(  buffer, "electronic_density_states_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( electronic_density_states_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "electronic_density_states_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( electronic_density_states_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( electronic_density_states_file_p );
+
   }
-  fclose( electronic_density_states_file_p );
 
 
   /* ionic_density_states file */
-  strcpy(  buffer, "ionic_density_states_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
+  if( constants.flag_observable_all ){
 
-  if( FILE_CHECK( ionic_density_states_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+    strcpy(  buffer, "ionic_density_states_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( ionic_density_states_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( ionic_density_states_file_p );
+
   }
-  fclose( ionic_density_states_file_p );
 
 
-  if( N_levels_many > 1 ){
+  /* dipole many file */
+  if( N_levels_many > 1 && constants.flag_observable_all ){
 
-    /* dipole many file */
     strcpy(  buffer, "dipole_many_" );
     strcat(  buffer, output_label );
     strcat(  buffer, ".dat" );
@@ -2981,18 +3368,22 @@ int output_files_closing( const constants constants ){
 
   }
 
-  
-  /* dipole single file */
-  strcpy(  buffer, "dipole_single_" );
-  strcat(  buffer, output_label );
-  strcat(  buffer, ".dat" );
 
-  if( FILE_CHECK( dipole_single_file_p, output_files_closing ) ){
-    fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-    fflush( stderr);
-    info=1;
+  /* dipole single file */
+  if( constants.flag_observable_all ){
+
+    strcpy(  buffer, "dipole_single_" );
+    strcat(  buffer, output_label );
+    strcat(  buffer, ".dat" );
+
+    if( FILE_CHECK( dipole_single_file_p, output_files_closing ) ){
+      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
+      fflush( stderr);
+      info=1;
+    }
+    fclose( dipole_single_file_p );
+
   }
-  fclose( dipole_single_file_p );
 
 
   return info;

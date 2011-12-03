@@ -33,5 +33,31 @@
   To visualise the effect of resonant electron-ion coupling, open gnuplot and
   type:
 
-  p './positions_run01_o0.dat' u 1:($4-$3) t 'CEID 0' w l lt 1, './positions_run01_o5.dat' u 1:($4-$3) t 'CEID 5' w l lt 3
+    p './positions_run01_o0.dat' u 1:($4-$3) t 'CEID 0' w lp lt 1, './positions_run01_o5.dat' u 1:($4-$3) t 'CEID 5' w lp lt 3
+
+  This way you can see the effect of the quantum fluctuations of the ions on
+  the average distance between the central atoms (arbitrary units).
+  CEID 0 is equivalent to Ehrenfest Dynamics, i.e., classical ions. The CEID 5
+  dynamics already show the modulation of this classical (adiabatic)
+  oscillations due to the non-radiative (quantum) decay to a lower electronic
+  state. 
+  The non-radiative electronic decay can be better visualised by plotting the 
+  electronic population of the initially occupied state (HOMO-1 to LUMO+1 
+  excitation):
+
+    p './populations_run01_o0.dat' u 1:7 t 'CEID 0' w lp lt 1, './populations_run01_o5.dat' u 1:7 t 'CEID 5' w lp lt 3
+
+  Finally, you can plot the average kinetic energy (classical+quantal) of the
+  ions:
+
+    p './energies_run01_o0.dat' u 1:5 t 'CEID 0' w lp lt 1, './energies_run01_o5.dat' u 1:5 t 'CEID 5' w lp lt 3
+
+  You can see that CEID 5 predicts "hotter" ions than CEID 0. The difference in
+  kinetic energy between the two runs is due to the decrease of electronic
+  potential energy during the decay (the total energy is conserved).
+
+
+  To remove all the files created during the previous runs, type
+
+    rm -f *.dat *.xyz
 
