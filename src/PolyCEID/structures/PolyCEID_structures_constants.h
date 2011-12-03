@@ -129,6 +129,10 @@ typedef struct{
   ivector              excited_many_body_occup;
   unsigned long  int   seed;                        // random number generator seed
   hamiltonian          hamiltonian;                 // the hamiltonian
+  unsigned short int   flag_observable_all;
+  unsigned short int   flag_observable_positions;
+  unsigned short int   flag_observable_populations;
+  unsigned short int   flag_observable_energy;
 
   /* derived constants */
   unsigned short int   flag_pruning;                //

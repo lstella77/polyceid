@@ -45,37 +45,43 @@
 
 int input_parsing( FILE*, constants_p constants_p, int, rvector );
 
-#define INPUT_PARSING( fp, c, counter, rvec ) FUNCTION_CHECK( input_parsing( (fp), &(c), (counter), (rvec) ), input_parsing )
+#define INPUT_PARSING( fp, co, counter, rvec ) FUNCTION_CHECK( input_parsing( (fp), &(co), (counter), (rvec) ), input_parsing )
 
 //------------------------------------------
 
 int hamiltonian_parsing( list_p list_p, constants_p constants_p );
 
-#define HAMILTONIAN_PARSING( lp, c ) FUNCTION_CHECK( hamiltonian_parsing( (lp), &(c) ), hamiltonian_parsing )
+#define HAMILTONIAN_PARSING( lp, co ) FUNCTION_CHECK( hamiltonian_parsing( (lp), &(co) ), hamiltonian_parsing )
 
 //------------------------------------------
 
-int assign_initial_condition_atoms( constants_p, list_p );
+int assign_initial_condition_atoms( list_p, constants_p );
 
-#define ASSIGN_INITIAL_CONDITION_ATOMS( c, lp ) FUNCTION_CHECK( assign_initial_condition_atoms( &(c), (lp) ), assign_initial_condition_atoms )
+#define ASSIGN_INITIAL_CONDITION_ATOMS( lp, co ) FUNCTION_CHECK( assign_initial_condition_atoms( (lp), &(co) ), assign_initial_condition_atoms )
 
 //------------------------------------------
 
 int initial_condition_atoms_parsing( constants_p, int, rvector );
 
-#define INITIAL_CONDITION_ATOMS_PARSING( c,counter, rvec ) FUNCTION_CHECK( initial_condition_atoms_parsing( &(c), (counter), (rvec) ), initial_condition_atoms_parsing )
+#define INITIAL_CONDITION_ATOMS_PARSING( co,ocounter, rvec ) FUNCTION_CHECK( initial_condition_atoms_parsing( &(co), (counter), (rvec) ), initial_condition_atoms_parsing )
 
 //------------------------------------------
 
 int initial_condition_electrons_parsing( constants_p constants_p );
 
-#define INITIAL_CONDITION_ELECTRONS_PARSING( c ) FUNCTION_CHECK( initial_condition_electrons_parsing( &(c) ), initial_condition_electrons_parsing )
+#define INITIAL_CONDITION_ELECTRONS_PARSING( co ) FUNCTION_CHECK( initial_condition_electrons_parsing( &(co) ), initial_condition_electrons_parsing )
 
 //------------------------------------------
 
 int construct_transition( const constants constants, ivector, rvector_p transition_p );
 
-#define CONSTRUCT_TRANSITION( c, occ, rvec ) FUNCTION_CHECK( construct_transition( (c), (occ), &(rvec) ), construct_transition ) 
+#define CONSTRUCT_TRANSITION( co, occ, rvec ) FUNCTION_CHECK( construct_transition( (co), (occ), &(rvec) ), construct_transition ) 
+
+//------------------------------------------
+
+int output_parsing( list_p, constants_p );
+
+#define OUTPUT_PARSING( lp, co ) FUNCTION_CHECK( output_parsing( (lp), &(co) ), output_parsing )
 
 //------------------------------------------
 

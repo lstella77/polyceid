@@ -287,6 +287,8 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
   }
 
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_all ) < 1 ) info=1;
+
   
   return info;
 
@@ -410,6 +412,8 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
     if( fprintf( fp, "%d\n",  constants.N_chain_steps ) < 1 ) info=1;
 
   }
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_all ) < 1 ) info=1;
 
 
   fflush( fp );
@@ -860,6 +864,13 @@ int PolyCEID_constants_verbose_print( FILE* fp, const constants constants ){
 
   }  
 
+  /* output_label */
+  fprintf( fp, "#------------------------------------------#\n" );
+  fprintf( fp, "# flag_observable_all:\n" );
+
+  if( fprintf( fp, "# %hu\n", constants.flag_observable_all ) < 1 ) info=1;
+
+  /* closing */
   fprintf( fp, "#------------------------------------------#\n" );
   fprintf( fp, "\n" );
 
@@ -989,6 +1000,8 @@ int PolyCEID_constants_copy( constants_p constants_p, const constants constants 
     constants_p->N_chain_steps   = constants.N_chain_steps;
 
   }  
+
+  constants_p->flag_observable_all = constants.flag_observable_all;
 
 
   return info;

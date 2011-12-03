@@ -55,7 +55,7 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
     LIST_PRINT( stdout, &input_list );
     fflush( stdout );
   */
-  
+
 
   // setting default for "output_label"
   strcpy( constants_p->output_label, "noname" );
@@ -228,7 +228,7 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
   if( ASSING_INT_VARIABLE( &input_list, "initial_ionic_state", 1, &constants_p->initial_ionic_state, &constants_p->initial_ionic_state ) ) info=1;
 
   // initial condition atoms
-  if( ASSIGN_INITIAL_CONDITION_ATOMS( *constants_p, &input_list ) ) info=1;
+  if( ASSIGN_INITIAL_CONDITION_ATOMS( &input_list, *constants_p ) ) info=1;
 
   // setting default for "cutoff_energy"
   constants_p->cutoff_energy = 10.0;
@@ -270,7 +270,10 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
   constants_p->seed = (unsigned long int) dummy_seed;
 
   // parsing hamiltonian
-  if( HAMILTONIAN_PARSING( &input_list, *constants_p ) )info=1;
+  if( HAMILTONIAN_PARSING( &input_list, *constants_p ) ) info=1;
+
+  // parsing output
+  if( OUTPUT_PARSING( &input_list, *constants_p ) ) info=1;
 
   /*
     S_ECHO( "list after assigning variable", input_list.title.name );
@@ -507,7 +510,6 @@ int hamiltonian_parsing( list_p list_p, constants_p constants_p ){
     entry_found_p = LIST_SEARCH( list_p, "node" );      
 
     if( !entry_found_p ) break;
-
 
     if( N_nodes > (N_atoms -1) ){
 
@@ -811,7 +813,7 @@ int hamiltonian_parsing( list_p list_p, constants_p constants_p ){
 
 //------------------------------------------
 
-int assign_initial_condition_atoms( constants_p constants_p, list_p list_p ){
+int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
 
   /* constants */
   int      N_atoms;
@@ -1562,6 +1564,68 @@ int construct_transition( const constants constants, ivector occup, rvector_p tr
 
 }
 
+//------------------------------------------
+
+int output_parsing( list_p list_p, constants_p constants_p ){
+
+  /* dummies */      
+  entry_p  entry_found_p=NULL;
+  int      info=0;
+
+
+  entry_found_p = LIST_SEARCH( list_p, "output" );      
+
+  if( !entry_found_p ){
+
+    // default output
+    constants_p->flag_observable_all = 0;
+
+    constants_p->flag_observable_positions = 1;
+
+    constants_p->flag_observable_populations = 1;
+
+    constants_p->flag_observable_energy = 1;
+
+  }
+  else{
+
+    if( !entry_found_p->sublist_p ){
+
+      fprintf( PolyCEID_STDERR, "ERROR: no value to extract from variable %s\n", entry_found_p->field.name );
+
+      fflush( PolyCEID_STDERR );
+
+      info=1;
+
+    }
+    else{
+
+      // extracting "flag_observable_all"
+      constants_p->flag_observable_all = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "all" );
+
+      // extracting "flag_observable_positions"
+      constants_p->flag_observable_positions = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "positions" );
+
+      // extracting "flag_observable_populations"
+      constants_p->flag_observable_populations = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "populations" );
+
+      // extracting "flag_observable_energy"
+      constants_p->flag_observable_energy = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "energy" );
+
+      // free the input list
+      //LIST_CUT( entry_found_p->sublist_p );
+
+    }
+
+    // cut the entry
+    ENTRY_CUT( entry_found_p );
+
+  }        
+
+
+  return info;
+
+}
 
 //------------------------------------------
 
