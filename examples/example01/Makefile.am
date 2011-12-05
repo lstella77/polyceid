@@ -22,3 +22,4 @@
 SUBDIRS = reference
 EXTRA_DIST = README input01_o0 input01_o5 initial_condition_atoms \
              initial_condition_electrons hamiltonian
+

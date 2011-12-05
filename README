@@ -23,7 +23,9 @@
   Basic install:
 
     autoreconf -i
+
     ./configure
+
     make
 
   The executable PolyCEID will be found in src/PolyCEID.

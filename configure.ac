@@ -82,3 +82,4 @@ AC_CONFIG_FILES([Makefile \
 		  src/PolyCEID/structures/Makefile \
 		  src/PolyCEID/utils/Makefile])
 AC_OUTPUT
+
