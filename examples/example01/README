@@ -56,6 +56,7 @@
   kinetic energy between the two runs is due to the decrease of electronic
   potential energy during the decay (the total energy is conserved).
 
+  Reference output files can be found in the directory reference/
 
   To remove all the files created during the previous runs, type
 

@@ -19,6 +19,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #  THE SOFTWARE.
 
-SUBDIRS = reference
-EXTRA_DIST = README input01_o0 input01_o5 initial_condition_atoms \
-             initial_condition_electrons hamiltonian
+EXTRA_DIST = energies_run01_o0.dat energies_run01_o5.dat output01_o0.dat \
+             output01_o5.dat populations_run01_o0.dat populations_run01_o5.dat \
+	     positions_run01_o5.dat positions_run01_o0.dat
+
