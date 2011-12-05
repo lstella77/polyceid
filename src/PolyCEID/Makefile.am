@@ -31,9 +31,9 @@ SUBDIRS = algebra \
 bin_PROGRAMS = PolyCEID
 PolyCEID_SOURCES = PolyCEID_main.c
 
-PolyCEID_CFLAGS =
+# PolyCEID_CFLAGS =
 
-PolyCEID_CPPFLAGS =
+# PolyCEID_CPPFLAGS =
 
 PolyCEID_LDADD =   evolution/libevolution.a \
                    output/liboutput.a \
@@ -45,5 +45,5 @@ PolyCEID_LDADD =   evolution/libevolution.a \
                    utils/libutils.a \
 		   ${LAPACK_LIBS} ${BLAS_LIBS} ${LIBS} ${FLIBS}
 
-PolyCEID_LDFLAGS =
+# PolyCEID_LDFLAGS =
 
