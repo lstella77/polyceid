@@ -70,6 +70,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile \
                   examples/Makefile \
                   examples/example01/Makefile \
+                  examples/example01/reference/Makefile \
                   src/Makefile \
 		  src/PolyCEID/Makefile \
 		  src/PolyCEID/algebra/Makefile \
