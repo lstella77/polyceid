@@ -87,29 +87,29 @@ int print_populations( const constants, const state, const config );
 
 //------------------------------------------
 
-int print_mu_trace( const constants, const state, const config );
+int print_mu_traces( const constants, const state, const config );
 
-#define PRINT_MU_TRACE( co, st, cf ) FUNCTION_CHECK(  print_mu_trace( (co), (st), (cf) ), print_mu_trace ) 
+#define PRINT_MU_TRACES( co, st, cf ) FUNCTION_CHECK(  print_mu_traces( (co), (st), (cf) ), print_mu_traces ) 
 
 //------------------------------------------
 
-int print_mu_norm( const constants, const state, const config );
+int print_mu_norms( const constants, const state, const config );
 
-#define PRINT_MU_NORM( co, st, cf ) FUNCTION_CHECK(  print_mu_norm( (co), (st), (cf) ), print_mu_norm ) 
+#define PRINT_MU_NORMS( co, st, cf ) FUNCTION_CHECK(  print_mu_norms( (co), (st), (cf) ), print_mu_norms ) 
 
 //------------------------------------------
 
 #ifdef __DEBUG_PLUS__
 
-int print_rho_trace( const constants, const state, const config );
+int print_rho_traces( const constants, const state, const config );
 
-#define PRINT_RHO_TRACE( co, st, cf ) FUNCTION_CHECK(  print_rho_trace( (co), (st), (cf) ), print_rho_trace ) 
+#define PRINT_RHO_TRACES( co, st, cf ) FUNCTION_CHECK(  print_rho_traces( (co), (st), (cf) ), print_rho_traces )
 
 //------------------------------------------
 
-int print_rho_norm( const constants, const state, const config );
+int print_rho_norms( const constants, const state, const config );
 
-#define PRINT_RHO_NORM( co, st, cf ) FUNCTION_CHECK(  print_rho_norm( (co), (st), (cf) ), print_rho_norm ) 
+#define PRINT_RHO_NORMS( co, st, cf ) FUNCTION_CHECK(  print_rho_norms( (co), (st), (cf) ), print_rho_norms ) 
 
 #endif /* __DEBUG_PLUS__ */
 
@@ -121,15 +121,15 @@ int print_adiabatic_populations( const constants, const state );
 
 //------------------------------------------
 
-int print_adiabatic_projection( const constants, const state );
+int print_adiabatic_projections( const constants, const state );
 
-#define PRINT_ADIABATIC_PROJECTION( co, st ) FUNCTION_CHECK(  print_adiabatic_projection( (co), (st) ), print_adiabatic_projection ) 
+#define PRINT_ADIABATIC_PROJECTIONS( co, st ) FUNCTION_CHECK(  print_adiabatic_projections( (co), (st) ), print_adiabatic_projections ) 
 
 //------------------------------------------
 
-int print_projection( const state );
+int print_projections( const state );
 
-#define PRINT_PROJECTION( st ) FUNCTION_CHECK(  print_projection( (st) ), print_projection ) 
+#define PRINT_PROJECTIONS( st ) FUNCTION_CHECK(  print_projections( (st) ), print_projections ) 
 
 //------------------------------------------
 
@@ -157,15 +157,15 @@ int print_single_level_populations_adiabatic( const constants, const state );
 
 //------------------------------------------
 
-int print_nonadiabatic_coupling( const constants, const state );
+int print_nonadiabatic_couplings( const constants, const state );
 
-#define PRINT_NONADIABATIC_COUPLING( co, st ) FUNCTION_CHECK(  print_nonadiabatic_coupling( (co), (st) ), print_nonadiabatic_coupling ) 
+#define PRINT_NONADIABATIC_COUPLINGS( co, st ) FUNCTION_CHECK(  print_nonadiabatic_couplings( (co), (st) ), print_nonadiabatic_couplings ) 
 
 //------------------------------------------
 
-int print_nonadiabatic_rate( const constants, const state );
+int print_nonadiabatic_rates( const constants, const state );
 
-#define PRINT_NONADIABATIC_RATE( co, st ) FUNCTION_CHECK(  print_nonadiabatic_rate( (co), (st) ), print_nonadiabatic_rate ) 
+#define PRINT_NONADIABATIC_RATES( co, st ) FUNCTION_CHECK(  print_nonadiabatic_rates( (co), (st) ), print_nonadiabatic_rates ) 
 
 //------------------------------------------
 
@@ -223,15 +223,15 @@ int print_ionic_density_states( const constants, const state );
 
 //------------------------------------------
 
-int print_dipole_many( const constants, const state );
+int print_dipoles_many( const constants, const state );
 
-#define PRINT_DIPOLE_MANY( co, st ) FUNCTION_CHECK(  print_dipole_many( (co), (st) ), print_dipole_many ) 
+#define PRINT_DIPOLES_MANY( co, st ) FUNCTION_CHECK(  print_dipoles_many( (co), (st) ), print_dipoles_many ) 
 
 //------------------------------------------
 
-int print_dipole_single( const constants, const state );
+int print_dipoles_single( const constants, const state );
 
-#define PRINT_DIPOLE_SINGLE( co, st ) FUNCTION_CHECK(  print_dipole_single( (co), (st) ), print_dipole_single ) 
+#define PRINT_DIPOLES_SINGLE( co, st ) FUNCTION_CHECK(  print_dipoles_single( (co), (st) ), print_dipole_singles ) 
 
 //------------------------------------------
 
@@ -248,6 +248,12 @@ int print_energies( const constants, const state );
 //------------------------------------------
 
 /* utilities */
+
+//------------------------------------------
+
+int open_file( FILE**, char* );
+
+#define OPEN_FILE( fp, fn ) FUNCTION_CHECK( open_file( &(fp), (fn) ), open_file )
 
 //------------------------------------------
 
