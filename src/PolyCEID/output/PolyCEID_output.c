@@ -2145,11 +2145,12 @@ int print_position_ion_frame( const constants constants, const state state, cons
 int open_file( FILE** fpp, char* filename ){
 
   /* dummies */
-  int   info=0;
+  int info=0;
 
-  *fpp = fopen( filename, "wt");
 
-  if( FILE_CHECK( fp, open_file ) ){
+  *fpp = fopen( filename, "wt" );
+
+  if( FILE_CHECK( *fpp, open_file ) ){
 
     fprintf( stderr, "ERROR occurred when opening file %s.\n", filename );
 
@@ -2158,6 +2159,31 @@ int open_file( FILE** fpp, char* filename ){
     info=1;
 
   }
+
+
+  return info;
+
+}	
+
+//------------------------------------------
+
+int close_file( FILE** fpp, char* filename ){
+
+  /* dummies */
+  int info=0;
+
+
+  if( FILE_CHECK( *fpp, close_file ) ){
+
+    fprintf( stderr, "ERROR occurred when closing file %s.\n", filename );
+
+    fflush( stderr );
+
+    info=1;
+
+  }
+
+  fclose( *fpp );
 
 
   return info;
@@ -2197,8 +2223,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( positions_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( positions_fp, constants ) ) info=1;
-
   }
 
 
@@ -2209,8 +2233,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( momenta_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( momenta_fp, constants ) ) info=1;
-
   }
 
 
@@ -2220,8 +2242,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "forces_%s.dat", constants.output_label );
 
     OPEN_FILE( forces_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( forces_fp, constants ) ) info=1;
 
   }
 
@@ -2235,8 +2255,6 @@ int output_files_opening( const constants constants ){
 
       OPEN_FILE( positions_thermostat_fp, buffer );	
 
-      // if( CONSTANTS_VERBOSE_PRINT( positions_thermostat_fp, constants ) ) info=1;
-
     }
 
 
@@ -2247,8 +2265,6 @@ int output_files_opening( const constants constants ){
 
       OPEN_FILE( momenta_thermostat_fp, buffer );	
 
-      // if( CONSTANTS_VERBOSE_PRINT( momenta_thermostat_fp, constants ) ) info=1;
-
     }
 
 
@@ -2258,8 +2274,6 @@ int output_files_opening( const constants constants ){
       sprintf( buffer, "forces_thermostat_%s.dat", constants.output_label );
 
       OPEN_FILE( forces_thermostat_fp, buffer );	
-
-      // if( CONSTANTS_VERBOSE_PRINT( forces_thermostat_fp, constants ) ) info=1;
 
     }
 
@@ -2273,8 +2287,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( populations_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( populations_fp, constants ) ) info=1;
-
   }
 
 
@@ -2284,8 +2296,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "energies_%s.dat", constants.output_label );
 
     OPEN_FILE( energies_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( energies_fp, constants ) ) info=1;
 
   }
     
@@ -2297,8 +2307,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( mu_traces_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( mu_traces_fp, constants ) ) info=1;
-
   }
 
 
@@ -2308,8 +2316,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "mu_norms_%s.dat", constants.output_label );
 
     OPEN_FILE( mu_norms_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( mu_norms_fp, constants ) ) info=1;
 
   }
 
@@ -2323,8 +2329,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( rho_traces_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( rho_traces_fp, constants ) ) info=1;
-
   }
 
 
@@ -2334,8 +2338,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "rho_norms_%s.dat", constants.output_label );
 
     OPEN_FILE( rho_norms_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( rho_norms_fp, constants ) ) info=1;
 
   }
 
@@ -2349,9 +2351,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( adiabatic_populations_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_populations_fp, constants ) ) info=1;
-
-
   }
 
 
@@ -2361,8 +2360,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "adiabatic_projections_%s.dat", constants.output_label );
 
     OPEN_FILE( adiabatic_projections_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_projections_fp, constants ) ) info=1;
 
   }
 
@@ -2374,8 +2371,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( projections_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( projections_fp, constants ) ) info=1;
-
   }
 
 
@@ -2385,8 +2380,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "adiabatic_PES_many_%s.dat", constants.output_label );
 
     OPEN_FILE( adiabatic_PES_many_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_PES_many_fp, constants ) ) info=1;
 
   }
 
@@ -2398,8 +2391,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( adiabatic_PES_single_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_PES_single_fp, constants ) ) info=1;
-
   }
 
 
@@ -2409,8 +2400,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "single_level_populations_Ehrenfest_%s.dat", constants.output_label );
 
     OPEN_FILE( single_level_populations_Ehrenfest_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( single_level_populations_Ehrenfest_fp, constants ) ) info=1;
 
   }
 
@@ -2422,8 +2411,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( single_level_populations_adiabatic_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( single_level_populations_adiabatic_fp, constants ) ) info=1;
-
   }
 
 
@@ -2433,8 +2420,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "nonadiabatic_couplings_%s.dat", constants.output_label );
 
     OPEN_FILE( nonadiabatic_couplings_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( nonadiabatic_couplings_fp, constants ) ) info=1;
 
   }
 
@@ -2447,8 +2432,6 @@ int output_files_opening( const constants constants ){
 
       OPEN_FILE( nonadiabatic_rates_fp, buffer );	
 
-      if( CONSTANTS_VERBOSE_PRINT( nonadiabatic_rates_fp, constants ) ) info=1;
-
   }
   */
 
@@ -2460,8 +2443,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( one_body_electronic_density_matrix_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_density_matrix_fp, constants ) ) info=1;
-  
   }
 
 
@@ -2472,8 +2453,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( one_body_electronic_hole_matrix_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_hole_matrix_fp, constants ) ) info=1;
-  
   }
 
 
@@ -2484,8 +2463,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( one_body_electronic_particle_matrix_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( one_body_electronic_particle_matrix_fp, constants ) ) info=1;
-  
   }
 
 
@@ -2495,8 +2472,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "natural_orbitals_%s.dat", constants.output_label );
 
     OPEN_FILE( natural_orbitals_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( natural_orbitals_fp, constants ) ) info=1;
 
   }
 
@@ -2508,8 +2483,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( hole_orbitals_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( hole_orbitals_fp, constants ) ) info=1;
-
   }
 
 
@@ -2519,8 +2492,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "particle_orbitals_%s.dat", constants.output_label );
 
     OPEN_FILE( particle_orbitals_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( particle_orbitals_fp, constants ) ) info=1;
 
   }
 
@@ -2532,8 +2503,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( adiabatic_states_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( adiabatic_states_fp, constants ) ) info=1;
-
   }
 
 
@@ -2543,8 +2512,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "electronic_density_states_%s.dat", constants.output_label );
 
     OPEN_FILE( electronic_density_states_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( electronic_density_states_fp, constants ) ) info=1;
 
   }
 
@@ -2556,8 +2523,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( ionic_density_states_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( ionic_density_states_fp, constants ) ) info=1;
-
   }
 
 
@@ -2568,8 +2533,6 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( dipoles_many_fp, buffer );	
 
-    // if( CONSTANTS_VERBOSE_PRINT( dipoles_many_fp, constants ) ) info=1;
-
   }
 
 
@@ -2579,8 +2542,6 @@ int output_files_opening( const constants constants ){
     sprintf( buffer, "dipoles_single_%s.dat", constants.output_label );
 
     OPEN_FILE( dipoles_single_fp, buffer );	
-
-    // if( CONSTANTS_VERBOSE_PRINT( dipoles_single_fp, constants ) ) info=1;
 
   }
 
@@ -2604,21 +2565,13 @@ int output_files_closing( const constants constants ){
                           
   N_levels_many = constants.N_levels_many;
   N_chain       = constants.N_chain;
-  output_label  = (char*)constants.output_label;
-
 
   /* xyz file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, output_label );
-    strcat(  buffer, ".xyz" );
+    sprintf( buffer, "%s.xyz", constants.output_label );
 
-    if( FILE_CHECK( xyz_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( xyz_fp );
+    CLOSE_FILE( xyz_fp, buffer );	
 
   }
 
@@ -2626,16 +2579,9 @@ int output_files_closing( const constants constants ){
   /* positions file */
   if( constants.flag_observable_all || constants.flag_observable_positions ){
 
-    strcpy(  buffer, "positions_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "positions_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( positions_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( positions_fp );
+    CLOSE_FILE( positions_fp, buffer );	
 
   }
 
@@ -2643,16 +2589,9 @@ int output_files_closing( const constants constants ){
   /* momenta file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "momenta_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "momenta_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( momenta_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( momenta_fp );
+    CLOSE_FILE( momenta_fp, buffer );	
 
   }
 
@@ -2660,16 +2599,9 @@ int output_files_closing( const constants constants ){
   /* forces file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "forces_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "forces_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( forces_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( forces_fp );
+    CLOSE_FILE( forces_fp, buffer );	
 
   }
 
@@ -2679,16 +2611,9 @@ int output_files_closing( const constants constants ){
     /* positions thermostat file */
     if( constants.flag_observable_all ){
 
-      strcpy(  buffer, "positions_thermostat_" );
-      strcat(  buffer, output_label );
-      strcat(  buffer, ".dat" );
+      sprintf( buffer, "positions_thermostat_%s.dat", constants.output_label );
 
-      if( FILE_CHECK( positions_thermostat_fp, output_files_closing ) ){
-        fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-        fflush( stderr);
-        info=1;
-      }
-      fclose( positions_thermostat_fp );
+      CLOSE_FILE( positions_thermostat_fp, buffer );	
 
     }
 
@@ -2696,33 +2621,19 @@ int output_files_closing( const constants constants ){
     /* momenta thermostat file */
     if( constants.flag_observable_all ){
 
-      strcpy(  buffer, "momenta_thermostat_" );
-      strcat(  buffer, output_label );
-      strcat(  buffer, ".dat" );
+      sprintf( buffer, "momenta_thermostat_%s.dat", constants.output_label );
 
-      if( FILE_CHECK( momenta_thermostat_fp, output_files_closing ) ){
-        fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-        fflush( stderr);
-        info=1;
-      }
-      fclose( momenta_thermostat_fp );
+      CLOSE_FILE( momenta_thermostat_fp, buffer );	
 
     }
 
 
-    /* forces file */
+    /* forces thermostat file */
     if( constants.flag_observable_all ){
 
-      strcpy(  buffer, "forces_thermostat_" );
-      strcat(  buffer, output_label );
-      strcat(  buffer, ".dat" );
+      sprintf( buffer, "forces_thermostat_%s.dat", constants.output_label );
 
-      if( FILE_CHECK( forces_thermostat_fp, output_files_closing ) ){
-        fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-        fflush( stderr);
-        info=1;
-      }
-      fclose( forces_thermostat_fp );
+      CLOSE_FILE( forces_thermostat_fp, buffer );	
 
     }
 
@@ -2732,16 +2643,9 @@ int output_files_closing( const constants constants ){
   /* populations file */
   if( constants.flag_observable_all || constants.flag_observable_populations ){
 
-    strcpy(  buffer, "populations_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "populations_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( populations_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( populations_fp );
+    CLOSE_FILE( populations_fp, buffer );	
 
   }
 
@@ -2749,33 +2653,19 @@ int output_files_closing( const constants constants ){
   /* energies file */
   if( constants.flag_observable_all || constants.flag_observable_energy ){
 
-    strcpy(  buffer, "energies_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "energies_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( energies_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( energies_fp );
+    CLOSE_FILE( energies_fp, buffer );	
 
   }
-
+    
 
   /* mu traces file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "mu_traces" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "mu_traces_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( mu_traces_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( mu_traces_fp );
+    CLOSE_FILE( mu_traces_fp, buffer );	
 
   }
 
@@ -2783,35 +2673,21 @@ int output_files_closing( const constants constants ){
   /* mu norms file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "mu_norms" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "mu_norms_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( mu_norms_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( mu_norms_fp );
+    CLOSE_FILE( mu_norms_fp, buffer );	
 
-  }  
+  }
+
 
 #ifdef __DEBUG_PLUS__
-
 
   /* rho traces file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "rho_traces" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "rho_traces_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( rho_traces_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( rho_traces_fp );
+    CLOSE_FILE( rho_traces_fp, buffer );	
 
   }
 
@@ -2819,16 +2695,9 @@ int output_files_closing( const constants constants ){
   /* rho norms file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "rho_norms" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "rho_norms_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( rho_norms_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( rho_norms_fp );
+    CLOSE_FILE( rho_norms_fp, buffer );	
 
   }
 
@@ -2838,16 +2707,9 @@ int output_files_closing( const constants constants ){
   /* adiabatic_populations file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "adiabatic_populations" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "adiabatic_populations_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( adiabatic_populations_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( adiabatic_populations_fp );
+    CLOSE_FILE( adiabatic_populations_fp, buffer );	
 
   }
 
@@ -2855,16 +2717,9 @@ int output_files_closing( const constants constants ){
   /* adiabatic_projections file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "adiabatic_projections" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "adiabatic_projections_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( adiabatic_projections_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( adiabatic_projections_fp );
+    CLOSE_FILE( adiabatic_projections_fp, buffer );	
 
   }
 
@@ -2872,16 +2727,9 @@ int output_files_closing( const constants constants ){
   /* projections file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "projections" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "projections_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( projections_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( projections_fp );
+    CLOSE_FILE( projections_fp, buffer );	
 
   }
 
@@ -2889,16 +2737,9 @@ int output_files_closing( const constants constants ){
   /* adiabatic_PES_many file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "adiabatic_PES_many_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "adiabatic_PES_many_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( adiabatic_PES_many_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( adiabatic_PES_many_fp );
+    CLOSE_FILE( adiabatic_PES_many_fp, buffer );	
 
   }
 
@@ -2906,16 +2747,9 @@ int output_files_closing( const constants constants ){
   /* adiabatic_PES_single file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "adiabatic_PES_single_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "adiabatic_PES_single_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( adiabatic_PES_single_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( adiabatic_PES_single_fp );
+    CLOSE_FILE( adiabatic_PES_single_fp, buffer );	
 
   }
 
@@ -2923,16 +2757,9 @@ int output_files_closing( const constants constants ){
   /* single_level_populations_Ehrenfest file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "single_level_populations_Ehrenfest_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "single_level_populations_Ehrenfest_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( single_level_populations_Ehrenfest_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( single_level_populations_Ehrenfest_fp );
+    CLOSE_FILE( single_level_populations_Ehrenfest_fp, buffer );	
 
   }
 
@@ -2940,16 +2767,9 @@ int output_files_closing( const constants constants ){
   /* single_level_populations_adiabatic file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "single_level_populations_adiabatic_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "single_level_populations_adiabatic_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( single_level_populations_adiabatic_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( single_level_populations_adiabatic_fp );
+    CLOSE_FILE( single_level_populations_adiabatic_fp, buffer );	
 
   }
 
@@ -2957,16 +2777,9 @@ int output_files_closing( const constants constants ){
   /* nonadiabatic_couplings file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "nonadiabatic_couplings_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "nonadiabatic_couplings_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( nonadiabatic_couplings_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( nonadiabatic_couplings_fp );
+    CLOSE_FILE( nonadiabatic_couplings_fp, buffer );	
 
   }
 
@@ -2975,16 +2788,9 @@ int output_files_closing( const constants constants ){
   /*
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "nonadiabatic_rates_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+      sprintf( buffer, "nonadiabatic_rates_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( nonadiabatic_rates_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( nonadiabatic_rates_fp );
+      CLOSE_FILE( nonadiabatic_rates_fp, buffer );	
 
   }
   */
@@ -2993,16 +2799,9 @@ int output_files_closing( const constants constants ){
   /* one_body_electronic_density_matrix file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "one_body_electronic_density_matrix_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "one_body_electronic_density_matrix_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( one_body_electronic_density_matrix_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( one_body_electronic_density_matrix_fp );
+    CLOSE_FILE( one_body_electronic_density_matrix_fp, buffer );	
 
   }
 
@@ -3010,16 +2809,9 @@ int output_files_closing( const constants constants ){
   /* one_body_electronic_hole_matrix file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "one_body_electronic_hole_matrix_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "one_body_electronic_hole_matrix_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( one_body_electronic_hole_matrix_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( one_body_electronic_hole_matrix_fp );
+    CLOSE_FILE( one_body_electronic_hole_matrix_fp, buffer );	
 
   }
 
@@ -3027,16 +2819,9 @@ int output_files_closing( const constants constants ){
   /* one_body_electronic_particle_matrix file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "one_body_electronic_particle_matrix_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "one_body_electronic_particle_matrix_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( one_body_electronic_particle_matrix_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( one_body_electronic_particle_matrix_fp );
+    CLOSE_FILE( one_body_electronic_particle_matrix_fp, buffer );	
 
   }
 
@@ -3044,16 +2829,9 @@ int output_files_closing( const constants constants ){
   /* natural_orbitals file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "natural_orbitals_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "natural_orbitals_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( natural_orbitals_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( natural_orbitals_fp );
+    CLOSE_FILE( natural_orbitals_fp, buffer );	
 
   }
 
@@ -3061,16 +2839,9 @@ int output_files_closing( const constants constants ){
   /* hole_orbitals file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "hole_orbitals_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "hole_orbitals_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( hole_orbitals_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( hole_orbitals_fp );
+    CLOSE_FILE( hole_orbitals_fp, buffer );	
 
   }
 
@@ -3078,16 +2849,9 @@ int output_files_closing( const constants constants ){
   /* particle_orbitals file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "particle_orbitals_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "particle_orbitals_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( particle_orbitals_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( particle_orbitals_fp );
+    CLOSE_FILE( particle_orbitals_fp, buffer );	
 
   }
 
@@ -3095,16 +2859,9 @@ int output_files_closing( const constants constants ){
   /* adiabatic_states file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "adiabatic_states_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "adiabatic_states_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( adiabatic_states_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( adiabatic_states_fp );
+    CLOSE_FILE( adiabatic_states_fp, buffer );	
 
   }
 
@@ -3112,16 +2869,9 @@ int output_files_closing( const constants constants ){
   /* electronic_density_states file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "electronic_density_states_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "electronic_density_states_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( electronic_density_states_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( electronic_density_states_fp );
+    CLOSE_FILE( electronic_density_states_fp, buffer );	
 
   }
 
@@ -3129,33 +2879,19 @@ int output_files_closing( const constants constants ){
   /* ionic_density_states file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "ionic_density_states_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "ionic_density_states_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( ionic_density_states_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( ionic_density_states_fp );
+    CLOSE_FILE( ionic_density_states_fp, buffer );	
 
   }
 
 
   /* dipoles many file */
-  if( N_levels_many > 1 && constants.flag_observable_all ){
+  if( N_levels_many > 1 &&  constants.flag_observable_all ){
 
-    strcpy(  buffer, "dipoles_many_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "dipoles_many_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( dipoles_many_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( dipoles_many_fp );
+    CLOSE_FILE( dipoles_many_fp, buffer );	
 
   }
 
@@ -3163,16 +2899,9 @@ int output_files_closing( const constants constants ){
   /* dipoles single file */
   if( constants.flag_observable_all ){
 
-    strcpy(  buffer, "dipoles_single_" );
-    strcat(  buffer, output_label );
-    strcat(  buffer, ".dat" );
+    sprintf( buffer, "dipoles_single_%s.dat", constants.output_label );
 
-    if( FILE_CHECK( dipoles_single_fp, output_files_closing ) ){
-      fprintf( stderr, "ERROR occurred when closing file %s.\n", buffer );
-      fflush( stderr);
-      info=1;
-    }
-    fclose( dipoles_single_fp );
+    CLOSE_FILE( dipoles_single_fp, buffer );	
 
   }
 
