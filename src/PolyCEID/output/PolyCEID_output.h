@@ -257,6 +257,12 @@ int open_file( FILE**, char* );
 
 //------------------------------------------
 
+int close_file( FILE**, char* );
+
+#define CLOSE_FILE( fp, fn ) FUNCTION_CHECK( close_file( &(fp), (fn) ), close_file )
+
+//------------------------------------------
+
 int output_files_opening( const constants );
 
 #define OUTPUT_OPENING( co ) FUNCTION_CHECK(  output_files_opening( (co) ), output_files_opening ) 
