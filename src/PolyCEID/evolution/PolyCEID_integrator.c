@@ -459,37 +459,66 @@ int compute_observables( const constants constants, state_p state_p, config_p co
 
 
   /* update energy */
-  if( ENERGIES_UPDATE( constants, *state_p, *config_p ) ) info=1;
+  if( constants.flag_observable_all || constants.flag_observable_energies ){
+
+    if( ENERGIES_UPDATE( constants, *state_p, *config_p ) ) info=1;
+
+  }
 
   /* compute adiabatic projection */
+  // BUGFIX: what are the dependencies here?
   if( ADIABATIC_PROJECTION_UPDATE( constants, *state_p, *config_p ) ) info=1;
 
 #ifndef __NO_DIPOLE__
 
-  /* compute superpositions */
-  if( COMPUTE_SUPERPOSITIONS( constants, *state_p, *config_p ) ) info=1;
+  if( constants.flag_observable_all || constants.flag_observable_dipoles_many ){
 
-  /* compute classical dipole */
-  if( COMPUTE_CLASSICAL_DIPOLE( constants, *state_p, *config_p ) ) info=1;
+    /* compute superpositions */
+    if( COMPUTE_SUPERPOSITIONS( constants, *state_p, *config_p ) ) info=1;
+
+    /* compute classical dipole */
+    if( COMPUTE_CLASSICAL_DIPOLE( constants, *state_p, *config_p ) ) info=1;
+
+  }
 
 #endif /* __NO_DIPOLE__ */
 
   /* update one_body_electronic_density_matrix */
-  if( COMPUTE_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, *state_p, *config_p ) ) info=1; 
+  if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
+
+    if( COMPUTE_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, *state_p, *config_p ) ) info=1; 
+
+  }
 
   /* compute single level populations */
-  if( COMPUTE_SINGLE_LEVEL_POPULATIONS( constants, *state_p, *config_p ) ) info=1;
-	  
+  if( constants.flag_observable_all || constants.flag_observable_single_level_populations ){
+
+    if( COMPUTE_SINGLE_LEVEL_POPULATIONS( constants, *state_p, *config_p ) ) info=1;
+
+  }
+
   /* compute ionic density */
-  if( IONIC_DENSITY_UPDATE( constants, *state_p, *config_p ) ) info=1;
-	  
+  if( constants.flag_observable_all || constants.flag_observable_ionic_density_states ){
+
+    if( IONIC_DENSITY_UPDATE( constants, *state_p, *config_p ) ) info=1;
+
+  }
+
   /* update one_body_electronic_transition_matrix */
-  if( COMPUTE_ONE_BODY_ELECTRONIC_TRANSITION_MATRIX( constants, *state_p, *config_p ) ) info=1;
+  if( constants.flag_observable_all || constants.flag_observable_transition_matrices ){
+
+    if( COMPUTE_ONE_BODY_ELECTRONIC_TRANSITION_MATRIX( constants, *state_p, *config_p ) ) info=1;
+
+  }
 
 #ifndef __NO_DIPOLE__
 
   /* compute dipole single*/
-  if( COMPUTE_DIPOLE_SINGLE( constants, *state_p, *config_p ) ) info=1;
+  if( constants.flag_observable_all || constants.flag_observable_dipoles_single ){
+
+    if( COMPUTE_DIPOLE_SINGLE( constants, *state_p, *config_p ) ) info=1;
+
+  }
 
 #endif /* __NO_DIPOLE__ */
 

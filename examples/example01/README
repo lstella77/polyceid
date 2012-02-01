@@ -60,5 +60,5 @@
 
   To remove all the files created during the previous runs, type
 
-    rm -f *.dat *.xyz
+    rm -f *.dat
 

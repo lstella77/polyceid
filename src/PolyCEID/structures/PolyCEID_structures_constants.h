@@ -130,9 +130,26 @@ typedef struct{
   unsigned long  int   seed;                        // random number generator seed
   hamiltonian          hamiltonian;                 // the hamiltonian
   unsigned short int   flag_observable_all;
+  unsigned short int   flag_observable_geometry;
   unsigned short int   flag_observable_positions;
+  unsigned short int   flag_observable_momenta;
+  unsigned short int   flag_observable_forces;
   unsigned short int   flag_observable_populations;
-  unsigned short int   flag_observable_energy;
+  unsigned short int   flag_observable_mus;
+  unsigned short int   flag_observable_energies;
+  unsigned short int   flag_observable_adiabatic_populations;
+  unsigned short int   flag_observable_projections;
+  unsigned short int   flag_observable_adiabatic_pes_many;
+  unsigned short int   flag_observable_adiabatic_pes_single;
+  unsigned short int   flag_observable_single_level_populations;
+  unsigned short int   flag_observable_nonadiabatic_couplings;
+  unsigned short int   flag_observable_density_matrix;
+  unsigned short int   flag_observable_transition_matrices;
+  unsigned short int   flag_observable_adiabatic_states;
+  unsigned short int   flag_observable_electronic_density_states;
+  unsigned short int   flag_observable_ionic_density_states;
+  unsigned short int   flag_observable_dipoles_many;
+  unsigned short int   flag_observable_dipoles_single;
 
   /* derived constants */
   unsigned short int   flag_pruning;                //
