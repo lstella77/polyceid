@@ -235,9 +235,9 @@ int print_dipoles_single( const constants, const state );
 
 //------------------------------------------
 
-int print_position_ion_frame( const constants, const state, const config );
+int print_geometry( const constants, const state, const config );
 
-#define PRINT_FRAME( co, st, cf )   FUNCTION_CHECK(  print_position_ion_frame( (co), (st), (cf) ), print_position_ion_frame  )
+#define PRINT_GEOMETRY( co, st, cf )   FUNCTION_CHECK(  print_geometry( (co), (st), (cf) ), print_geometry  )
 
 //------------------------------------------
 

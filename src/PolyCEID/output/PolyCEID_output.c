@@ -29,7 +29,7 @@
 
 /* private varaiables */
 
-FILE*      xyz_fp;
+FILE*      geometry_fp;
 FILE*      positions_fp;
 FILE*      momenta_fp;
 FILE*      forces_fp;
@@ -83,19 +83,25 @@ int print_observables( const constants constants, const state state, const confi
   N_chain       = constants.N_chain;
 	     
 
+  if( constants.flag_observable_all || constants.flag_observable_geometry ){
+
+    if( PRINT_GEOMETRY( constants, state, config ) )                     info=1;
+
+  }  
+
   if( constants.flag_observable_all || constants.flag_observable_positions ){
 
     if( PRINT_POSITIONS( constants, state, config ) )                   info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_momenta ){
 
     if( PRINT_MOMENTA( constants, state, config ) )                     info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_forces ){
 
     if( PRINT_FORCES( constants, state, config ) )                      info=1;
 
@@ -129,13 +135,9 @@ int print_observables( const constants constants, const state state, const confi
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_mus ){
 
     if( PRINT_MU_TRACES( constants, state, config ) )                   info=1;
-
-  }  
-
-  if( constants.flag_observable_all ){
 
     if( PRINT_MU_NORMS( constants, state, config ) )                    info=1;
 
@@ -157,55 +159,47 @@ int print_observables( const constants constants, const state state, const confi
 
 #endif /* __DEBUG_PLUS__ */
 
-  if( constants.flag_observable_all || constants.flag_observable_energy ){
+  if( constants.flag_observable_all || constants.flag_observable_energies ){
 
     if( PRINT_ENERGIES( constants, state ) )                            info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_populations ){
 
     if( PRINT_ADIABATIC_POPULATIONS( constants, state ) )               info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_projections ){
 
     if( PRINT_ADIABATIC_PROJECTIONS( constants, state ) )               info=1;
-
-  }  
-
-  if( constants.flag_observable_all ){
 
     if( PRINT_PROJECTIONS( state ) )                                    info=1;
 
   }
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_many ){
 
     if( PRINT_ADIABATIC_PES_MANY( constants, state ) )                  info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_single ){
 
     if( PRINT_ADIABATIC_PES_SINGLE( constants, state ) )                info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_single_level_populations ){
 
     if( PRINT_SINGLE_LEVEL_POPULATIONS_EHRENFEST( constants, state ) )  info=1;
-
-  }  
-
-  if( constants.flag_observable_all ){
 
     if( PRINT_SINGLE_LEVEL_POPULATIONS_ADIABATIC( constants, state ) )  info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_nonadiabatic_couplings ){
 
     if( PRINT_NONADIABATIC_COUPLINGS( constants, state ) )              info=1; 
 
@@ -219,75 +213,53 @@ int print_observables( const constants constants, const state state, const confi
   }
   */
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
 
     if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, state ) )  info=1;
-
-  }
-
-  if( constants.flag_observable_all ){
-
-    if( PRINT_ONE_BODY_ELECTRONIC_HOLE_MATRIX( constants, state ) )     info=1;
-
-  }
-
-  if( constants.flag_observable_all ){
-
-    if( PRINT_ONE_BODY_ELECTRONIC_PARTICLE_MATRIX( constants, state ) ) info=1;
-
-  }  
-
-  if( constants.flag_observable_all ){
 
     if( PRINT_NATURAL_ORBITALS( constants, state ) )                    info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_transition_matrices ){
+
+    if( PRINT_ONE_BODY_ELECTRONIC_HOLE_MATRIX( constants, state ) )     info=1;
+
+    if( PRINT_ONE_BODY_ELECTRONIC_PARTICLE_MATRIX( constants, state ) ) info=1;
 
     if( PRINT_HOLE_ORBITALS( constants, state ) )                       info=1;
-
-  }  
-
-  if( constants.flag_observable_all ){
 
     if( PRINT_PARTICLE_ORBITALS( constants, state ) )                   info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_states ){
 
     if( PRINT_ADIABATIC_STATES( constants, state ) )                    info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_electronic_density_states ){
 
     if( PRINT_ELECTRONIC_DENSITY_STATES( constants, state ) )           info=1;
 
   }  
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_ionic_density_states ){
 
     if( PRINT_IONIC_DENSITY_STATES( constants, state ) )                info=1;
 
   }  
 
-  if( N_levels_many > 1 && constants.flag_observable_all ){
+  if( ( N_levels_many > 1 && constants.flag_observable_all ) || constants.flag_observable_dipoles_many ){
 
     if( PRINT_DIPOLES_MANY( constants, state ) )                        info=1;
 
   }
 
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_dipoles_single ){
 
     if( PRINT_DIPOLES_SINGLE( constants, state ) )                       info=1;
-
-  }  
-
-  if( constants.flag_observable_all ){
-
-    if( PRINT_FRAME( constants, state, config ) )                       info=1;
 
   }  
 
@@ -2059,7 +2031,7 @@ int print_dipoles_single( const constants constants, const state state ){
 //------------------------------------------
 
 //BUGFIX: thsi was originally DEF
-int print_position_ion_frame( const constants constants, const state state, const config config ){
+int print_geometry( const constants constants, const state state, const config config ){
 
   /* constants */
   int        N_atoms;
@@ -2094,34 +2066,34 @@ int print_position_ion_frame( const constants constants, const state state, cons
   time             =  state.time;
   positions_p      = &(config.atoms.positions);
 
-  fprintf( xyz_fp, "%d\n", N_atoms );
-  fprintf( xyz_fp, "# time = %le\n", time );
+  fprintf( geometry_fp, "%d\n", N_atoms );
+  fprintf( geometry_fp, "# time = %le\n", time );
 
   if( !info ){
 
     for( i_atom=0; i_atom<N_atoms; i_atom++ ){
 
-      fprintf( xyz_fp, "%s  "DOUBLE_FORMAT"  ", "C", positions_p->rvector[ i_atom *sdim ] );
+      fprintf( geometry_fp, "%s  "DOUBLE_FORMAT"  ", "C", positions_p->rvector[ i_atom *sdim ] );
       
       if( sdim > 1 ){
 
-	fprintf( xyz_fp, DOUBLE_FORMAT"  ", positions_p->rvector[ 1 +i_atom *sdim ] );
+	fprintf( geometry_fp, DOUBLE_FORMAT"  ", positions_p->rvector[ 1 +i_atom *sdim ] );
 
       }
       else{
       
-	fprintf( xyz_fp, DOUBLE_FORMAT"  ", 0.0e0  );
+	fprintf( geometry_fp, DOUBLE_FORMAT"  ", 0.0e0  );
       
       }
 
       if( sdim > 2 ){
 
-	fprintf( xyz_fp, DOUBLE_FORMAT"\n", positions_p->rvector[ 2 +i_atom *sdim ] );
+	fprintf( geometry_fp, DOUBLE_FORMAT"\n", positions_p->rvector[ 2 +i_atom *sdim ] );
       
       }
       else{
       
-	fprintf( xyz_fp, DOUBLE_FORMAT"\n", 0.0e0  );
+	fprintf( geometry_fp, DOUBLE_FORMAT"\n", 0.0e0  );
       
       }
 
@@ -2129,7 +2101,7 @@ int print_position_ion_frame( const constants constants, const state state, cons
 
   } /* end info if*/
 
-  fflush(  xyz_fp );
+  fflush(  geometry_fp );
 
 
   return info;
@@ -2206,12 +2178,12 @@ int output_files_opening( const constants constants ){
   N_chain       = constants.N_chain;
 
 
-  /* xyz file */
+  /* geometry file */
   if( constants.flag_observable_all ){
 
-    sprintf( buffer, "%s.xyz", constants.output_label );
+    sprintf( buffer, "%s.geometry", constants.output_label );
 
-    OPEN_FILE( xyz_fp, buffer );	
+    OPEN_FILE( geometry_fp, buffer );	
 
   }
 
@@ -2227,7 +2199,7 @@ int output_files_opening( const constants constants ){
 
 
   /* momenta file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_momenta ){
 
     sprintf( buffer, "momenta_%s.dat", constants.output_label );
 
@@ -2237,7 +2209,7 @@ int output_files_opening( const constants constants ){
 
 
   /* forces file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_forces ){
 
     sprintf( buffer, "forces_%s.dat", constants.output_label );
 
@@ -2290,29 +2262,14 @@ int output_files_opening( const constants constants ){
   }
 
 
-  /* energies file */
-  if( constants.flag_observable_all || constants.flag_observable_energy ){
+  if( constants.flag_observable_all || constants.flag_observable_mus ){
 
-    sprintf( buffer, "energies_%s.dat", constants.output_label );
-
-    OPEN_FILE( energies_fp, buffer );	
-
-  }
-    
-
-  /* mu traces file */
-  if( constants.flag_observable_all ){
-
+    /* mu traces file */
     sprintf( buffer, "mu_traces_%s.dat", constants.output_label );
 
     OPEN_FILE( mu_traces_fp, buffer );	
 
-  }
-
-
-  /* mu norms file */
-  if( constants.flag_observable_all ){
-
+    /* mu norms file */
     sprintf( buffer, "mu_norms_%s.dat", constants.output_label );
 
     OPEN_FILE( mu_norms_fp, buffer );	
@@ -2344,8 +2301,18 @@ int output_files_opening( const constants constants ){
 #endif /* __DEBUG_PLUS__ */
 
 
+  /* energies file */
+  if( constants.flag_observable_all || constants.flag_observable_energies ){
+
+    sprintf( buffer, "energies_%s.dat", constants.output_label );
+
+    OPEN_FILE( energies_fp, buffer );	
+
+  }
+    
+
   /* adiabatic_populations file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_populations ){
 
     sprintf( buffer, "adiabatic_populations_%s.dat", constants.output_label );
 
@@ -2354,19 +2321,14 @@ int output_files_opening( const constants constants ){
   }
 
 
-  /* adiabatic_projections file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_projections ){
 
+    /* adiabatic_projections file */
     sprintf( buffer, "adiabatic_projections_%s.dat", constants.output_label );
 
     OPEN_FILE( adiabatic_projections_fp, buffer );	
 
-  }
-
-
-  /* projections file */
-  if( constants.flag_observable_all ){
-
+    /* projections file */
     sprintf( buffer, "projections_%s.dat", constants.output_label );
 
     OPEN_FILE( projections_fp, buffer );	
@@ -2375,7 +2337,7 @@ int output_files_opening( const constants constants ){
 
 
   /* adiabatic_PES_many file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_many ){
 
     sprintf( buffer, "adiabatic_PES_many_%s.dat", constants.output_label );
 
@@ -2385,7 +2347,7 @@ int output_files_opening( const constants constants ){
 
 
   /* adiabatic_PES_single file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_single ){
 
     sprintf( buffer, "adiabatic_PES_single_%s.dat", constants.output_label );
 
@@ -2394,19 +2356,14 @@ int output_files_opening( const constants constants ){
   }
 
 
-  /* single_level_populations_Ehrenfest file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_single_level_populations ){
 
+    /* single_level_populations_Ehrenfest file */
     sprintf( buffer, "single_level_populations_Ehrenfest_%s.dat", constants.output_label );
 
     OPEN_FILE( single_level_populations_Ehrenfest_fp, buffer );	
-
-  }
-
-
-  /* single_level_populations_adiabatic file */
-  if( constants.flag_observable_all ){
-
+  
+    /* single_level_populations_adiabatic file */
     sprintf( buffer, "single_level_populations_adiabatic_%s.dat", constants.output_label );
 
     OPEN_FILE( single_level_populations_adiabatic_fp, buffer );	
@@ -2415,7 +2372,7 @@ int output_files_opening( const constants constants ){
 
 
   /* nonadiabatic_couplings file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_nonadiabatic_couplings ){
 
     sprintf( buffer, "nonadiabatic_couplings_%s.dat", constants.output_label );
 
@@ -2436,39 +2393,14 @@ int output_files_opening( const constants constants ){
   */
 
 
-  /* one_body_electronic_density_matrix file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
 
+    /* one_body_electronic_density_matrix file */
     sprintf( buffer, "one_body_electronic_density_matrix_%s.dat", constants.output_label );
 
     OPEN_FILE( one_body_electronic_density_matrix_fp, buffer );	
 
-  }
-
-
-  /* one_body_electronic_hole_matrix file */
-  if( constants.flag_observable_all ){
-
-    sprintf( buffer, "one_body_electronic_hole_matrix_%s.dat", constants.output_label );
-
-    OPEN_FILE( one_body_electronic_hole_matrix_fp, buffer );	
-
-  }
-
-
-  /* one_body_electronic_particle_matrix file */
-  if( constants.flag_observable_all ){
-
-    sprintf( buffer, "one_body_electronic_particle_matrix_%s.dat", constants.output_label );
-
-    OPEN_FILE( one_body_electronic_particle_matrix_fp, buffer );	
-
-  }
-
-
-  /* natural_orbitals file */
-  if( constants.flag_observable_all ){
-
+    /* natural_orbitals file */
     sprintf( buffer, "natural_orbitals_%s.dat", constants.output_label );
 
     OPEN_FILE( natural_orbitals_fp, buffer );	
@@ -2476,19 +2408,24 @@ int output_files_opening( const constants constants ){
   }
 
 
-  /* hole_orbitals file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_transition_matrices ){
 
+    /* one_body_electronic_hole_matrix file */
+    sprintf( buffer, "one_body_electronic_hole_matrix_%s.dat", constants.output_label );
+
+    OPEN_FILE( one_body_electronic_hole_matrix_fp, buffer );	
+
+    /* one_body_electronic_particle_matrix file */
+    sprintf( buffer, "one_body_electronic_particle_matrix_%s.dat", constants.output_label );
+
+    OPEN_FILE( one_body_electronic_particle_matrix_fp, buffer );	
+
+    /* hole_orbitals file */
     sprintf( buffer, "hole_orbitals_%s.dat", constants.output_label );
 
     OPEN_FILE( hole_orbitals_fp, buffer );	
 
-  }
-
-
-  /* particle_orbitals file */
-  if( constants.flag_observable_all ){
-
+    /* particle_orbitals file */
     sprintf( buffer, "particle_orbitals_%s.dat", constants.output_label );
 
     OPEN_FILE( particle_orbitals_fp, buffer );	
@@ -2497,7 +2434,7 @@ int output_files_opening( const constants constants ){
 
 
   /* adiabatic_states file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_states ){
 
     sprintf( buffer, "adiabatic_states_%s.dat", constants.output_label );
 
@@ -2507,7 +2444,7 @@ int output_files_opening( const constants constants ){
 
 
   /* electronic_density_states file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_electronic_density_states ){
 
     sprintf( buffer, "electronic_density_states_%s.dat", constants.output_label );
 
@@ -2527,7 +2464,7 @@ int output_files_opening( const constants constants ){
 
 
   /* dipoles many file */
-  if( N_levels_many > 1 &&  constants.flag_observable_all ){
+  if( ( N_levels_many > 1 && constants.flag_observable_all ) || constants.flag_observable_dipoles_many ){
 
     sprintf( buffer, "dipoles_many_%s.dat", constants.output_label );
 
@@ -2537,7 +2474,7 @@ int output_files_opening( const constants constants ){
 
 
   /* dipoles single file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_dipoles_single ){
 
     sprintf( buffer, "dipoles_single_%s.dat", constants.output_label );
 
@@ -2559,19 +2496,18 @@ int output_files_closing( const constants constants ){
   int       N_chain;
   /* dummies */
   char      buffer[MAX_STRING_LENGTH];
-  char*     output_label;
   int       info=0;
 
                           
   N_levels_many = constants.N_levels_many;
   N_chain       = constants.N_chain;
 
-  /* xyz file */
+  /* geometry file */
   if( constants.flag_observable_all ){
 
-    sprintf( buffer, "%s.xyz", constants.output_label );
+    sprintf( buffer, "%s.geometry", constants.output_label );
 
-    CLOSE_FILE( xyz_fp, buffer );	
+    CLOSE_FILE( geometry_fp, buffer );	
 
   }
 
@@ -2587,7 +2523,7 @@ int output_files_closing( const constants constants ){
 
 
   /* momenta file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_momenta ){
 
     sprintf( buffer, "momenta_%s.dat", constants.output_label );
 
@@ -2597,7 +2533,7 @@ int output_files_closing( const constants constants ){
 
 
   /* forces file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_forces ){
 
     sprintf( buffer, "forces_%s.dat", constants.output_label );
 
@@ -2650,29 +2586,14 @@ int output_files_closing( const constants constants ){
   }
 
 
-  /* energies file */
-  if( constants.flag_observable_all || constants.flag_observable_energy ){
+  if( constants.flag_observable_all || constants.flag_observable_mus ){
 
-    sprintf( buffer, "energies_%s.dat", constants.output_label );
-
-    CLOSE_FILE( energies_fp, buffer );	
-
-  }
-    
-
-  /* mu traces file */
-  if( constants.flag_observable_all ){
-
+    /* mu traces file */
     sprintf( buffer, "mu_traces_%s.dat", constants.output_label );
 
     CLOSE_FILE( mu_traces_fp, buffer );	
 
-  }
-
-
-  /* mu norms file */
-  if( constants.flag_observable_all ){
-
+    /* mu norms file */
     sprintf( buffer, "mu_norms_%s.dat", constants.output_label );
 
     CLOSE_FILE( mu_norms_fp, buffer );	
@@ -2704,8 +2625,18 @@ int output_files_closing( const constants constants ){
 #endif /* __DEBUG_PLUS__ */
 
 
+  /* energies file */
+  if( constants.flag_observable_all || constants.flag_observable_energies ){
+
+    sprintf( buffer, "energies_%s.dat", constants.output_label );
+
+    CLOSE_FILE( energies_fp, buffer );	
+
+  }
+    
+
   /* adiabatic_populations file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_populations ){
 
     sprintf( buffer, "adiabatic_populations_%s.dat", constants.output_label );
 
@@ -2714,19 +2645,14 @@ int output_files_closing( const constants constants ){
   }
 
 
-  /* adiabatic_projections file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_projections ){
 
+    /* adiabatic_projections file */
     sprintf( buffer, "adiabatic_projections_%s.dat", constants.output_label );
 
     CLOSE_FILE( adiabatic_projections_fp, buffer );	
 
-  }
-
-
-  /* projections file */
-  if( constants.flag_observable_all ){
-
+    /* projections file */
     sprintf( buffer, "projections_%s.dat", constants.output_label );
 
     CLOSE_FILE( projections_fp, buffer );	
@@ -2735,7 +2661,7 @@ int output_files_closing( const constants constants ){
 
 
   /* adiabatic_PES_many file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_many ){
 
     sprintf( buffer, "adiabatic_PES_many_%s.dat", constants.output_label );
 
@@ -2745,7 +2671,7 @@ int output_files_closing( const constants constants ){
 
 
   /* adiabatic_PES_single file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_single ){
 
     sprintf( buffer, "adiabatic_PES_single_%s.dat", constants.output_label );
 
@@ -2754,19 +2680,14 @@ int output_files_closing( const constants constants ){
   }
 
 
-  /* single_level_populations_Ehrenfest file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_single_level_populations ){
 
+    /* single_level_populations_Ehrenfest file */
     sprintf( buffer, "single_level_populations_Ehrenfest_%s.dat", constants.output_label );
 
     CLOSE_FILE( single_level_populations_Ehrenfest_fp, buffer );	
-
-  }
-
-
-  /* single_level_populations_adiabatic file */
-  if( constants.flag_observable_all ){
-
+  
+    /* single_level_populations_adiabatic file */
     sprintf( buffer, "single_level_populations_adiabatic_%s.dat", constants.output_label );
 
     CLOSE_FILE( single_level_populations_adiabatic_fp, buffer );	
@@ -2775,7 +2696,7 @@ int output_files_closing( const constants constants ){
 
 
   /* nonadiabatic_couplings file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_nonadiabatic_couplings ){
 
     sprintf( buffer, "nonadiabatic_couplings_%s.dat", constants.output_label );
 
@@ -2796,39 +2717,14 @@ int output_files_closing( const constants constants ){
   */
 
 
-  /* one_body_electronic_density_matrix file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
 
+    /* one_body_electronic_density_matrix file */
     sprintf( buffer, "one_body_electronic_density_matrix_%s.dat", constants.output_label );
 
     CLOSE_FILE( one_body_electronic_density_matrix_fp, buffer );	
 
-  }
-
-
-  /* one_body_electronic_hole_matrix file */
-  if( constants.flag_observable_all ){
-
-    sprintf( buffer, "one_body_electronic_hole_matrix_%s.dat", constants.output_label );
-
-    CLOSE_FILE( one_body_electronic_hole_matrix_fp, buffer );	
-
-  }
-
-
-  /* one_body_electronic_particle_matrix file */
-  if( constants.flag_observable_all ){
-
-    sprintf( buffer, "one_body_electronic_particle_matrix_%s.dat", constants.output_label );
-
-    CLOSE_FILE( one_body_electronic_particle_matrix_fp, buffer );	
-
-  }
-
-
-  /* natural_orbitals file */
-  if( constants.flag_observable_all ){
-
+    /* natural_orbitals file */
     sprintf( buffer, "natural_orbitals_%s.dat", constants.output_label );
 
     CLOSE_FILE( natural_orbitals_fp, buffer );	
@@ -2836,19 +2732,24 @@ int output_files_closing( const constants constants ){
   }
 
 
-  /* hole_orbitals file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_transition_matrices ){
 
+    /* one_body_electronic_hole_matrix file */
+    sprintf( buffer, "one_body_electronic_hole_matrix_%s.dat", constants.output_label );
+
+    CLOSE_FILE( one_body_electronic_hole_matrix_fp, buffer );	
+
+    /* one_body_electronic_particle_matrix file */
+    sprintf( buffer, "one_body_electronic_particle_matrix_%s.dat", constants.output_label );
+
+    CLOSE_FILE( one_body_electronic_particle_matrix_fp, buffer );	
+
+    /* hole_orbitals file */
     sprintf( buffer, "hole_orbitals_%s.dat", constants.output_label );
 
     CLOSE_FILE( hole_orbitals_fp, buffer );	
 
-  }
-
-
-  /* particle_orbitals file */
-  if( constants.flag_observable_all ){
-
+    /* particle_orbitals file */
     sprintf( buffer, "particle_orbitals_%s.dat", constants.output_label );
 
     CLOSE_FILE( particle_orbitals_fp, buffer );	
@@ -2857,7 +2758,7 @@ int output_files_closing( const constants constants ){
 
 
   /* adiabatic_states file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_adiabatic_states ){
 
     sprintf( buffer, "adiabatic_states_%s.dat", constants.output_label );
 
@@ -2867,7 +2768,7 @@ int output_files_closing( const constants constants ){
 
 
   /* electronic_density_states file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_electronic_density_states ){
 
     sprintf( buffer, "electronic_density_states_%s.dat", constants.output_label );
 
@@ -2887,7 +2788,7 @@ int output_files_closing( const constants constants ){
 
 
   /* dipoles many file */
-  if( N_levels_many > 1 &&  constants.flag_observable_all ){
+  if( ( N_levels_many > 1 && constants.flag_observable_all ) || constants.flag_observable_dipoles_many ){
 
     sprintf( buffer, "dipoles_many_%s.dat", constants.output_label );
 
@@ -2897,7 +2798,7 @@ int output_files_closing( const constants constants ){
 
 
   /* dipoles single file */
-  if( constants.flag_observable_all ){
+  if( constants.flag_observable_all || constants.flag_observable_dipoles_single ){
 
     sprintf( buffer, "dipoles_single_%s.dat", constants.output_label );
 
