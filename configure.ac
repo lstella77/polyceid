@@ -1,5 +1,5 @@
 
-dnl  Copyright (C) 2011 by Lorenzo Stella <lorenzo DOT stella77 AT gmail DOT com>
+dnl  Copyright (C) 2011-2012 by Lorenzo Stella <lorenzo DOT stella77 AT gmail.com>
 
 dnl  Permission is hereby granted, free of charge, to any person obtaining a copy
 dnl  of this software and associated documentation files (the "Software"), to deal
