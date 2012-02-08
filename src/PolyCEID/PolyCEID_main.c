@@ -214,6 +214,7 @@ int main( int argc, char* argv[] ){
 
 
 	/* initial writing */
+	/*
 	if( !info ){
 	
 	  fprintf( stdout, "# constants [at the beginning]\n" );
@@ -241,16 +242,17 @@ int main( int argc, char* argv[] ){
 	  
 	}
       
-
+        
 	if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
 	
 	if( CONFIG_VERBOSE_PRINT( stdout, config_tmp ) ) info=1;
 	
 	if( STATE_VERBOSE_PRINT( stdout, state ) ) info=1;
 	
+
 	fprintf( stdout, "\n" );
 	fflush( stdout );
-      
+        */
 
 
 	/* integration of the CEID EOM */
@@ -262,6 +264,7 @@ int main( int argc, char* argv[] ){
 
 
 	/* final writing */
+	/*
 	if( !info ){
       
 	  fprintf( stdout, "# constants [at the end]\n" );
@@ -273,7 +276,7 @@ int main( int argc, char* argv[] ){
 
 	}
       
-	if( CONSTANTS_VERBOSE_PRINT( stdout, constants ) ) info=1;
+	// if( CONSTANTS_VERBOSE_PRINT( stdout, constants ) ) info=1;
 	
 	fprintf( stdout, "\n" );
 
@@ -289,15 +292,17 @@ int main( int argc, char* argv[] ){
 	
 	}
 	
+	
 	if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
 	
 	if( CONFIG_VERBOSE_PRINT( stdout, config_tmp ) ) info=1;
 	
 	if( STATE_VERBOSE_PRINT( stdout, state ) ) info=1;
 	
+
 	fprintf( stdout, "\n" );
 	fflush( stdout );
-      
+        i*/
 
 	/* closing output files */
 	if( !info ){

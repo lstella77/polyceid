@@ -405,7 +405,7 @@ entry_p  _list_search( list_p l_p, char* name ){
   // pointer check
   if( !l_p ){
 
-    fprintf( PolyCEID_STDERR, "ERROR: no list %s to be searched\n", name );
+    fprintf( PolyCEID_STDERR, "ERROR: no list in which searching for %s\n", name );
 
     fflush( PolyCEID_STDERR );
 
