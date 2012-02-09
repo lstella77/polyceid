@@ -1575,329 +1575,280 @@ int output_parsing( list_p list_p, constants_p constants_p ){
 
   entry_found_p = LIST_SEARCH( list_p, "output" );      
 
-  if( !entry_found_p ){
+  if( !entry_found_p->sublist_p ){
 
-    // default output
-#ifdef __DEBUG__
-    constants_p->flag_observable_all = 1;
-#else
-    constants_p->flag_observable_all = 0;
-#endif /* __DEBUG__ */
+    fprintf( PolyCEID_STDERR, "ERROR: no value to extract from variable %s\n", entry_found_p->field.name );
 
-    constants_p->flag_observable_geometry = 0;
+    fflush( PolyCEID_STDERR );
 
-    constants_p->flag_observable_positions = 1;
-
-    constants_p->flag_observable_momenta = 0;
-
-    constants_p->flag_observable_forces = 0;
-
-    constants_p->flag_observable_populations = 1;
-
-    constants_p->flag_observable_mus = 0;
-
-    constants_p->flag_observable_energies = 1;
-
-
-    constants_p->flag_observable_projections = 0;
-
-    constants_p->flag_observable_adiabatic_pes_many = 0;
-
-    constants_p->flag_observable_adiabatic_pes_single = 0;
-
-    constants_p->flag_observable_single_level_populations = 0;
-
-    constants_p->flag_observable_nonadiabatic_couplings = 0;
-
-    constants_p->flag_observable_density_matrix = 0;
-
-    constants_p->flag_observable_transition_matrices = 0;
-
-    constants_p->flag_observable_adiabatic_states = 0;
-
-    constants_p->flag_observable_electronic_density_states = 0;
-
-    constants_p->flag_observable_ionic_density_states = 0;
-
-    constants_p->flag_observable_dipoles_many = 0;
-
-    constants_p->flag_observable_dipoles_single = 0;
+    info=1;
 
   }
   else{
 
-    if( !entry_found_p->sublist_p ){
+    // extracting "flag_observable_all"
+    if( entry_found_p->sublist_p ){
 
-      fprintf( PolyCEID_STDERR, "ERROR: no value to extract from variable %s\n", entry_found_p->field.name );
-
-      fflush( PolyCEID_STDERR );
-
-      info=1;
+      constants_p->flag_observable_all = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "all" );
 
     }
     else{
 
-      // extracting "flag_observable_all"
-      if( entry_found_p->sublist_p ){
+#ifdef __DEBUG__
+      constants_p->flag_observable_all = 1;
+#else
+      constants_p->flag_observable_all = 0;
+#endif /* __DEBUG__ */
 
-        constants_p->flag_observable_all = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "all" );
+    }        
 
-      }
-      else{
+    // extracting "flag_observable_geometry"
+    if( entry_found_p->sublist_p ){
 
-        constants_p->flag_observable_all = 0;
-
-      }        
-
-      // extracting "flag_observable_geometry"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_geometry = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "geometry" );
-
-      }
-      else{
-
-        constants_p->flag_observable_geometry = 0;
-
-      }        
-
-      // extracting "flag_observable_positions"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_positions = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "positions" );
-
-      }
-      else{
-
-        constants_p->flag_observable_positions = 1;
-
-      }        
-
-      // extracting "flag_observable_momenta"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_momenta = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "momenta" );
-
-      }
-      else{
-
-        constants_p->flag_observable_momenta = 0;
-
-      }        
-
-      // extracting "flag_observable_forces"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_forces = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "forces" );
-
-      }
-      else{
-
-        constants_p->flag_observable_forces = 0;
-
-      }        
-
-      // extracting "flag_observable_populations"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_populations = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "populations" );
-
-      }
-      else{
-
-        constants_p->flag_observable_populations = 1;
-
-      }        
-
-      // extracting "flag_observable_mus"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_mus = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "mus" );
-
-      }
-      else{
-
-        constants_p->flag_observable_mus = 0;
-
-      }        
-
-      // extracting "flag_observable_energies"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_energies = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "energies" );
-
-      }
-      else{
-
-        constants_p->flag_observable_energies = 1;
-
-      }        
-
-      // extracting "flag_observable_adiabatic_populations"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_adiabatic_populations = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_populations" );
-
-      }
-      else{
-
-        constants_p->flag_observable_adiabatic_populations = 0;
-
-      }        
-
-      // extracting "flag_observable_projections"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_projections = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "projections" );
-
-      }
-      else{
-
-        constants_p->flag_observable_projections = 0;
-
-      }        
-
-      // extracting "flag_observable_adiabatic_pes_many"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_adiabatic_pes_many = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_pes_many" );
-
-      }
-      else{
-
-        constants_p->flag_observable_adiabatic_pes_many = 0;
-
-      }        
-
-      // extracting "flag_observable_adiabatic_pes_single"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_adiabatic_pes_single = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_pes_single" );
-
-      }
-      else{
-
-        constants_p->flag_observable_adiabatic_pes_single = 0;
-
-      }        
-
-      // extracting "flag_observable_single_level_populations"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_single_level_populations = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "single_level_populations" );
-
-      }
-      else{
-
-        constants_p->flag_observable_single_level_populations = 0;
-
-      }        
-
-      // extracting "flag_observable_nonadiabatic_couplings"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_nonadiabatic_couplings = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "nonadiabatic_coupling" );
-
-      }
-      else{
-
-        constants_p->flag_observable_nonadiabatic_couplings = 0;
-
-      }        
-
-      // extracting "flag_observable_density_matrix"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_density_matrix = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "density_matrix" );
-
-      }
-      else{
-
-        constants_p->flag_observable_density_matrix = 0;
-
-      }        
-
-      // extracting "flag_observable_transition_matrices"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_transition_matrices = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "transition_matrices" );
-
-      }
-      else{
-
-        constants_p->flag_observable_transition_matrices = 0;
-
-      }        
-
-      // extracting "flag_observable_adiabatic_states"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_adiabatic_states = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_states" );
-
-      }
-      else{
-
-        constants_p->flag_observable_adiabatic_states = 0;
-
-      }        
-
-      // extracting "flag_observable_electronic_density_states"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_electronic_density_states = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "electronic_density_states" );
-
-      }
-      else{
-
-        constants_p->flag_observable_electronic_density_states = 0;
-
-      }        
-
-      // extracting "flag_observable_ionic_density_states"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_ionic_density_states = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "ionic_density_states" );
-
-      }
-      else{
-
-        constants_p->flag_observable_ionic_density_states = 0;
-
-      }        
-
-      // extracting "flag_observable_dipoles_many"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_dipoles_many = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "dipoles_many" );
-
-      }
-      else{
-
-        constants_p->flag_observable_dipoles_many = 0;
-
-      }        
-
-      // extracting "flag_observable_dipoles_single"
-      if( entry_found_p->sublist_p ){
-
-        constants_p->flag_observable_dipoles_single = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "dipoles_single" );
-
-      }
-      else{
-
-        constants_p->flag_observable_dipoles_single = 0;
-
-      }        
-
-      // free the input list
-      //LIST_CUT( entry_found_p->sublist_p );
+      constants_p->flag_observable_geometry = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "geometry" );
 
     }
+    else{
 
-    // cut the entry
-    ENTRY_CUT( entry_found_p );
+      constants_p->flag_observable_geometry = 0;
 
-  }        
+    }        
+
+    // extracting "flag_observable_positions"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_positions = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "positions" );
+
+    }
+    else{
+
+      constants_p->flag_observable_positions = 1;
+
+    }        
+
+    // extracting "flag_observable_momenta"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_momenta = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "momenta" );
+
+    }
+    else{
+
+      constants_p->flag_observable_momenta = 0;
+
+    }        
+
+    // extracting "flag_observable_forces"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_forces = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "forces" );
+
+    }
+    else{
+
+      constants_p->flag_observable_forces = 0;
+
+    }        
+
+    // extracting "flag_observable_populations"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_populations = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "populations" );
+
+    }
+    else{
+
+      constants_p->flag_observable_populations = 1;
+
+    }        
+
+    // extracting "flag_observable_mus"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_mus = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "mus" );
+
+    }
+    else{
+
+      constants_p->flag_observable_mus = 0;
+
+    }        
+
+    // extracting "flag_observable_energies"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_energies = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "energies" );
+
+    }
+    else{
+
+      constants_p->flag_observable_energies = 1;
+
+    }        
+
+    // extracting "flag_observable_adiabatic_populations"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_adiabatic_populations = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_populations" );
+
+    }
+    else{
+
+      constants_p->flag_observable_adiabatic_populations = 0;
+
+    }        
+
+    // extracting "flag_observable_projections"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_projections = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "projections" );
+
+    }
+    else{
+
+      constants_p->flag_observable_projections = 0;
+
+    }        
+
+    // extracting "flag_observable_adiabatic_pes_many"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_adiabatic_pes_many = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_pes_many" );
+
+    }
+    else{
+
+      constants_p->flag_observable_adiabatic_pes_many = 0;
+
+    }        
+
+    // extracting "flag_observable_adiabatic_pes_single"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_adiabatic_pes_single = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_pes_single" );
+
+    }
+    else{
+
+      constants_p->flag_observable_adiabatic_pes_single = 0;
+
+    }        
+
+    // extracting "flag_observable_single_level_populations"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_single_level_populations = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "single_level_populations" );
+
+    }
+    else{
+
+      constants_p->flag_observable_single_level_populations = 0;
+
+    }        
+
+    // extracting "flag_observable_nonadiabatic_couplings"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_nonadiabatic_couplings = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "nonadiabatic_coupling" );
+
+    }
+    else{
+
+      constants_p->flag_observable_nonadiabatic_couplings = 0;
+
+    }        
+
+    // extracting "flag_observable_density_matrix"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_density_matrix = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "density_matrix" );
+
+    }
+    else{
+
+      constants_p->flag_observable_density_matrix = 0;
+
+    }        
+
+    // extracting "flag_observable_transition_matrices"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_transition_matrices = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "transition_matrices" );
+
+    }
+    else{
+
+      constants_p->flag_observable_transition_matrices = 0;
+
+    }        
+
+    // extracting "flag_observable_adiabatic_states"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_adiabatic_states = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "adiabatic_states" );
+
+    }
+    else{
+
+      constants_p->flag_observable_adiabatic_states = 0;
+
+    }        
+
+    // extracting "flag_observable_electronic_density_states"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_electronic_density_states = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "electronic_density_states" );
+
+    }
+    else{
+
+      constants_p->flag_observable_electronic_density_states = 0;
+
+    }        
+
+    // extracting "flag_observable_ionic_density_states"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_ionic_density_states = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "ionic_density_states" );
+
+    }
+    else{
+
+      constants_p->flag_observable_ionic_density_states = 0;
+
+    }        
+
+    // extracting "flag_observable_dipoles_many"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_dipoles_many = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "dipoles_many" );
+
+    }
+    else{
+
+      constants_p->flag_observable_dipoles_many = 0;
+
+    }        
+
+    // extracting "flag_observable_dipoles_single"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_dipoles_single = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "dipoles_single" );
+
+    }
+    else{
+
+      constants_p->flag_observable_dipoles_single = 0;
+
+    }        
+
+    // free the input list
+    //LIST_CUT( entry_found_p->sublist_p );
+
+  }
+
+  // cut the entry
+  ENTRY_CUT( entry_found_p );
 
 
   return info;
