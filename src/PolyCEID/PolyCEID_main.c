@@ -23,13 +23,13 @@
 
 ******************************************************************************/
 
-#include "config.h"
 #include "input/PolyCEID_input_parsing.h"
 #include "initial/PolyCEID_initialise_state.h"
 #include "evolution/PolyCEID_integrator.h"
 #include "output/PolyCEID_output.h" 
 #include "initial/PolyCEID_rho_extra_indexing.h"
 #include "initial/PolyCEID_CI_table.h"
+#include "output/PolyCEID_output_general.h"
 #include <time.h>
 
 
@@ -52,9 +52,12 @@ int main( int argc, char* argv[] ){
   int                info=0;
 
 
+  /* print header */
+  PRINT_HEADER( stdout );
+
   /* start time */
   time1 = time( NULL );
-  fprintf( stdout, "#   This run has started on %s\n\n", asctime( timeinfo = localtime( &time1 ) ) );
+  fprintf( stdout, "#   This run has started on %s\n", asctime( timeinfo = localtime( &time1 ) ) );
 
   /* line parsing */
   if( argc !=2 ){
@@ -67,15 +70,6 @@ int main( int argc, char* argv[] ){
   }
 
   if( !info ){
-
-
-#ifdef __DEBUG__
-
-    fprintf( stderr, "STARTING PolyCEID\n" );
-    fflush( stderr );
-    
-#endif /* __DEBUG__ */
-    
 
     while( !info && flag_static ){
 
@@ -212,48 +206,6 @@ int main( int argc, char* argv[] ){
 	}
 
 
-	/* initial writing */
-	/*
-	if( !info ){
-	
-	  fprintf( stdout, "# constants [at the beginning]\n" );
-	
-	}
-	else{
-
-	  fprintf( stdout, "# constants [at the beginning --- after an error occurred]\n" );
-	  
-	}
-      
-	if( CONSTANTS_VERBOSE_PRINT( stdout, constants ) ) info=1;
-	
-	fprintf( stdout, "\n" );
-
-
-	if( !info ){
-
-	  fprintf( stdout, "# config & state [at the beginning]\n" );
-	
-	}
-	else{
-	
-	  fprintf( stdout, "# config & state [at the beginning --- after an error occurred]\n" );
-	  
-	}
-      
-        
-	if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
-	
-	if( CONFIG_VERBOSE_PRINT( stdout, config_tmp ) ) info=1;
-	
-	if( STATE_VERBOSE_PRINT( stdout, state ) ) info=1;
-	
-
-	fprintf( stdout, "\n" );
-	fflush( stdout );
-        */
-
-
 	/* integration of the CEID EOM */
 	if( !info ){
       
@@ -261,47 +213,6 @@ int main( int argc, char* argv[] ){
 
 	}
 
-
-	/* final writing */
-	/*
-	if( !info ){
-      
-	  fprintf( stdout, "# constants [at the end]\n" );
-
-	}
-	else{
-
-	  fprintf( stdout, "# constants [at the end --- after an error occurred]\n" );
-
-	}
-      
-	// if( CONSTANTS_VERBOSE_PRINT( stdout, constants ) ) info=1;
-	
-	fprintf( stdout, "\n" );
-
-
-	if( !info ){
-
-	  fprintf( stdout, "# config & state [at the end]\n" );
-
-	}
-	else{
-    
-	  fprintf( stdout, "# config state [at the end --- after an error occurred]\n" );
-	
-	}
-	
-	
-	if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
-	
-	if( CONFIG_VERBOSE_PRINT( stdout, config_tmp ) ) info=1;
-	
-	if( STATE_VERBOSE_PRINT( stdout, state ) ) info=1;
-	
-
-	fprintf( stdout, "\n" );
-	fflush( stdout );
-        i*/
 
 	/* closing output files */
 	if( !info ){
@@ -362,19 +273,12 @@ int main( int argc, char* argv[] ){
       
     } /* end while*/
 
-#ifdef __DEBUG__
-    
-  fprintf( stderr, "ENDING PolyCEID\n" );
-  fflush( stderr );
-
-#endif /* __DEBUG__ */
-
   } /* end info conditional */
 
 
   /* end time */
   time2 = time( NULL );
-  fprintf( stdout, "#   This run has ended on %s\n\n", asctime( localtime( &time2 ) ) );
+  fprintf( stdout, "#   This run has ended on %s\n", asctime( localtime( &time2 ) ) );
 
   //secs  = difftime( time2, time1 ) /CLOCKS_PER_SEC;
   secs  = difftime( time2, time1 );
@@ -394,3 +298,4 @@ int main( int argc, char* argv[] ){
   return info;
 
 }
+

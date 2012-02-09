@@ -24,6 +24,7 @@
 noinst_LIBRARIES = liboutput.a
 
 liboutput_a_SOURCES = \
+                   PolyCEID_output_general.c \
                    PolyCEID_output.c \
                    PolyCEID_rho_norm_and_projection.c \
                    PolyCEID_adiabatic_projection.c \
@@ -38,6 +39,7 @@ liboutput_a_SOURCES = \
                    PolyCEID_one_body_electronic_transition_matrix.c
 
 noinst_HEADERS = \
+                   PolyCEID_output_general.h \
                    PolyCEID_output.h \
                    PolyCEID_rho_norm_and_projection.h \
                    PolyCEID_adiabatic_projection.h \

@@ -31,6 +31,7 @@
 #include "../structures/PolyCEID_structures_state.h"
 #include "../structures/PolyCEID_structures_config.h"
 #include "../initial/PolyCEID_indexing.h"
+#include "../output/PolyCEID_output_general.h"
 #include "../output/PolyCEID_energies.h"
 #include <string.h>
 
