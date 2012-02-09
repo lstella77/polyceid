@@ -2124,13 +2124,16 @@ int open_file( FILE** fpp, char* filename ){
 
   if( FILE_CHECK( *fpp, open_file ) ){
 
-    fprintf( stderr, "ERROR occurred when opening file %s.\n", filename );
+    fprintf( stderr, "ERROR occurred when opening file %s\n", filename );
 
     fflush( stderr );
 
     info=1;
 
   }
+
+  /* print header */
+  PRINT_HEADER( *fpp );
 
 
   return info;
