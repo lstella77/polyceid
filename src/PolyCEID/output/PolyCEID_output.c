@@ -2181,7 +2181,7 @@ int output_files_opening( const constants constants ){
   /* geometry file */
   if( constants.flag_observable_all ){
 
-    sprintf( buffer, "%s.geometry", constants.output_label );
+    sprintf( buffer, "%s.xyz", constants.output_label );
 
     OPEN_FILE( geometry_fp, buffer );	
 

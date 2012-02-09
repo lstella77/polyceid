@@ -42,7 +42,6 @@ int main( int argc, char* argv[] ){
   /* dummies */
   FILE*              fp;
   time_t             time1, time2;
-  time_t             rawtime;
   struct tm*         timeinfo;
   int                days, hours, mins;
   double             secs;
@@ -54,10 +53,10 @@ int main( int argc, char* argv[] ){
 
 
   /* start time */
-  time( &rawtime );
-  time1=clock();
+  time1 = time( NULL );
+  fprintf( stdout, "#   This run has started on %s\n\n", asctime( timeinfo = localtime( &time1 ) ) );
 
-
+  /* line parsing */
   if( argc !=2 ){
 
     fprintf( stderr, "USAGE %s \"input file name\"\n", argv[ 0 ] );
@@ -374,18 +373,11 @@ int main( int argc, char* argv[] ){
 
 
   /* end time */
-  fprintf( stdout, "# ----------\n" );
+  time2 = time( NULL );
+  fprintf( stdout, "#   This run has ended on %s\n\n", asctime( localtime( &time2 ) ) );
 
-  timeinfo = localtime( &rawtime );
-  fprintf( stdout, "# This run has started  on %s", asctime( timeinfo ) );
-
-  time( &rawtime );
-  time2=clock();
-
-  timeinfo = localtime( &rawtime );
-  fprintf( stdout, "# This run has finished on %s", asctime( timeinfo ) );
-
-  secs  = difftime( time2, time1 ) /CLOCKS_PER_SEC;
+  //secs  = difftime( time2, time1 ) /CLOCKS_PER_SEC;
+  secs  = difftime( time2, time1 );
   
   days  = ceil( secs ) /DAY2SEC;
   secs -= days *DAY2SEC;
@@ -396,8 +388,7 @@ int main( int argc, char* argv[] ){
   mins  = ceil( secs ) /MIN2SEC;
   secs -= mins *MIN2SEC;
   
-  fprintf( stdout, "# This run has lasted for %d days, %d hours, %d mins, and %4.2f secs.\n", days, hours, mins, secs ); 
-  fprintf( stdout, "# ----------\n" );
+  fprintf( stdout, "#   This run has lasted for %d days, %d hours, %d mins, and %4.2f secs\n\n", days, hours, mins, secs ); 
 
 
   return info;
