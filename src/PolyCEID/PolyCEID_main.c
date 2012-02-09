@@ -57,7 +57,7 @@ int main( int argc, char* argv[] ){
 
   /* start time */
   time1 = time( NULL );
-  fprintf( stdout, "#   This run has started on %s\n", asctime( timeinfo = localtime( &time1 ) ) );
+  fprintf( stdout, "#   The run has started on %s\n", asctime( timeinfo = localtime( &time1 ) ) );
 
   /* line parsing */
   if( argc !=2 ){
@@ -278,7 +278,7 @@ int main( int argc, char* argv[] ){
 
   /* end time */
   time2 = time( NULL );
-  fprintf( stdout, "#   This run has ended on %s\n", asctime( localtime( &time2 ) ) );
+  fprintf( stdout, "#   The run has ended on %s\n", asctime( localtime( &time2 ) ) );
 
   //secs  = difftime( time2, time1 ) /CLOCKS_PER_SEC;
   secs  = difftime( time2, time1 );
@@ -292,7 +292,7 @@ int main( int argc, char* argv[] ){
   mins  = ceil( secs ) /MIN2SEC;
   secs -= mins *MIN2SEC;
   
-  fprintf( stdout, "#   This run has lasted for %d days, %d hours, %d mins, and %4.2f secs\n\n", days, hours, mins, secs ); 
+  fprintf( stdout, "#   The run has lasted for %d days, %d hours, %d mins, and %4.2f secs\n\n", days, hours, mins, secs ); 
 
 
   return info;

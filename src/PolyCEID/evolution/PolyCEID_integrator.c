@@ -68,8 +68,14 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
   if( !info ){
 
+    /* update energy */
+    if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
+
+    fprintf( stdout, "#         step         time         energy\n" );
+    fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+
     /* compute observables */
-    if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
+    if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=0;
 	  
     /* print observables */
     if( PRINT_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
@@ -177,6 +183,10 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
 #endif /* __DEBUG_PLUS__ */
 
+      /* update energy */
+      if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
+
+      fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
 
       /* compute observables */
       if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
@@ -229,6 +239,11 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 #endif /* __DEBUG_PLUS__ */
 
 
+    /* update energy */
+    if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
+
+    fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+
     /* compute observables */
     if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
 	  
@@ -246,22 +261,18 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
   } /* end time_length conditional */
      
 
-#ifdef __DEBUG__
-
   if( !info ){
 
-    fprintf( stderr, ":-)\n\n" );
+    fprintf( stdout, "#   Success! :-)\n\n" );
 
   }
   else{
 
-    fprintf( stderr, ":-(\n\n" );
+    fprintf( stdout, "#   Failure! :-(\n\n" );
 
   }
 
-  fflush( stderr );
-
-#endif /* __DEBUG__ */
+  fflush( stdout );
 
 
   return info;
@@ -457,13 +468,6 @@ int compute_observables( const constants constants, state_p state_p, config_p co
   /* dummy */
   int info=0;
 
-
-  /* update energy */
-  if( constants.flag_observable_all || constants.flag_observable_energies ){
-
-    if( ENERGIES_UPDATE( constants, *state_p, *config_p ) ) info=1;
-
-  }
 
   /* compute adiabatic projection */
   // BUGFIX: what are the dependencies here?
