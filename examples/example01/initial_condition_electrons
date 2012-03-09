@@ -2,7 +2,7 @@ cutoff_energy            { 4.0e0 }
 
 initial_condition_type   { pure }
 
-initial_many_body_occup  { 0-0 }
+initial_many_body_occup  { 1.0 * 0-0 }
 
-excited_many_body_occup  { 2-2 }
+excited_many_body_occup  { 1.0 * 2-2 }
 

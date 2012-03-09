@@ -79,15 +79,21 @@ int construct_transition( const constants constants, char*, rvector_p transition
 
 //------------------------------------------
 
-int construct_transition_single( const constants constants, int, int, rvector_p transition_p );
+int construct_transition_single( const constants constants, double, int, int, rvector_p transition_p );
 
-#define CONSTRUCT_TRANSITION_SINGLE( co, h, e, rvec ) FUNCTION_CHECK( construct_transition_single( (co), (h), (e), &(rvec) ), construct_transition_single ) 
+#define CONSTRUCT_TRANSITION_SINGLE( co, a, h, e, rvec ) FUNCTION_CHECK( construct_transition_single( (co), (a), (h), (e), &(rvec) ), construct_transition_single ) 
 
 //------------------------------------------
 
 int find_level( char**, int* );
 
 #define FIND_LEVEL( occ_p, lvl ) FUNCTION_CHECK( find_level( (occ_p), &(lvl) ), find_level ) 
+
+//------------------------------------------
+
+int find_coefficient( char**, double* );
+
+#define FIND_COEFFICIENT( occ_p, coef ) FUNCTION_CHECK( find_coefficient( (occ_p), &(coef) ), find_coefficient ) 
 
 //------------------------------------------
 
