@@ -1205,6 +1205,7 @@ int construct_transition( const constants constants, char*  occup, rvector_p tra
   /* dummy */
   int      hole, electron;
   int      i;
+  double   coeff;
   double   norm;
   int      info=0;
 
@@ -1217,13 +1218,15 @@ int construct_transition( const constants constants, char*  occup, rvector_p tra
 
   while( *occup ){
 
-    if( FIND_LEVEL( &occup, hole ) )     info=1;
+    if( FIND_COEFFICIENT( &occup, coeff ) )  info=1;
 
-    if( FIND_LEVEL( &occup, electron ) ) info=1;
+    if( FIND_LEVEL( &occup, hole ) )         info=1;
+
+    if( FIND_LEVEL( &occup, electron ) )     info=1;
 
     if( !info ){
 
-      if( CONSTRUCT_TRANSITION_SINGLE( constants, hole, electron, *transition_p ) ) info=1;
+      if( CONSTRUCT_TRANSITION_SINGLE( constants, coeff, hole, electron, *transition_p ) ) info=1;
 
     }  
 
@@ -1265,7 +1268,7 @@ int construct_transition( const constants constants, char*  occup, rvector_p tra
 
 //------------------------------------------
 
-int construct_transition_single( const constants constants, int hole, int electron, rvector_p transition_p ){
+int construct_transition_single( const constants constants, double coeff, int hole, int electron, rvector_p transition_p ){
 
   /* constants */
   int      N_levels_single;
@@ -1276,6 +1279,7 @@ int construct_transition_single( const constants constants, int hole, int electr
   /* dummy */
   ivector  ivec1;
   ivector  ivec2;
+  rvector  transition_tmp;
   int      i, h, k;
   int      level_hole, level_electron;
   int      ph_sign=1;
@@ -1306,6 +1310,8 @@ int construct_transition_single( const constants constants, int hole, int electr
     if( IVECTOR_ALLOCATE( SPIN_DEG *N_levels_single, ivec1 ) ) info=1;
 
     if( IVECTOR_ALLOCATE( SPIN_DEG *N_levels_single, ivec2 ) ) info=1;
+
+    if( RVECTOR_ALLOCATE( N_levels_many, transition_tmp ) ) info=1;
 
   }
 
@@ -1394,7 +1400,7 @@ int construct_transition_single( const constants constants, int hole, int electr
 
     if( !IVECTOR_COMPARE_MUTE( ivec1, ivec2 ) ){
 
-      transition_p->rvector[ i ] = 1.0e0;
+      transition_tmp.rvector[ i ] = 1.0e0;
      
       flag_first=1;
      
@@ -1403,8 +1409,8 @@ int construct_transition_single( const constants constants, int hole, int electr
   } /* end i loop */
 
   /* 
-    fprintf( stdout, "transition:\n" );
-    if( RVECTOR_PRINT_PLUS( stdout, *transition_p ) ) info=1;
+    fprintf( stdout, "transition_tmp:\n" );
+    if( RVECTOR_PRINT_PLUS( stdout, transition_tmp ) ) info=1;
     fprintf( stdout, "\n" );
   
     fprintf( stdout, "ivec2:\n" );
@@ -1431,8 +1437,8 @@ int construct_transition_single( const constants constants, int hole, int electr
   if( IVECTOR_COPY( ivec1, ivec2 ) ) info=1;
 
   /*
-    fprintf( stdout, "transition:\n" );
-    if( RVECTOR_PRINT_PLUS( stdout, *transition_p ) ) info=1;
+    fprintf( stdout, "transition_tmp:\n" );
+    if( RVECTOR_PRINT_PLUS( stdout, transition_tmp ) ) info=1;
     fprintf( stdout, "\n" );
   
     fprintf( stdout, "ivec1 [flipped]:\n" );
@@ -1454,7 +1460,7 @@ int construct_transition_single( const constants constants, int hole, int electr
 
       if( !flag_first ){
      
-        transition_p->rvector[ i ] = 1.0e0;
+        transition_tmp.rvector[ i ] = 1.0e0;
      
         ph_sign = symmetry_multiplicity.imatrix[ i ][ 2 *N_SYMMETRIES ]; 
 
@@ -1463,7 +1469,7 @@ int construct_transition_single( const constants constants, int hole, int electr
       }
       else{
 
-        transition_p->rvector[ i ] = (double) symmetry_multiplicity.imatrix[ i ][ 1 ];
+        transition_tmp.rvector[ i ] = (double) symmetry_multiplicity.imatrix[ i ][ 1 ];
 
       }        
       
@@ -1507,8 +1513,8 @@ int construct_transition_single( const constants constants, int hole, int electr
       if( IVECTOR_COPY( ivec1, ivec2 ) ) info=1;
 
     /*
-      fprintf( stdout, "transition:\n" );
-      if( RVECTOR_PRINT_PLUS( stdout, *transition_p ) ) info=1;
+      fprintf( stdout, "transition_tmp:\n" );
+      if( RVECTOR_PRINT_PLUS( stdout, transition_tmp ) ) info=1;
       fprintf( stdout, "\n" );
   
       fprintf( stdout, "ivec1 [flipped]:\n" );
@@ -1528,7 +1534,7 @@ int construct_transition_single( const constants constants, int hole, int electr
 
       if( !IVECTOR_COMPARE_MUTE( ivec1, ivec2 ) ){
 
-        transition_p->rvector[ i ] = (double) ph_sign;
+        transition_tmp.rvector[ i ] = (double) ph_sign;
      
       }
     
@@ -1553,8 +1559,8 @@ int construct_transition_single( const constants constants, int hole, int electr
     if( IVECTOR_COPY( ivec1, ivec2 ) ) info=1;
 
     /*
-      fprintf( stdout, "transition:\n" );
-      if( RVECTOR_PRINT_PLUS( stdout, *transition_p ) ) info=1;
+      fprintf( stdout, "transition_tmp:\n" );
+      if( RVECTOR_PRINT_PLUS( stdout, transition_tmp ) ) info=1;
       fprintf( stdout, "\n" );
   
       fprintf( stdout, "ivec1 [flipped]:\n" );
@@ -1575,7 +1581,7 @@ int construct_transition_single( const constants constants, int hole, int electr
 
       if( !IVECTOR_COMPARE_MUTE( ivec1, ivec2 ) ){
 
-        transition_p->rvector[ i ] = (double) ph_sign *symmetry_multiplicity.imatrix[ i ][ 1 ];
+        transition_tmp.rvector[ i ] = (double) ph_sign *symmetry_multiplicity.imatrix[ i ][ 1 ];
 
       }
   
@@ -1584,12 +1590,12 @@ int construct_transition_single( const constants constants, int hole, int electr
   } /* end i loop */
 
 
-  /* the normalisation -- check if the satte is there */
+  /* the normalisation */
   norm = 0.0e0;
 
   for( i=0; i<N_levels_many; i++ ){
 
-    norm += ( transition_p->rvector[ i ] )*( transition_p->rvector[ i ] ); 
+    norm += ( transition_tmp.rvector[ i ] )*( transition_tmp.rvector[ i ] ); 
     
   }
   
@@ -1599,22 +1605,35 @@ int construct_transition_single( const constants constants, int hole, int electr
     
     for( i=0; i<N_levels_many; i++ ){
 
-      transition_p->rvector[ i ] /= norm;
+      transition_tmp.rvector[ i ] /= norm;
 	      
     }
     
   }
   else{
 
-    fprintf( stdout, "WARNING: norm of the state %d-%d is too small [%le]\n", hole, electron, norm );
+    fprintf( stdout, "ERROR: norm of excited_many_body_state too small [%le]\n", norm );
     fflush( stdout );
     
+    info=1;
+
   }
 
 
-  if( IVECTOR_FREE( ivec2 ) ) info=1;
+  /* updating */
+  for( i=0; i<N_levels_many; i++ ){ 
 
-  if( IVECTOR_FREE( ivec1 ) ) info=1;
+     transition_p->rvector[ i ] += coeff *transition_tmp.rvector[ i ];
+
+  }
+
+
+  /* dellocations */
+  if( RVECTOR_FREE( transition_tmp ) ) info=1;
+
+  if( IVECTOR_FREE( ivec2 ) )          info=1;
+
+  if( IVECTOR_FREE( ivec1 ) )          info=1;
 
 
   return info;
@@ -1632,22 +1651,19 @@ int find_level( char** occup_p, int* level_p ){
   char  c;
   int   info=0;
 
+
   occup = *occup_p;
 
   /* parse the occupation string */
   c = *occup++;
-  // fprintf( stdout, "---> char %c\n", c ); 
-  // fflush( stdout );
   
   count=0;
   while( c && c != '-' && c != '+' ){
 
-    if( isspace( c ) ) continue;
-
     buffer[ count++ ] = c;
       
     /* check boundary */
-    if( count > MAX_STRING_LENGTH ){
+    if( MAX_STRING_LENGTH == count ){
 
       fprintf( stderr, "ERROR: buffer length excided! [%d]\n", MAX_STRING_LENGTH );
       fflush( stderr );
@@ -1661,25 +1677,23 @@ int find_level( char** occup_p, int* level_p ){
     c = *occup++;
 
   }
-  buffer[ count ] = '\0';
-  // fprintf( stdout, "---> buffer %s\n", buffer ); 
-  // fflush( stdout );
+
+  // trim if it is needed
+  while( count < MAX_STRING_LENGTH ){
+
+    buffer[ count++ ] = '\0';
+
+  }
 
   /* initialise hole */
   if( !info ){
 
     *level_p = atoi( buffer );
 
-    // fprintf( stdout, "---> level %d\n", *level_p ); 
-    // fflush( stdout );
-
-
     if( c ) c = *occup++;
     count=0;
     buffer[ count ] = c;
     while( c ){
-
-      if( isspace( c ) ) continue;
 
       buffer[ count++ ] = c;
 
@@ -1688,7 +1702,13 @@ int find_level( char** occup_p, int* level_p ){
       if( MAX_STRING_LENGTH == count );
 
     }
-    buffer[ count ] = '\0';
+
+    // trim if it is needed
+    while( count < MAX_STRING_LENGTH ){
+
+      buffer[ count++ ] = '\0';
+
+    }
 
     *occup_p[ 0 ] = '\0';
     strncat( *occup_p, buffer, MAX_STRING_LENGTH );
@@ -1700,6 +1720,85 @@ int find_level( char** occup_p, int* level_p ){
 
 }
 
+//------------------------------------------
+
+int find_coefficient( char** occup_p, double* coeff_p ){
+
+  /* dummies */
+  char  buffer[ MAX_STRING_LENGTH ];
+  char* occup;
+  int   count;
+  char  c;
+  int   info=0;
+
+
+  occup = *occup_p;
+
+  /* parse the occupation string */
+  c = *occup++;
+  
+  count=0;
+  while( c != '\0' && c != '*' ){
+
+    buffer[ count++ ] = c;
+      
+    /* check boundary */
+    if( MAX_STRING_LENGTH == count ){
+
+      fprintf( stderr, "ERROR: buffer length excided! [%d]\n", MAX_STRING_LENGTH );
+      fflush( stderr );
+
+      break;
+
+      info=1;
+
+    }        
+
+    c = *occup++;
+
+  }
+  
+  // trim if it is needed
+  while( count < MAX_STRING_LENGTH ){
+
+    buffer[ count++ ] = '\0';
+
+  }
+
+  /* initialise hole */
+  if( !info ){
+
+    *coeff_p = atof( buffer );
+
+    if( c ) c = *occup++;
+    count=0;
+    buffer[ count ] = c;
+    while( c ){
+
+      buffer[ count++ ] = c;
+
+      c = *occup++;
+
+      if( MAX_STRING_LENGTH == count );
+
+    }
+
+    // trim if it is needed
+    while( count < MAX_STRING_LENGTH ){
+
+      buffer[ count++ ] = '\0';
+
+    }
+
+    *occup_p[ 0 ] = '\0';
+    strncat( *occup_p, buffer, MAX_STRING_LENGTH );
+      
+  }
+
+
+  return info;
+
+}
 
 //------------------------------------------
 
