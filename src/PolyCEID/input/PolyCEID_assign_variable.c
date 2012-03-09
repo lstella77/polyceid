@@ -305,6 +305,77 @@ int _assign_string_variable( list_p list_p, char* name, char* value_p, char* def
   return info;
 
 }
+/* FUNCTION: _assign_stringcat_variable
+ *
+ * ARGUMENTS: list_p  list_p
+ *
+ *            char*   name of the int variable
+ *
+ *            char*  default value
+ *
+ * RETURN:    char*
+ *
+ * search for the char* variable in the list and assign 
+ * its value
+ *
+ */
+int _assign_stringcat_variable( list_p list_p, char* name, char* value_p, char* default_value_p ){
+
+  /* dummies */
+  entry_p  entry_found_p=NULL;  
+  entry_p  dummy_entry_p=NULL;
+  int      info=0;
+
+
+  // search for the variable
+  entry_found_p = LIST_SEARCH( list_p, name );
+
+  if( !entry_found_p ){
+
+    S_ECHO( "Using default value for variable:", name );
+
+    value_p[ 0 ] = '\0';
+    strncat( value_p, dummy_entry_p->field.name, MAX_NAME_LENGTH );
+
+  }
+  else{
+
+    S_ECHO( "Extracted value for variable:", name );
+
+    if( !entry_found_p->sublist_p ){
+
+      fprintf( PolyCEID_STDERR, "ERROR: no value to extract from variable %s\n", entry_found_p->field.name );
+
+      fflush( PolyCEID_STDERR );
+
+      info=1;
+
+    }        
+    else{      
+
+      value_p[ 0 ] = '\0';
+
+      dummy_entry_p = entry_found_p->sublist_p->first_entry_p;
+
+      while( dummy_entry_p ){  
+
+        strncat( value_p, dummy_entry_p->field.name, MAX_NAME_LENGTH );
+
+        dummy_entry_p = dummy_entry_p->next_entry_p;
+
+      }  
+
+      // cut the entry
+      ENTRY_CUT( entry_found_p );
+
+    }  
+
+  }
+
+
+  return info;
+
+}
 
 /* FUNCTION: _assign_flag_variable
  *

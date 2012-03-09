@@ -27,7 +27,7 @@
 #include "PolyCEID_input_parsing.h"
 
 
-#define MAX_N_FIELDS   10000
+#define MAX_N_FIELDS         10000
 
 
 /*********************
@@ -246,17 +246,17 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
 
 
   // setting default for "initial_many_body_occup"
-  if( IVECTOR_ALLOCATE( 2, constants_p->initial_many_body_occup ) ) info=1;
+  strcpy( constants_p->initial_many_body_occup, "0-0" );
 
   // extracting "initial_many_body_occup"
-  if( ASSING_INT_VARIABLE( &input_list, "initial_many_body_occup", 2, constants_p->initial_many_body_occup.ivector, constants_p->initial_many_body_occup.ivector ) ) info=1;
+  if( ASSING_STRINGCAT_VARIABLE( &input_list, "initial_many_body_occup", constants_p->initial_many_body_occup, constants_p->initial_many_body_occup ) ) info=1;
 
 
   // setting default for "excited_many_body_occup"
-  if( IVECTOR_ALLOCATE( 2, constants_p->excited_many_body_occup ) ) info=1;
+  strcpy( constants_p->excited_many_body_occup, "1-1" );
 
   // extracting "excited_many_body_occup"
-  if( ASSING_INT_VARIABLE( &input_list, "excited_many_body_occup", 2, constants_p->excited_many_body_occup.ivector, constants_p->excited_many_body_occup.ivector ) ) info=1;
+  if( ASSING_STRINGCAT_VARIABLE( &input_list, "excited_many_body_occup", constants_p->excited_many_body_occup, constants_p->excited_many_body_occup ) ) info=1;
 
 
   // setting default for "seed"
@@ -1198,7 +1198,74 @@ int initial_condition_electrons_parsing( constants_p constants_p ){
  *         |1,1,1,1,0,0,0,0>
  *         SPIN_DEG=1,2 assumed
  */
-int construct_transition( const constants constants, ivector occup, rvector_p transition_p ){
+int construct_transition( const constants constants, char*  occup, rvector_p transition_p ){
+
+  /* constants */
+  int      N_levels_many;
+  /* dummy */
+  int      hole, electron;
+  int      i;
+  double   norm;
+  int      info=0;
+
+
+  N_levels_many            = constants.N_levels_many;
+
+
+  /* set to zero */
+  if( RVECTOR_ZERO( *transition_p ) ) info=1;
+
+  while( *occup ){
+
+    if( FIND_LEVEL( &occup, hole ) )     info=1;
+
+    if( FIND_LEVEL( &occup, electron ) ) info=1;
+
+    if( !info ){
+
+      if( CONSTRUCT_TRANSITION_SINGLE( constants, hole, electron, *transition_p ) ) info=1;
+
+    }  
+
+  }  
+
+  /* the normalisation */
+  norm = 0.0e0;
+
+  for( i=0; i<N_levels_many; i++ ){
+
+    norm += ( transition_p->rvector[ i ] )*( transition_p->rvector[ i ] ); 
+    
+  }
+  
+  norm = sqrt( norm );
+	
+  if( norm > EPS ){
+    
+    for( i=0; i<N_levels_many; i++ ){
+
+      transition_p->rvector[ i ] /= norm;
+	      
+    }
+    
+  }
+  else{
+
+    fprintf( stderr, "ERROR: norm of excited_many_body_state too small [%le]\n", norm );
+    fflush( stderr );
+    
+    info=1;
+
+  }
+
+
+  return info;
+
+}
+
+//------------------------------------------
+
+int construct_transition_single( const constants constants, int hole, int electron, rvector_p transition_p ){
 
   /* constants */
   int      N_levels_single;
@@ -1209,7 +1276,6 @@ int construct_transition( const constants constants, ivector occup, rvector_p tr
   /* dummy */
   ivector  ivec1;
   ivector  ivec2;
-  int      hole, electron;
   int      i, h, k;
   int      level_hole, level_electron;
   int      ph_sign=1;
@@ -1225,12 +1291,9 @@ int construct_transition( const constants constants, ivector occup, rvector_p tr
   symmetry_multiplicity    = constants.symmetry_multiplicity;
 
 
-  hole     = occup.ivector[ 0 ];
-  electron = occup.ivector[ 1 ];
-
   if( hole < 0 || electron < 0 ){
 
-    fprintf( stderr, "ERROR: hole and electron must non-negative\n" );
+    fprintf( stderr, "ERROR: hole and electron must be non-negative\n" );
     fflush( stderr );
 
     info=1;
@@ -1245,10 +1308,6 @@ int construct_transition( const constants constants, ivector occup, rvector_p tr
     if( IVECTOR_ALLOCATE( SPIN_DEG *N_levels_single, ivec2 ) ) info=1;
 
   }
-
-
-  /* set to zero */
-  if( RVECTOR_ZERO( *transition_p ) ) info=1;
 
 
   /* initial state */
@@ -1525,7 +1584,7 @@ int construct_transition( const constants constants, ivector occup, rvector_p tr
   } /* end i loop */
 
 
-  /* the normalisation */
+  /* the normalisation -- check if the satte is there */
   norm = 0.0e0;
 
   for( i=0; i<N_levels_many; i++ ){
@@ -1547,11 +1606,9 @@ int construct_transition( const constants constants, ivector occup, rvector_p tr
   }
   else{
 
-    fprintf( stderr, "ERROR: norm of excited_many_body_state too small [%le]\n", norm );
-    fflush( stderr );
+    fprintf( stdout, "WARNING: norm of the state %d-%d is too small [%le]\n", hole, electron, norm );
+    fflush( stdout );
     
-    info=1;
-
   }
 
 
@@ -1563,6 +1620,86 @@ int construct_transition( const constants constants, ivector occup, rvector_p tr
   return info;
 
 }
+
+//------------------------------------------
+
+int find_level( char** occup_p, int* level_p ){
+
+  /* dummies */
+  char  buffer[ MAX_STRING_LENGTH ];
+  char* occup;
+  int   count;
+  char  c;
+  int   info=0;
+
+  occup = *occup_p;
+
+  /* parse the occupation string */
+  c = *occup++;
+  // fprintf( stdout, "---> char %c\n", c ); 
+  // fflush( stdout );
+  
+  count=0;
+  while( c && c != '-' && c != '+' ){
+
+    if( isspace( c ) ) continue;
+
+    buffer[ count++ ] = c;
+      
+    /* check boundary */
+    if( count > MAX_STRING_LENGTH ){
+
+      fprintf( stderr, "ERROR: buffer length excided! [%d]\n", MAX_STRING_LENGTH );
+      fflush( stderr );
+
+      break;
+
+      info=1;
+
+    }        
+
+    c = *occup++;
+
+  }
+  buffer[ count ] = '\0';
+  // fprintf( stdout, "---> buffer %s\n", buffer ); 
+  // fflush( stdout );
+
+  /* initialise hole */
+  if( !info ){
+
+    *level_p = atoi( buffer );
+
+    // fprintf( stdout, "---> level %d\n", *level_p ); 
+    // fflush( stdout );
+
+
+    if( c ) c = *occup++;
+    count=0;
+    buffer[ count ] = c;
+    while( c ){
+
+      if( isspace( c ) ) continue;
+
+      buffer[ count++ ] = c;
+
+      c = *occup++;
+
+      if( MAX_STRING_LENGTH == count );
+
+    }
+    buffer[ count ] = '\0';
+
+    *occup_p[ 0 ] = '\0';
+    strncat( *occup_p, buffer, MAX_STRING_LENGTH );
+      
+  }
+
+
+  return info;
+
+}
+
 
 //------------------------------------------
 
