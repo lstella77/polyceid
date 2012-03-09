@@ -125,8 +125,8 @@ typedef struct{
   atoms                initial_atoms;
   double               cutoff_energy;
   char                 initial_condition_type[MAX_STRING_LENGTH];
-  ivector              initial_many_body_occup;
-  ivector              excited_many_body_occup;
+  char                 initial_many_body_occup[MAX_STRING_LENGTH];
+  char                 excited_many_body_occup[MAX_STRING_LENGTH];
   unsigned long  int   seed;                        // random number generator seed
   hamiltonian          hamiltonian;                 // the hamiltonian
   unsigned short int   flag_observable_all;

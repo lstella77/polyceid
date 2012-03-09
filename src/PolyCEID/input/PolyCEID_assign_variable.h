@@ -98,6 +98,24 @@ int _assign_string_variable( list_p, char*, char*, char* );
 
 #define ASSING_STRING_VARIABLE( lp, name, sp, sdp )  FUNCTION_CHECK_NEW( _assign_string_variable( (lp), (name), (sp), (sdp) ) )
 
+/* FUNCTION: _assign_stringcat_variable
+ *
+ * ARGUMENTS: list_p  list_p
+ *
+ *            char*   name of the int variable
+ *
+ *            char*   default value
+ *
+ * RETURN:    char*
+ *
+ * search for the string variable in the list and assign 
+ * its value
+ *
+ */
+int _assign_stringcat_variable( list_p, char*, char*, char* );
+
+#define ASSING_STRINGCAT_VARIABLE( lp, name, sp, sdp )  FUNCTION_CHECK_NEW( _assign_stringcat_variable( (lp), (name), (sp), (sdp) ) )
+
 /* FUNCTION: _assign_flag_variable
  *
  * ARGUMENTS: list_p  list_p

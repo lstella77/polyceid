@@ -121,12 +121,6 @@ int PolyCEID_constants_free( constants_p constants_p ){
   /* initial_many_body_state */
   if( RVECTOR_FREE( constants_p->initial_many_body_state ) ) info=1;
   
-  /* excited_many_body_occup */
-  if( IVECTOR_FREE( constants_p->excited_many_body_occup ) ) info=1;
-
-  /* initial_many_body_occup */
-  if( IVECTOR_FREE( constants_p->initial_many_body_occup ) ) info=1;
-  
   /* symmetry_multiplicity  */
   if( IMATRIX_FREE( constants_p->symmetry_multiplicity ) ) info=1;
 
@@ -253,9 +247,9 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
   if( !strcmp( constants_p->initial_condition_type, "pure" ) ){
 
-    if( IVECTOR_READ( fp, constants_p->initial_many_body_occup ) ) info=1;
+    if( fscanf( fp, "%s", constants_p->initial_many_body_occup ) < 1 ) info=1;
 
-    if( IVECTOR_READ( fp, constants_p->excited_many_body_occup ) ) info=1;
+    if( fscanf( fp, "%s", constants_p->excited_many_body_occup ) < 1 ) info=1;
 
     if( RVECTOR_READ( fp, constants_p->initial_many_body_state ) ) info=1;
 
@@ -379,9 +373,9 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
   if( !strcmp( constants.initial_condition_type, "pure" ) ){
 
-    if( IVECTOR_PRINT( fp, constants.initial_many_body_occup ) ) info=1;
+    if( fprintf( fp, "%s\n", constants.initial_many_body_occup ) < 1 ) info=1;
 
-    if( IVECTOR_PRINT( fp, constants.excited_many_body_occup ) ) info=1;
+    if( fprintf( fp, "%s\n", constants.excited_many_body_occup ) < 1 ) info=1;
 
     if( RVECTOR_PRINT( fp, constants.initial_many_body_state ) ) info=1;
 
@@ -780,13 +774,13 @@ int PolyCEID_constants_verbose_print( FILE* fp, const constants constants ){
     fprintf( fp, "#------------------------------------------#\n" );
     fprintf( fp, "# initial_many_body_occup:\n" );
 
-    if( IVECTOR_PRINT_PLUS( fp, constants.initial_many_body_occup ) ) info=1;
+    if( fprintf( fp, "# %s\n", constants.initial_many_body_occup ) < 1 ) info=1;
 
     /* excited_many_body_occup */
     fprintf( fp, "#------------------------------------------#\n" );
     fprintf( fp, "# excited_many_body_occup:\n" );
 
-    if( IVECTOR_PRINT_PLUS( fp, constants.excited_many_body_occup ) ) info=1;
+    if( fprintf( fp, "# %s\n", constants.excited_many_body_occup ) < 1 ) info=1;
 
     /* initial_many_body_state */
     fprintf( fp, "#------------------------------------------#\n" );
@@ -967,9 +961,9 @@ int PolyCEID_constants_copy( constants_p constants_p, const constants constants 
 
   if( !strcmp( constants.initial_condition_type, "pure" ) ){
 
-    if( IVECTOR_COPY( constants_p->initial_many_body_occup, constants.initial_many_body_occup ) ) info=1;
+    if( !strcpy( constants_p->initial_many_body_occup, constants.initial_many_body_occup ) ) info=1;
 
-    if( IVECTOR_COPY( constants_p->excited_many_body_occup, constants.excited_many_body_occup ) ) info=1;
+    if( !strcpy( constants_p->excited_many_body_occup, constants.excited_many_body_occup ) ) info=1;
 
     if( RVECTOR_COPY( constants_p->initial_many_body_state, constants.initial_many_body_state ) ) info=1;
 

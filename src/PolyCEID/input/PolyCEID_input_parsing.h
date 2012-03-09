@@ -73,9 +73,21 @@ int initial_condition_electrons_parsing( constants_p constants_p );
 
 //------------------------------------------
 
-int construct_transition( const constants constants, ivector, rvector_p transition_p );
+int construct_transition( const constants constants, char*, rvector_p transition_p );
 
 #define CONSTRUCT_TRANSITION( co, occ, rvec ) FUNCTION_CHECK( construct_transition( (co), (occ), &(rvec) ), construct_transition ) 
+
+//------------------------------------------
+
+int construct_transition_single( const constants constants, int, int, rvector_p transition_p );
+
+#define CONSTRUCT_TRANSITION_SINGLE( co, h, e, rvec ) FUNCTION_CHECK( construct_transition_single( (co), (h), (e), &(rvec) ), construct_transition_single ) 
+
+//------------------------------------------
+
+int find_level( char**, int* );
+
+#define FIND_LEVEL( occ_p, lvl ) FUNCTION_CHECK( find_level( (occ_p), &(lvl) ), find_level ) 
 
 //------------------------------------------
 
