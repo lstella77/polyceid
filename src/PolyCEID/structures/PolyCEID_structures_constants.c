@@ -191,6 +191,8 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
   if( fscanf( fp, "%hu", &constants_p->flag_periodic_boundary_condition ) < 1 ) info=1;
 
+  if( fscanf( fp, "%hu", &constants_p->flag_Ehrenfest ) < 1 ) info=1;
+
   if( fscanf( fp, "%hu", &constants_p->flag_pruning ) < 1 ) info=1;
 
   /* atoms */
@@ -316,6 +318,8 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
   if( fprintf( fp, "%hu\n", constants.flag_no_Ehrenfest_frame ) < 1 ) info=1;
 
   if( fprintf( fp, "%hu\n", constants.flag_periodic_boundary_condition ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_Ehrenfest ) < 1 ) info=1;
 
   if( fprintf( fp, "%hu\n", constants.flag_pruning ) < 1 ) info=1;
 
@@ -512,12 +516,6 @@ int PolyCEID_constants_verbose_print( FILE* fp, const constants constants ){
 #endif /* __K_MATRIX_UPDATE__ */
 
 
-#ifdef __NO_CEID__
-
-  fprintf( fp, "# Preprocessor: using __NO_CEID__\n" );
-
-#endif /* __NO_CEID__ */
-
 #ifdef __ORTHONORMALISE__
 
   fprintf( fp, "# Preprocessor: using __ORTHONORMALISE__\n" );
@@ -613,7 +611,13 @@ int PolyCEID_constants_verbose_print( FILE* fp, const constants constants ){
   fprintf( fp, "#------------------------------------------#\n" );
   fprintf( fp, "# flag_periodic_boundary_condition:\n" );
 
-  if( fprintf( fp, "# %hu\n", constants.flag_periodic_boundary_condition) < 1 ) info=1;
+  if( fprintf( fp, "# %hu\n", constants.flag_periodic_boundary_condition ) < 1 ) info=1;
+
+  /* flag_Ehrenfest */
+  fprintf( fp, "#------------------------------------------#\n" );
+  fprintf( fp, "# flag_Ehrenfest:\n" );
+
+  if( fprintf( fp, "# %hu\n", constants.flag_Ehrenfest ) < 1 ) info=1;
 
   /* flag_pruning */
   fprintf( fp, "#------------------------------------------#\n" );
@@ -904,6 +908,8 @@ int PolyCEID_constants_copy( constants_p constants_p, const constants constants 
   constants_p->flag_no_Ehrenfest_frame    = constants.flag_no_Ehrenfest_frame;
 
   constants_p->flag_periodic_boundary_condition = constants.flag_periodic_boundary_condition;
+
+  constants_p->flag_Ehrenfest             = constants.flag_Ehrenfest;
 
   constants_p->flag_pruning               = constants.flag_pruning;
 

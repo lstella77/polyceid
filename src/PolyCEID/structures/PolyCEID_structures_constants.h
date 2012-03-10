@@ -103,6 +103,7 @@ typedef struct{
   unsigned short int   flag_normal_mode_expansion;  //
   unsigned short int   flag_no_Ehrenfest_frame;     //
   unsigned short int   flag_periodic_boundary_condition; //
+  unsigned short int   flag_Ehrenfest;              //
   rvector              cell_dim;                    //
   int                  N_atoms;                     // Number of atoms
   int                  N_levels_single;             // Number of 1-electronic levels

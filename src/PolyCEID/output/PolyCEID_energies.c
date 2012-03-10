@@ -180,15 +180,15 @@ int kinetic_energy_update( const constants constants, state_p state_p, config_p 
   int             info=0;
 
 
-  N_atoms                        =  constants.N_atoms;
-  sdim                           =  constants.spacial_dimension; 
-  masses_p                       = &config_p->atoms.masses;
+  N_atoms                  =  constants.N_atoms;
+  sdim                     =  constants.spacial_dimension; 
+  masses_p                 = &config_p->atoms.masses;
 
-  momenta_p                      = &(config_p->atoms.momenta);
-  kinetic_energy_atoms_p         = &(state_p->observables.kinetic_energy_atoms);
-  kinetic_energy_system_p        = &(state_p->observables.kinetic_energy_system);
-  mu01_p                         = &(config_p->electrons.mu01);
-  mu02_p                         = &(config_p->electrons.mu02);
+  momenta_p                = &(config_p->atoms.momenta);
+  kinetic_energy_atoms_p   = &(state_p->observables.kinetic_energy_atoms);
+  kinetic_energy_system_p  = &(state_p->observables.kinetic_energy_system);
+  mu01_p                   = &(config_p->electrons.mu01);
+  mu02_p                   = &(config_p->electrons.mu02);
 
 
   /* set to zero */
@@ -207,13 +207,13 @@ int kinetic_energy_update( const constants constants, state_p state_p, config_p 
 
         dummy1 += ( momenta_p->rvector[ index ] ) *( momenta_p->rvector[ index ] ) /( masses_p->rvector[ index ] );
 
-#ifndef __NO_CEID__
+        if( !constants.flag_Ehrenfest ){
 
-        dummy2 += ( momenta_p->rvector[ index ] ) *REAL( MATRIX_TRACE( mu01_p->array[ index ] ) ) /( masses_p->rvector[ index ] );
+          dummy2 += ( momenta_p->rvector[ index ] ) *REAL( MATRIX_TRACE( mu01_p->array[ index ] ) ) /( masses_p->rvector[ index ] );
 
-        dummy3 +=  REAL( MATRIX_TRACE( mu02_p->array[ COORDINATE_INDEX( index, index ) ] ) ) /( masses_p->rvector[ index ] );
+          dummy3 +=  REAL( MATRIX_TRACE( mu02_p->array[ COORDINATE_INDEX( index, index ) ] ) ) /( masses_p->rvector[ index ] );
 
-#endif /* __NO_CEID__ */
+	}
 
       }
 
@@ -262,22 +262,20 @@ int potential_energy_update( const constants constants, state_p state_p, config_
   matrix_p        dummy_matrix1_p;
   /* dummies */
   int             info=0;
-#ifndef __NO_CEID__  
   int             i_coor1, i_coor2;
-#endif /* __NO_CEID__ */  
   double          dummy1, dummy2, dummy3;
 
 
-  N_coor      =  constants.N_coor;
+  N_coor                     =  constants.N_coor;
 
-  potential_energy_system_p        = &(state_p->observables.potential_energy_system);
-  mu00_p                           = &(config_p->electrons.mu00);
-  mu10_p                           = &(config_p->electrons.mu10);
-  mu20_p                           = &(config_p->electrons.mu20);
-  H_matrix_p                       = &(config_p->electrons.H_matrix);
-  F_matrix_p                       = &(config_p->electrons.F_matrix);
-  K_matrix_p                       = &(config_p->electrons.K_matrix);
-  dummy_matrix1_p                  = &(state_p->dummy_matrix1);
+  potential_energy_system_p  = &(state_p->observables.potential_energy_system);
+  mu00_p                     = &(config_p->electrons.mu00);
+  mu10_p                     = &(config_p->electrons.mu10);
+  mu20_p                     = &(config_p->electrons.mu20);
+  H_matrix_p                 = &(config_p->electrons.H_matrix);
+  F_matrix_p                 = &(config_p->electrons.F_matrix);
+  K_matrix_p                 = &(config_p->electrons.K_matrix);
+  dummy_matrix1_p            = &(state_p->dummy_matrix1);
 
 
   if( MATRIX_MATRIX_PRODUCT( *H_matrix_p, *mu00_p, *dummy_matrix1_p  ) ) info=1;
@@ -293,102 +291,103 @@ int potential_energy_update( const constants constants, state_p state_p, config_
   /* set to zero */
   dummy3 = dummy2 = ZERO;
 
-#ifndef __NO_CEID__ 
- 
-  for( i_coor1=0; i_coor1<N_coor; i_coor1++ ){
+  if( !constants.flag_Ehrenfest ){
 
-    if( MATRIX_MATRIX_PRODUCT( F_matrix_p->array[ i_coor1 ], mu10_p->array[ i_coor1 ], *dummy_matrix1_p  ) ) info=1;
+    for( i_coor1=0; i_coor1<N_coor; i_coor1++ ){
 
-    /*
-      fprintf( stdout, "i_coor1 = %d\n", i_coor1 );
+      if( MATRIX_MATRIX_PRODUCT( F_matrix_p->array[ i_coor1 ], mu10_p->array[ i_coor1 ], *dummy_matrix1_p  ) ) info=1;
+
+      /*
+        fprintf( stdout, "i_coor1 = %d\n", i_coor1 );
       
-      fprintf( stdout, "F_matrix\n" );
-      if( MATRIX_PRINT_PLUS( stdout, F_matrix_p->array[ i_coor1 ] ) ) info = 1;
-      fprintf( stdout, "\n" );
-    */
+        fprintf( stdout, "F_matrix\n" );
+        if( MATRIX_PRINT_PLUS( stdout, F_matrix_p->array[ i_coor1 ] ) ) info = 1;
+        fprintf( stdout, "\n" );
+      */
 
-    dummy2 += REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
+      dummy2 += REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
 
 #ifndef __ENERGY_MOD__ 
 
-    for( i_coor2=0; i_coor2<N_coor; i_coor2++ ){
+      for( i_coor2=0; i_coor2<N_coor; i_coor2++ ){
 
       
-	//  fprintf( stdout, "i_coor1 = %d, i_coor2 = %d\n", i_coor1, i_coor2 );
+          //  fprintf( stdout, "i_coor1 = %d, i_coor2 = %d\n", i_coor1, i_coor2 );
 
-	/*
-	fprintf( stdout, "K_matrix\n" );
-	if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) ) info = 1;
-	fprintf( stdout, "\n" );
+	  /*
+	    fprintf( stdout, "K_matrix\n" );
+            if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) ) info = 1;
+	    fprintf( stdout, "\n" );
 
-	fprintf( stdout, "mu20\n" );
-	if( MATRIX_PRINT_PLUS( stdout, mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) ) info = 1;
-	fprintf( stdout, "\n" );
-	*/
+	    fprintf( stdout, "mu20\n" );
+	    if( MATRIX_PRINT_PLUS( stdout, mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) ) info = 1;
+	    fprintf( stdout, "\n" );
+	  */
 
-      if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ], 
-				 mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ], *dummy_matrix1_p ) ) info=1;
+        if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ], 
+	  			 mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ], *dummy_matrix1_p ) ) info=1;
 
-      /*
-	fprintf( stdout, "dummy_matrix1\n" );
-	if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix1_p ) ) info = 1;
-	fprintf( stdout, "\n" );
-      */
+        /*
+	  fprintf( stdout, "dummy_matrix1\n" );
+	  if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix1_p ) ) info = 1;
+	  fprintf( stdout, "\n" );
+        */
 
-      /*
-        fprintf( stdout, "norm K_matrix  %15.9le \n", MATRIX_NORM(  K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) );
-        fprintf( stdout, "norm mu02      %15.9le \n", MATRIX_NORM(  mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) );
-        fprintf( stdout, "norm dummy1        %15.9le \n", MATRIX_NORM( *dummy_matrix1_p ) );
-      */
+        /*
+          fprintf( stdout, "norm K_matrix  %15.9le \n", MATRIX_NORM(  K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) );
+          fprintf( stdout, "norm mu02      %15.9le \n", MATRIX_NORM(  mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor2 ) ] ) );
+          fprintf( stdout, "norm dummy1        %15.9le \n", MATRIX_NORM( *dummy_matrix1_p ) );
+        */
 
-      //      fprintf( stdout, "dummy3: [before] = %le\n", dummy3 );
+        // fprintf( stdout, "dummy3: [before] = %le\n", dummy3 );
 
-      dummy3 += REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
+        dummy3 += REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
 
-      //      fprintf( stdout, "dummy3: [after] = %le\n", dummy3 );
+        // fprintf( stdout, "dummy3: [after] = %le\n", dummy3 );
 
-    } /* end i_coor2 loop */
+      } /* end i_coor2 loop */
+
 
 #else /* __ENERGY_MOD__ */
 
       /*
-      fprintf( stdout, "K_matrix\n" );
-      if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) ) info = 1;
-      fprintf( stdout, "\n" );
+        fprintf( stdout, "K_matrix\n" );
+        if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) ) info = 1;
+        fprintf( stdout, "\n" );
 
-      fprintf( stdout, "mu20\n" );
-      if( MATRIX_PRINT_PLUS( stdout, mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) ) info = 1;
-      fprintf( stdout, "\n" );
+        fprintf( stdout, "mu20\n" );
+        if( MATRIX_PRINT_PLUS( stdout, mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) ) info = 1;
+        fprintf( stdout, "\n" );
       */
 
-    if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ], 
+      if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ], 
 				 mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ], *dummy_matrix1_p ) ) info=1;
 
-    /*
-      fprintf( stdout, "dummy_matrix1\n" );
-      if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix1_p ) ) info = 1;
-      fprintf( stdout, "\n" );
-    */
+      /*
+        fprintf( stdout, "dummy_matrix1\n" );
+        if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix1_p ) ) info = 1;
+        fprintf( stdout, "\n" );
+      */
 
-    /*
-      fprintf( stdout, "norm K_matrix  %15.9le \n", MATRIX_NORM(  K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) );
-      fprintf( stdout, "norm mu02      %15.9le \n", MATRIX_NORM(  mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) );
-      fprintf( stdout, "norm dummy1        %15.9le \n", MATRIX_NORM( *dummy_matrix1_p ) );
-    */
+      /*
+        fprintf( stdout, "norm K_matrix  %15.9le \n", MATRIX_NORM(  K_matrix_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) );
+        fprintf( stdout, "norm mu02      %15.9le \n", MATRIX_NORM(  mu20_p->array[ COORDINATE_INDEX( i_coor1, i_coor1 ) ] ) );
+        fprintf( stdout, "norm dummy1        %15.9le \n", MATRIX_NORM( *dummy_matrix1_p ) );
+      */
 
-    //      fprintf( stdout, "dummy3: [before] = %le\n", dummy3 );
+      // fprintf( stdout, "dummy3: [before] = %le\n", dummy3 );
 
-    dummy3 += REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
+      dummy3 += REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
 
-    //      fprintf( stdout, "dummy3: [after] = %le\n", dummy3 );
+      // fprintf( stdout, "dummy3: [after] = %le\n", dummy3 );
 
 #endif /* __ENERGY_MOD__ */
 
-  } /* end i_coor1 loop */
+    } /* end i_coor1 loop */
 
-#endif /* __NO_CEID__ */  
-  
-  potential_energy_system_p->rvector[ 0 ] = dummy1;
+  }  
+
+  potential_energy_system_p->rvector[ 0 ] =  dummy1;
 
   potential_energy_system_p->rvector[ 1 ] = -dummy2;
 

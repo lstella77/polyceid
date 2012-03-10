@@ -117,188 +117,188 @@ int rho_dot_update( const constants constants, state_p state_p, config_p config_
     if( MATRIX_ZERO( rho_dot_p->array[ i_rho ] ) ) info=1;
 
 
-
     /*----------------------
       First part
       ----------------------*/
+    if( !constants.flag_Ehrenfest ){ 
 
 
-    //    fprintf( stdout, "  ---------- First part -----------\n" );
+      //    fprintf( stdout, "  ---------- First part -----------\n" );
 
-
-    /* set dummy matrix to zero */
-    if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
-
-    /* coor loop */
-    for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
-
-
-      //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
 
       /* set dummy matrix to zero */
-      if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
+      if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
 
-      i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
-
-
-      //      fprintf( stdout, "   i_coor1 = %d, i_atom = %d \n", i_coor1, i_atom );
+      /* coor loop */
+      for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
 
 
-      // term 1
-      index = RHO_INDEX_CHANGE1_PLUS2_FIRST( i_rho, i_mode ); 
+        //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
+
+        /* set dummy matrix to zero */
+        if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
+
+        i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
 
 
-      //      fprintf( stdout, "   index = %d \n", index );
+        //      fprintf( stdout, "   i_coor1 = %d, i_atom = %d \n", i_coor1, i_atom );
 
 
-      if( index < max_rho_index ){
+        // term 1
+        index = RHO_INDEX_CHANGE1_PLUS2_FIRST( i_rho, i_mode ); 
 
-	dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) ) );
 
-	/*
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+          dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) ) );
+
+          /*
+	    fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	    fprintf( stdout, "\n" );
+	  */
+
+          if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
+	
+	  if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // term 2
+        index = i_rho; // for compatibility
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        dummy = CMPLX( 2.0e0 *( dummy_rho_index1.ivector[ i_mode ] ) +1.0e0 );
+
+        /*
+          fprintf( stdout, "dummy\n" );
+          if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	  fprintf( stdout, "\n" );
+        */
+
+        if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
+
+        if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        // term 3
+        index = RHO_INDEX_CHANGE1_MINUS2_FIRST( i_rho, i_mode ); 
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+          dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ i_mode ] -1.0e0 ) ) );
+
+	  /*
+	    fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+            fprintf( stdout, "\n" );
+	  */
+	
+	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
+	
+	  if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // term 4
+        index = RHO_INDEX_CHANGE1_MINUS2_SECOND( i_rho, i_mode ); 
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+	  dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ i_mode ] -1.0e0 ) ) );
+
+	  /*
+	    fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	    fprintf( stdout, "\n" );
+	  */
+
+	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
+	
+	  if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // term 5
+        index = i_rho; // for compatibility
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        dummy = CMPLX( 2.0e0 *( dummy_rho_index2.ivector[ i_mode ] ) +1.0e0 );
+
+        /*
 	  fprintf( stdout, "dummy\n" );
 	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
 	  fprintf( stdout, "\n" );
-	*/
+        */
 
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
+        if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
+
+        if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+
+        // term 6
+        index = RHO_INDEX_CHANGE1_PLUS2_SECOND( i_rho, i_mode ); 
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+	  dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) ) );
+
+	  /*
+	    fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	    fprintf( stdout, "\n" );
+	  */
 	
-	if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // term 2
-      index = i_rho; // for compatibility
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      dummy = CMPLX( 2.0e0 *( dummy_rho_index1.ivector[ i_mode ] ) +1.0e0 );
-
-      /*
-	fprintf( stdout, "dummy\n" );
-	if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	fprintf( stdout, "\n" );
-      */
-
-      if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
-
-      if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-      // term 3
-      index = RHO_INDEX_CHANGE1_MINUS2_FIRST( i_rho, i_mode ); 
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ i_mode ] -1.0e0 ) ) );
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
+	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
 	
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
-	
-	if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+	  if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
 
-      }
+        }
 
-      // term 4
-      index = RHO_INDEX_CHANGE1_MINUS2_SECOND( i_rho, i_mode ); 
+        // final
 
+        dummy = CMPLX( ( ap_p->rvector[ i_coor1 ] ) *( ap_p->rvector[ i_coor1 ] ) /( masses_aux.rvector[ i_coor1 ] ) );
 
-      //      fprintf( stdout, "   index = %d \n", index );
+        if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
 
+        if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
 
-      if( index < max_rho_index ){
+      } /* i_mode loop */
 
-	dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ i_mode ] -1.0e0 ) ) );
+      dummy = CMPLX_DIVISION( CMPLX( 0.25e0 ), IHBAR );
 
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
+      if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
 
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
-	
-	if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // term 5
-      index = i_rho; // for compatibility
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      dummy = CMPLX( 2.0e0 *( dummy_rho_index2.ivector[ i_mode ] ) +1.0e0 );
-
-      /*
-	fprintf( stdout, "dummy\n" );
-	if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	fprintf( stdout, "\n" );
-      */
-
-      if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
-
-      if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-
-      // term 6
-      index = RHO_INDEX_CHANGE1_PLUS2_SECOND( i_rho, i_mode ); 
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) ) );
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-	
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix3_p  ) ) info=1;
-	
-	if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix3_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // final
-
-      dummy = CMPLX( ( ap_p->rvector[ i_coor1 ] ) *( ap_p->rvector[ i_coor1 ] ) /( masses_aux.rvector[ i_coor1 ] ) );
-
-      if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
-
-      if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
-
-    } /* i_mode loop */
-
-    dummy = CMPLX_DIVISION( CMPLX( 0.25e0 ), IHBAR );
-
-    if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
-
-    if( MATRIX_DIF( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
+      if( MATRIX_DIF( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
 
 
 #ifdef __DEBUG_PLUS__
-    fprintf( stdout, "   --------------\n" );
-    norm = MATRIX_NORM( *dummy_matrix1_p );
-    fprintf( stdout, "   Term's norm [1] = %le\n", norm );
+      fprintf( stdout, "   --------------\n" );
+      norm = MATRIX_NORM( *dummy_matrix1_p );
+      fprintf( stdout, "   Term's norm [1] = %le\n", norm );
 #endif /* __DEBUG_PLUS__ */
 
-
+    }
 
 
     if( flag_no_Ehrenfest_frame ){
@@ -361,667 +361,672 @@ int rho_dot_update( const constants constants, state_p state_p, config_p config_
     /*----------------------
       Third part
       ----------------------*/
+    if( !constants.flag_Ehrenfest ){ 
 
 
-    //    fprintf( stdout, "  -------------- Third part -----------\n" );
+      //    fprintf( stdout, "  -------------- Third part -----------\n" );
 
-
-    /* set dummy matrix to zero */
-    if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
-
-    /* coor loop */
-    for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
-
-
-      //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
 
       /* set dummy matrix to zero */
-      if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
+      if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
 
-      i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
-
-
-      //      fprintf( stdout, "   i_coor1 = %d \n", i_coor1 );
+      /* coor loop */
+      for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
 
 
-      // term 1
+        //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
 
-      /* set dummy matrix to zero */
-      if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
+        /* set dummy matrix to zero */
+        if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
 
-      // A
-      index = RHO_INDEX_CHANGE1_PLUS1_FIRST( i_rho, i_mode ); 
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
+        i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
 
 
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) );
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // B
-      index = RHO_INDEX_CHANGE1_MINUS1_FIRST( i_rho, i_mode ); 
+        //      fprintf( stdout, "   i_coor1 = %d \n", i_coor1 );
 
 
-      //      fprintf( stdout, "   index = %d \n", index );
+        // term 1
+
+        /* set dummy matrix to zero */
+        if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
+
+        // A
+        index = RHO_INDEX_CHANGE1_PLUS1_FIRST( i_rho, i_mode ); 
 
 
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( dummy_rho_index1.ivector[ i_mode ] ) );
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // 
-      if( MATRIX_MATRIX_PRODUCT( delta_F_matrix_p->array[ i_coor1 ] , *dummy_matrix3_p,  *dummy_matrix4_p ) ) info=1;
-
-      if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-      // term 2
-
-      /* set dummy matrix to zero */
-      if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
-
-      // A
-      index = RHO_INDEX_CHANGE1_MINUS1_SECOND( i_rho, i_mode ); 
+        //      fprintf( stdout, "   index = %d \n", index );
 
 
-      //      fprintf( stdout, "   index = %d \n", index );
+        if( index < max_rho_index ){
+
+	  dummy = CMPLX( sqrt( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) );
+
+	  /*
+	    fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	   fprintf( stdout, "\n" );
+	  */
+
+          if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // B
+        index = RHO_INDEX_CHANGE1_MINUS1_FIRST( i_rho, i_mode ); 
 
 
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( dummy_rho_index2.ivector[ i_mode ] ) );
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // B
-      index = RHO_INDEX_CHANGE1_PLUS1_SECOND( i_rho, i_mode ); 
+        //      fprintf( stdout, "   index = %d \n", index );
 
 
-      //      fprintf( stdout, "   index = %d \n", index );
+        if( index < max_rho_index ){
+
+	  dummy = CMPLX( sqrt( dummy_rho_index1.ivector[ i_mode ] ) );
+
+	  /*
+	    fprintf( stdout, "dummy\n" );
+            if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+            fprintf( stdout, "\n" );
+	  */
+
+          if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // 
+        if( MATRIX_MATRIX_PRODUCT( delta_F_matrix_p->array[ i_coor1 ] , *dummy_matrix3_p,  *dummy_matrix4_p ) ) info=1;
+
+        if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        // term 2
+
+        /* set dummy matrix to zero */
+        if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
+
+        // A
+        index = RHO_INDEX_CHANGE1_MINUS1_SECOND( i_rho, i_mode ); 
 
 
-      if( index < max_rho_index ){
+        //      fprintf( stdout, "   index = %d \n", index );
 
-	dummy = CMPLX( sqrt( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) );
 
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
+        if( index < max_rho_index ){
 
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+	  dummy = CMPLX( sqrt( dummy_rho_index2.ivector[ i_mode ] ) );
 
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+	  /*
+	    fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	    fprintf( stdout, "\n" );
+	  */
 
-      }
+	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
 
-      //
-      if( MATRIX_MATRIX_PRODUCT( *dummy_matrix3_p, delta_F_matrix_p->array[ i_coor1 ] , *dummy_matrix4_p ) ) info=1;
+	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
 
-      if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+        }
 
-      // final
+        // B
+        index = RHO_INDEX_CHANGE1_PLUS1_SECOND( i_rho, i_mode ); 
 
-      dummy = CMPLX( ar_p->rvector[ i_coor1 ] );
 
-      if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+          dummy = CMPLX( sqrt( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) );
+
+          /*
+            fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	    fprintf( stdout, "\n" );
+          */
+
+	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        //
+        if( MATRIX_MATRIX_PRODUCT( *dummy_matrix3_p, delta_F_matrix_p->array[ i_coor1 ] , *dummy_matrix4_p ) ) info=1;
+
+        if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        // final
+
+        dummy = CMPLX( ar_p->rvector[ i_coor1 ] );
+
+        if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
     
-      if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
+        if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
 
-    } /* i_mode loop */
+      } /* i_mode loop */
 
-    dummy = CMPLX_DIVISION( CMPLX( OSQRT2 ), IHBAR );
+      dummy = CMPLX_DIVISION( CMPLX( OSQRT2 ), IHBAR );
 
-    if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
+      if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
 
-    if( MATRIX_DIF( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
+      if( MATRIX_DIF( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
 
 
 #ifdef __DEBUG_PLUS__
-    fprintf( stdout, "   --------------\n" );
-    norm = MATRIX_NORM( *dummy_matrix1_p );
-    fprintf( stdout, "   Term's norm [3] = %le\n", norm );
+      fprintf( stdout, "   --------------\n" );
+      norm = MATRIX_NORM( *dummy_matrix1_p );
+      fprintf( stdout, "   Term's norm [3] = %le\n", norm );
 #endif /* __DEBUG_PLUS__ */
  
-
+    }
 
     /*----------------------
       Fourth part
       ----------------------*/
+    if( !constants.flag_Ehrenfest ){ 
+
+
+      //    fprintf( stdout, "  ------------ Fourth part -----------\n" );
+
+
+      /* set dummy matrix to zero */
+      if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
+
+      /* coor loop */
+      for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
+
+
+        //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
+
+        /* set dummy matrix to zero */
+        if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
+
+        i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
+
+        K_matrix_index = COORDINATE_INDEX( i_coor1, i_coor1 );
+
+        //      fprintf( stdout, "   i_coor1 = %d, K_matrix_index = %d \n", i_coor1, K_matrix_index );
+
+
+        // term 1
+
+        /* set dummy matrix to zero */
+        if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
+
+        // A
+        index = RHO_INDEX_CHANGE1_PLUS2_FIRST( i_rho, i_mode ); 
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+          dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) ) ); //WARNING: already computed...
+
+          /*
+            fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	    fprintf( stdout, "\n" );
+          */
+
+	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // B
+        index = i_rho;
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        dummy = CMPLX( 2.0e0 *( dummy_rho_index1.ivector[ i_mode ] ) +1.0e0 );
+
+        /*
+          fprintf( stdout, "dummy\n" );
+          if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	  fprintf( stdout, "\n" );
+        */
+
+        if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+        if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        // C
+        index = RHO_INDEX_CHANGE1_MINUS2_FIRST( i_rho, i_mode );
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+          dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ i_mode ] -1.0e0 ) ) ); //WARNING: already computed...
+
+	  /*
+	    fprintf( stdout, "dummy\n" );
+            if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	    fprintf( stdout, "\n" );
+          */
+
+          if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+          if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // 
+        if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ K_matrix_index ] , *dummy_matrix3_p,  *dummy_matrix4_p ) ) info=1;
+       
+        if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        // term 2
+
+        /* set dummy matrix to zero */
+        if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
+
+        // A
+        index = RHO_INDEX_CHANGE1_MINUS2_SECOND( i_rho, i_mode ); 
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+          dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ i_mode ] -1.0e0 ) ) );
+
+          /*
+	    fprintf( stdout, "dummy\n" );
+ 	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+            fprintf( stdout, "\n" );
+          */
+
+          if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+          if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        // B
+        index = i_rho;
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        dummy = CMPLX( 2.0e0 *( dummy_rho_index2.ivector[ i_mode ] ) +1.0e0 );
+      
+        /*
+          fprintf( stdout, "dummy\n" );
+          if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	  fprintf( stdout, "\n" );
+	*/
+      
+        if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+      
+        if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        // C
+        index = RHO_INDEX_CHANGE1_PLUS2_SECOND( i_rho, i_mode ); 
+
+
+        //      fprintf( stdout, "   index = %d \n", index );
+
+
+        if( index < max_rho_index ){
+
+          dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) ) );
+
+          /*
+	    fprintf( stdout, "dummy\n" );
+	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+            fprintf( stdout, "\n" );
+          */
+
+	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+        }
+
+        //
+        if( MATRIX_MATRIX_PRODUCT( *dummy_matrix3_p, K_matrix_p->array[ K_matrix_index ] , *dummy_matrix4_p ) ) info=1;
+
+        if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
+
+        // final
+
+        dummy = CMPLX( ( ar_p->rvector[ i_coor1 ] ) *( ar_p->rvector[ i_coor1 ] ) );
+
+        if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
     
+        if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
 
-    //    fprintf( stdout, "  ------------ Fourth part -----------\n" );
+      } /* i_mode loop */
 
+      dummy = CMPLX_DIVISION( CMPLX( 0.25e0 ), IHBAR );
 
-    /* set dummy matrix to zero */
-    if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
+      if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
 
-    /* coor loop */
-    for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
-
-
-      //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
-
-      /* set dummy matrix to zero */
-      if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
-
-      i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
-
-      K_matrix_index = COORDINATE_INDEX( i_coor1, i_coor1 );
-
-      //      fprintf( stdout, "   i_coor1 = %d, K_matrix_index = %d \n", i_coor1, K_matrix_index );
-
-
-      // term 1
-
-      /* set dummy matrix to zero */
-      if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
-
-      // A
-      index = RHO_INDEX_CHANGE1_PLUS2_FIRST( i_rho, i_mode ); 
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) ) ); //WARNING: already computed...
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // B
-      index = i_rho;
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      dummy = CMPLX( 2.0e0 *( dummy_rho_index1.ivector[ i_mode ] ) +1.0e0 );
-
-      /*
-	fprintf( stdout, "dummy\n" );
-	if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	fprintf( stdout, "\n" );
-      */
-
-      if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-      if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      // C
-      index = RHO_INDEX_CHANGE1_MINUS2_FIRST( i_rho, i_mode );
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ i_mode ] -1.0e0 ) ) ); //WARNING: already computed...
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // 
-      if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ K_matrix_index ] , *dummy_matrix3_p,  *dummy_matrix4_p ) ) info=1;
-
-      if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-      // term 2
-
-      /* set dummy matrix to zero */
-      if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
-
-      // A
-      index = RHO_INDEX_CHANGE1_MINUS2_SECOND( i_rho, i_mode ); 
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ i_mode ] -1.0e0 ) ) );
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      // B
-      index = i_rho;
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      dummy = CMPLX( 2.0e0 *( dummy_rho_index2.ivector[ i_mode ] ) +1.0e0 );
-      
-      /*
-	fprintf( stdout, "dummy\n" );
-	if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	fprintf( stdout, "\n" );
-	*/
-      
-      if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-      
-      if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      // C
-      index = RHO_INDEX_CHANGE1_PLUS2_SECOND( i_rho, i_mode ); 
-
-
-      //      fprintf( stdout, "   index = %d \n", index );
-
-
-      if( index < max_rho_index ){
-
-	dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +2.0e0 ) *( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) ) );
-
-	/*
-	  fprintf( stdout, "dummy\n" );
-	  if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	  fprintf( stdout, "\n" );
-	*/
-
-	if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-      }
-
-      //
-      if( MATRIX_MATRIX_PRODUCT( *dummy_matrix3_p, K_matrix_p->array[ K_matrix_index ] , *dummy_matrix4_p ) ) info=1;
-
-      if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-      // final
-
-      dummy = CMPLX( ( ar_p->rvector[ i_coor1 ] ) *( ar_p->rvector[ i_coor1 ] ) );
-
-      if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
-    
-      if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
-
-    } /* i_mode loop */
-
-    dummy = CMPLX_DIVISION( CMPLX( 0.25e0 ), IHBAR );
-
-    if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
-
-    if( MATRIX_SUM( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
+      if( MATRIX_SUM( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
 
 
 #ifdef __DEBUG_PLUS__
-    fprintf( stdout, "   --------------\n" );
-    norm = MATRIX_NORM( *dummy_matrix1_p );
-    fprintf( stdout, "   Term's norm [4] = %le\n", norm );
+      fprintf( stdout, "   --------------\n" );
+      norm = MATRIX_NORM( *dummy_matrix1_p );
+      fprintf( stdout, "   Term's norm [4] = %le\n", norm );
 #endif /* __DEBUG_PLUS__ */
 
+    }
 
 #ifndef __ENERGY_MOD__
 
     /*----------------------
       Fifth part
       ----------------------*/
+    if( !constants.flag_Ehrenfest ){ 
 
 
-    //    fprintf( stdout, "  -------------- Fifth part -------------\n" );
+      //    fprintf( stdout, "  -------------- Fifth part -------------\n" );
 
 
-    /* set dummy matrix to zero */
-    if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
+      /* set dummy matrix to zero */
+      if( MATRIX_ZERO( *dummy_matrix1_p ) ) info=1;
 
-    /* coor loop */
-    for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
+      /* coor loop */
+      for( i_mode=0; i_mode<N_coor_red; i_mode++ ){
 
 
-      //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
+        //      fprintf( stdout, "-->i_mode = %d\n", i_mode );
       
 
-      for( j_mode=(i_mode+1); j_mode<N_coor_red; j_mode++ ){ // WARNING: j_mode != i_mode
+        for( j_mode=(i_mode+1); j_mode<N_coor_red; j_mode++ ){ // WARNING: j_mode != i_mode
 
 
 	//	fprintf( stdout, "-->j_mode = %d\n", i_mode );
 
 
-	/* set dummy matrix to zero */
-	if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
+	  /* set dummy matrix to zero */
+	  if( MATRIX_ZERO( *dummy_matrix2_p ) ) info=1;
 	
-	i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
+          i_coor1 = relevant_modes.ivector[ i_mode ]; // i_mode to cartesian coordinate
 
-	i_coor2 = relevant_modes.ivector[ j_mode ]; // j_mode to cartesian coordinate
+          i_coor2 = relevant_modes.ivector[ j_mode ]; // j_mode to cartesian coordinate
 
-	K_matrix_index = COORDINATE_INDEX( i_coor1, i_coor2 );
-
-
-	//	fprintf( stdout, "   i_coor1 = %d, i_coor2 = %d, K_matrix_index = %d \n", i_coor1, i_coor2, K_matrix_index );
+          K_matrix_index = COORDINATE_INDEX( i_coor1, i_coor2 );
 
 
-	// term 1
-
-	/* set dummy matrix to zero */
-	if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
-
-	// A
-	index = RHO_INDEX_CHANGE2_PLUS1_PLUS1_FIRST( i_rho, i_mode, j_mode ); 
+          // fprintf( stdout, "   i_coor1 = %d, i_coor2 = %d, K_matrix_index = %d \n", i_coor1, i_coor2, K_matrix_index );
 
 
-	//	fprintf( stdout, "   index = %d \n", index );
+	  // term 1
+
+	  /* set dummy matrix to zero */
+	  if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
+
+	  // A
+	  index = RHO_INDEX_CHANGE2_PLUS1_PLUS1_FIRST( i_rho, i_mode, j_mode ); 
+
+
+	  //	fprintf( stdout, "   index = %d \n", index );
 
 	
-	if( index < max_rho_index ){
+	  if( index < max_rho_index ){
 	
-	  dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index1.ivector[ j_mode ] +1.0e0 ) ) );
+	    dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index1.ivector[ j_mode ] +1.0e0 ) ) );
+
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+	    */
+
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+	  }
+
+	  // B
+	  index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_FIRST( i_rho, i_mode, j_mode ); 
+
+
+	  //	fprintf( stdout, "   index = %d \n", index );
+
+	
+	  if( index < max_rho_index ){
+	
+	    dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index1.ivector[ j_mode ] ) ) );
+
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+	    */
+
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+	  }
+
+	  // C
+	  index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_FIRST( i_rho, j_mode, i_mode ); //WARNING: note the index inversion
+
+
+	  // fprintf( stdout, "   index = %d \n", index );
+
+	
+	  if( index < max_rho_index ){
+	
+	    dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ j_mode ] +1.0e0 ) ) );
+
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+            */
+
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+	  }
+
+	  // D
+	  index = RHO_INDEX_CHANGE2_MINUS1_MINUS1_FIRST( i_rho, i_mode, j_mode ); 
+
+
+
+	  // fprintf( stdout, "   index = %d \n", index );
+
+	
+          if( index < max_rho_index ){
+	
+	    dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ j_mode ] ) ) );
+
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+	    */
+
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+	  }
 
 	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
+	    fprintf( stdout, "dummy_matrix3\n" );
+	    if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix3_p ) ) info=1;
+
+	    fprintf( stdout, "K_matrix\n" );
+	    if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ K_matrix_index ] ) ) info=1;
 	  */
 
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-	}
-
-	// B
-	index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_FIRST( i_rho, i_mode, j_mode ); 
-
-
-	//	fprintf( stdout, "   index = %d \n", index );
-
-	
-	if( index < max_rho_index ){
-	
-	  dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index1.ivector[ j_mode ] ) ) );
+	  // 
+	  if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ K_matrix_index ], *dummy_matrix3_p, *dummy_matrix4_p ) ) info=1;
 
 	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
+	    fprintf( stdout, "dummy_matrix4\n" );
+	    if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix4_p ) ) info=1;
 	  */
 
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+	  if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
 
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+	  // term 2
 
-	}
-
-	// C
-	index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_FIRST( i_rho, j_mode, i_mode ); //WARNING: note the index inversion
-
-
-	//	fprintf( stdout, "   index = %d \n", index );
-
-	
-	if( index < max_rho_index ){
-	
-	  dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ j_mode ] +1.0e0 ) ) );
-
-	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
-	  */
-
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-	}
-
-	// D
-	index = RHO_INDEX_CHANGE2_MINUS1_MINUS1_FIRST( i_rho, i_mode, j_mode ); 
-
-
-
-	//	fprintf( stdout, "   index = %d \n", index );
-
-	
-	if( index < max_rho_index ){
-	
-	  dummy = CMPLX( sqrt( ( dummy_rho_index1.ivector[ i_mode ] ) *( dummy_rho_index1.ivector[ j_mode ] ) ) );
-
-	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
-	  */
-
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-	}
-
-	/*
-	  fprintf( stdout, "dummy_matrix3\n" );
-	  if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix3_p ) ) info=1;
-
-	  fprintf( stdout, "K_matrix\n" );
-	  if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ K_matrix_index ] ) ) info=1;
-	*/
-
-	// 
-	if( MATRIX_MATRIX_PRODUCT( K_matrix_p->array[ K_matrix_index ], *dummy_matrix3_p, *dummy_matrix4_p ) ) info=1;
-
-	/*
-	  fprintf( stdout, "dummy_matrix4\n" );
-	  if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix4_p ) ) info=1;
-	*/
-
-	if( MATRIX_SUM( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-	// term 2
-
-	/* set dummy matrix to zero */
-	if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
+	  /* set dummy matrix to zero */
+	  if( MATRIX_ZERO( *dummy_matrix3_p ) ) info=1;
       
-	// A
-	index = RHO_INDEX_CHANGE2_MINUS1_MINUS1_SECOND( i_rho, i_mode, j_mode ); 
+	  // A
+	  index = RHO_INDEX_CHANGE2_MINUS1_MINUS1_SECOND( i_rho, i_mode, j_mode ); 
 
 
-	//	fprintf( stdout, "   index = %d \n", index );
+	  // fprintf( stdout, "   index = %d \n", index );
 
 
-	if( index < max_rho_index ){
+          if( index < max_rho_index ){
 
-	  dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ j_mode ] ) ) );
+	    dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ j_mode ] ) ) );
 
-	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
-	  */
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+	    */
 
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
 
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
 
-	}
+	  }
 
-	// B
-	index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_SECOND( i_rho, j_mode, i_mode ); //WARNING: note the index inversion
-
-
-	//	fprintf( stdout, "   index = %d \n", index );
+	  // B
+	  index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_SECOND( i_rho, j_mode, i_mode ); //WARNING: note the index inversion
 
 
-	if( index < max_rho_index ){
-
-	  dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ j_mode ] +1.0e0 ) ) );
-
-	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
-	  */
-
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
-
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
-
-	}
-
-	// C
-	index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_SECOND( i_rho, i_mode, j_mode ); 
+	  // fprintf( stdout, "   index = %d \n", index );
 
 
-	//	fprintf( stdout, "   index = %d \n", index );
+	  if( index < max_rho_index ){
+
+	    dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] ) *( dummy_rho_index2.ivector[ j_mode ] +1.0e0 ) ) );
+
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+	    */
+
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+	  }
+
+	  // C
+	  index = RHO_INDEX_CHANGE2_PLUS1_MINUS1_SECOND( i_rho, i_mode, j_mode ); 
 
 
-	if( index < max_rho_index ){
+	  // fprintf( stdout, "   index = %d \n", index );
 
-	  dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index2.ivector[ j_mode ] ) ) );
 
-	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
-	  */
+	  if( index < max_rho_index ){
 
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+	    dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index2.ivector[ j_mode ] ) ) );
 
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+	    */
 
-	}
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+	  }
 	
-	// D
-	index = RHO_INDEX_CHANGE2_PLUS1_PLUS1_SECOND( i_rho, i_mode, j_mode ); 
+	  // D
+	  index = RHO_INDEX_CHANGE2_PLUS1_PLUS1_SECOND( i_rho, i_mode, j_mode ); 
 
 
-	//	fprintf( stdout, "   index = %d \n", index );
+	  // fprintf( stdout, "   index = %d \n", index );
 
 
-	if( index < max_rho_index ){
+	  if( index < max_rho_index ){
 
-	  dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index2.ivector[ j_mode ] +1.0e0 ) ) );
+	    dummy = CMPLX( sqrt( ( dummy_rho_index2.ivector[ i_mode ] +1.0e0 ) *( dummy_rho_index2.ivector[ j_mode ] +1.0e0 ) ) );
+
+	    /*
+	      fprintf( stdout, "dummy\n" );
+	      if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
+	      fprintf( stdout, "\n" );
+	    */
+
+	    if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+
+	    if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+
+	  }
 
 	  /*
-	    fprintf( stdout, "dummy\n" );
-	    if( CMPLX_PRINT_PLUS( stdout, dummy ) ) info=1;
-	    fprintf( stdout, "\n" );
+	    fprintf( stdout, "dummy_matrix3\n" );
+	    if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix3_p ) ) info=1;
+	  
+	    fprintf( stdout, "K_matrix\n" );
+	    if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ K_matrix_index ] ) ) info=1;
 	  */
 
-	  if( MATRIX_SCALAR_PRODUCT( rho_p->array[ index ], dummy, *dummy_matrix4_p  ) ) info=1;
+	  //
+	  if( MATRIX_MATRIX_PRODUCT( *dummy_matrix3_p, K_matrix_p->array[ K_matrix_index ] , *dummy_matrix4_p ) ) info=1;
 
-	  if( MATRIX_SUM( *dummy_matrix3_p, *dummy_matrix4_p, *dummy_matrix3_p  ) ) info=1; //WARNING: overwriting!
+	  /*
+	    fprintf( stdout, "dummy_matrix4\n" );
+	    if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix4_p ) ) info=1;
+	  */
 
-	}
+	  if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
 
-	/*
-	  fprintf( stdout, "dummy_matrix3\n" );
-	  if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix3_p ) ) info=1;
-	  
-	  fprintf( stdout, "K_matrix\n" );
-	  if( MATRIX_PRINT_PLUS( stdout, K_matrix_p->array[ K_matrix_index ] ) ) info=1;
-	*/
+	  // final
 
-	//
-	if( MATRIX_MATRIX_PRODUCT( *dummy_matrix3_p, K_matrix_p->array[ K_matrix_index ] , *dummy_matrix4_p ) ) info=1;
+          dummy = CMPLX( ( ar_p->rvector[ i_coor1 ] ) *( ar_p->rvector[ i_coor2 ] ) );
 
-	/*
-	  fprintf( stdout, "dummy_matrix4\n" );
-	  if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix4_p ) ) info=1;
-	*/
-
-	if( MATRIX_DIF( *dummy_matrix2_p, *dummy_matrix4_p, *dummy_matrix2_p  ) ) info=1; //WARNING: overwriting!
-
-	// final
-
-	dummy = CMPLX( ( ar_p->rvector[ i_coor1 ] ) *( ar_p->rvector[ i_coor2 ] ) );
-
-	if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
+	  if( MATRIX_SCALAR_PRODUCT( *dummy_matrix2_p, dummy, *dummy_matrix2_p  ) ) info=1;  //WARNING: overwriting!
     
-	if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
+	  if( MATRIX_SUM( *dummy_matrix1_p, *dummy_matrix2_p, *dummy_matrix1_p  ) ) info=1;  //WARNING: overwriting!
 
-      } /* j_mode loop */
+        } /* j_mode loop */
 
-    } /* i_mode loop */
+      } /* i_mode loop */
 
-    dummy = CMPLX_DIVISION( CMPLX( 0.5e0 ), IHBAR ); // WARNING: this coefficient depends on the way the double loop i_mode j_mode is handled
+      dummy = CMPLX_DIVISION( CMPLX( 0.5e0 ), IHBAR ); // WARNING: this coefficient depends on the way the double loop i_mode j_mode is handled
 
-    if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
+      if( MATRIX_SCALAR_PRODUCT( *dummy_matrix1_p, dummy, *dummy_matrix1_p ) );  //WARNING: overwriting!
 
-    /*
-      fprintf( stdout, "dummy_matrix1\n" );
-      if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix1_p ) ) info=1;
-    */
+      /*
+        fprintf( stdout, "dummy_matrix1\n" );
+        if( MATRIX_PRINT_PLUS( stdout, *dummy_matrix1_p ) ) info=1;
+      */
 
-    if( MATRIX_SUM( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
+      if( MATRIX_SUM( rho_dot_p->array[ i_rho ], *dummy_matrix1_p, rho_dot_p->array[ i_rho ] ) ) info=1;  //WARNING: overwriting!
 
 
 #ifdef __DEBUG_PLUS__
-    fprintf( stdout, "   --------------\n" );
-    norm = MATRIX_NORM( *dummy_matrix1_p );
-    fprintf( stdout, "   Term's norm [5] = %le\n", norm );
+      fprintf( stdout, "   --------------\n" );
+      norm = MATRIX_NORM( *dummy_matrix1_p );
+      fprintf( stdout, "   Term's norm [5] = %le\n", norm );
 #endif /* __DEBUG_PLUS__ */
 
+    }
 
 #endif /* __ENERGY_MOD__ */
 
