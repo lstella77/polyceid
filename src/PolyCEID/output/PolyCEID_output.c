@@ -40,6 +40,7 @@ FILE*      populations_fp;
 FILE*      energies_fp;
 FILE*      mu_traces_fp;
 FILE*      mu_norms_fp;
+FILE*      purity_fp;
 #ifdef __DEBUG_PLUS__
 FILE*      rho_traces_fp;
 FILE*      rho_norms_fp;
@@ -140,6 +141,12 @@ int print_observables( const constants constants, const state state, const confi
     if( PRINT_MU_TRACES( constants, state, config ) )                   info=1;
 
     if( PRINT_MU_NORMS( constants, state, config ) )                    info=1;
+
+  }  
+
+  if( constants.flag_observable_all || constants.flag_observable_purity ){
+
+    if( PRINT_PURITY( constants, state, config ) )                      info=1;
 
   }  
 
@@ -871,6 +878,40 @@ int print_mu_norms( const constants constants, const state state, const config c
 
 //------------------------------------------
 
+int print_purity( const constants constants, const state state, const config config ){
+
+  /* state */
+  double    time;
+  const matrix*  mu00_p;
+  const matrix*  one_body_electronic_density_matrix_p;
+  /* dummies */
+  double    dummy;
+  int       info=0;
+
+
+  time                                 =  state.time;
+  mu00_p                               = &(config.electrons.mu00);
+  one_body_electronic_density_matrix_p = &(state.one_body_electronic_density_matrix);
+
+
+  fprintf( purity_fp, "%le  ", time );
+
+  dummy = MATRIX_NORM( *mu00_p );
+
+  fprintf( purity_fp, DOUBLE_FORMAT"  ", dummy *dummy );
+
+  dummy = MATRIX_NORM( *one_body_electronic_density_matrix_p );
+
+  fprintf( purity_fp, DOUBLE_FORMAT"\n", dummy *dummy );
+
+  fflush( purity_fp );
+
+
+  return info;
+
+}
+
+//------------------------------------------
 #ifdef __DEBUG_PLUS__ 
 
 //BUGFIX: this was originally DEF
@@ -2280,6 +2321,16 @@ int output_files_opening( const constants constants ){
   }
 
 
+  if( constants.flag_observable_all || constants.flag_observable_purity ){
+
+    /* purity file */
+    sprintf( buffer, "purity_%s.dat", constants.output_label );
+
+    OPEN_FILE( purity_fp, buffer );	
+
+  }
+
+
 #ifdef __DEBUG_PLUS__
 
   /* rho traces file */
@@ -2594,12 +2645,22 @@ int output_files_closing( const constants constants ){
     /* mu traces file */
     sprintf( buffer, "mu_traces_%s.dat", constants.output_label );
 
-    CLOSE_FILE( mu_traces_fp, buffer );	
+    CLOSE_FILE( mu_traces_fp, buffer );        
 
     /* mu norms file */
     sprintf( buffer, "mu_norms_%s.dat", constants.output_label );
 
-    CLOSE_FILE( mu_norms_fp, buffer );	
+    CLOSE_FILE( mu_norms_fp, buffer ); 
+
+  } 
+
+
+  if( constants.flag_observable_all || constants.flag_observable_purity ){
+
+    /* purity */
+    sprintf( buffer, "purity_%s.dat", constants.output_label );
+
+    CLOSE_FILE( purity_fp, buffer );	
 
   }
 

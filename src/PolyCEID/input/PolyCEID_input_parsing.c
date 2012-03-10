@@ -1910,6 +1910,18 @@ int output_parsing( list_p list_p, constants_p constants_p ){
 
     }        
 
+    // extracting "flag_observable_purity"
+    if( entry_found_p->sublist_p ){
+
+      constants_p->flag_observable_purity = ASSING_FLAG_VARIABLE( entry_found_p->sublist_p, "purity" );
+
+    }
+    else{
+
+      constants_p->flag_observable_purity = 0;
+
+    }        
+
     // extracting "flag_observable_energies"
     if( entry_found_p->sublist_p ){
 

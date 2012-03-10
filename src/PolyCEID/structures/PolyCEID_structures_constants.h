@@ -137,6 +137,7 @@ typedef struct{
   unsigned short int   flag_observable_forces;
   unsigned short int   flag_observable_populations;
   unsigned short int   flag_observable_mus;
+  unsigned short int   flag_observable_purity;
   unsigned short int   flag_observable_energies;
   unsigned short int   flag_observable_adiabatic_populations;
   unsigned short int   flag_observable_projections;

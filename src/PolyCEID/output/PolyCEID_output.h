@@ -100,6 +100,12 @@ int print_mu_norms( const constants, const state, const config );
 
 //------------------------------------------
 
+int print_purity( const constants, const state, const config );
+
+#define PRINT_PURITY( co, st, cf ) FUNCTION_CHECK(  print_purity( (co), (st), (cf) ), print_purity ) 
+
+//------------------------------------------
+
 #ifdef __DEBUG_PLUS__
 
 int print_rho_traces( const constants, const state, const config );

@@ -60,11 +60,11 @@ typedef struct{
   double   superposition_instantaneous_and_initial_state;
   double   superposition_instantaneous_and_excited_state;
 
-  rvector  oscillator_strength_many;  //[N_levels_many *(N_levels_many-1)/2] 
-  rvector  oscillator_frequency_many; //[N_levels_many *(N_levels_many -1)/2]
+  rvector  oscillator_strength_many;    // [N_levels_many *(N_levels_many-1)/2] 
+  rvector  oscillator_frequency_many;   // [N_levels_many *(N_levels_many -1)/2]
 
-  rvector  oscillator_strength_single;  //[N_levels_single]
-  rvector  oscillator_frequency_single; //[N_levels_single]
+  rvector  oscillator_strength_single;  // [N_levels_single]
+  rvector  oscillator_frequency_single; // [N_levels_single]
 
 } PolyCEID_observables;
 

@@ -486,7 +486,7 @@ int compute_observables( const constants constants, state_p state_p, config_p co
 #endif /* __NO_DIPOLE__ */
 
   /* update one_body_electronic_density_matrix */
-  if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
+  if( constants.flag_observable_all || constants.flag_observable_density_matrix || constants.flag_observable_purity ){
 
     if( COMPUTE_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, *state_p, *config_p ) ) info=1; 
 
