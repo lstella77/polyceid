@@ -92,6 +92,10 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
   constants_p->flag_periodic_boundary_condition = ASSING_FLAG_VARIABLE( &input_list, "periodic_boundary_condition" );
 
 
+  // extracting "flag_Ehrenfest"
+  constants_p->flag_Ehrenfest = ASSING_FLAG_VARIABLE( &input_list, "Ehrenfest" );
+
+
   // extracting "N_atoms"
   if( ASSING_INT_VARIABLE( &input_list, "N_atoms", 1, &constants_p->N_atoms, NULL ) ) info=1;
 
@@ -297,10 +301,22 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
   constants_p->N_coor = ( constants_p->N_atoms ) *( constants_p->spacial_dimension );
 
 
-  /* check */
+  /* check N_electrons_CAS */
   if(  constants_p->N_electrons_CAS > constants_p->N_electrons || ( constants_p->N_electrons -constants_p->N_electrons_CAS )%2 ){
 
     fprintf( stderr, "ERROR: Invalid value of N_electron_CAS [%d]\n", constants_p->N_electrons_CAS );
+    fflush( stderr );
+    
+    info=1;
+
+  }
+
+  /* check Ehrenfest */
+  if( constants_p->flag_Ehrenfest && constants_p->CEID_order >0 ){
+
+    fprintf( stderr, "ERROR: to perform an Ehrenfest calculation, the CEID order must be 0!\n" );
+    fprintf( stderr, "       CEID order %d found instead\n", constants_p->CEID_order );
+
     fflush( stderr );
     
     info=1;
@@ -399,20 +415,6 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
     if( CONSTANTS_ALLOCATE( NP_CONSTANTS, pp, *constants_p, 0 ) ) info=1; //WARNING: initial allocation without many_body_hybridisation_table and symmetry_coefficients
 
   }
-
-
-#ifdef __NO_CEID__
-
-  if( constants_p->CEID_order > 0 ){
-
-
-    fprintf( stderr, "ERROR: CEID_order must be equal to 0 if __NO_CEID__ is in use\n" );
-
-    info=1;
-
-  }
-
-#endif /* __NO_CEID__ */
 
 
   /* compute_rho_dimension */
@@ -1254,7 +1256,7 @@ int construct_transition( const constants constants, char*  occup, rvector_p tra
   }
   else{
 
-    fprintf( stderr, "ERROR: norm of excited_many_body_state too small [%le]\n", norm );
+    fprintf( stderr, "ERROR: norm of the state is too small [%le]\n", norm );
     fflush( stderr );
     
     info=1;
@@ -1612,11 +1614,9 @@ int construct_transition_single( const constants constants, double coeff, int ho
   }
   else{
 
-    fprintf( stdout, "ERROR: norm of excited_many_body_state too small [%le]\n", norm );
+    fprintf( stdout, "WARNING: the norm of the state %d-%d is too small [%le]\n", hole, electron, norm );
     fflush( stdout );
     
-    info=1;
-
   }
 
 

@@ -51,11 +51,9 @@ int forces_update( const constants constants, state_p state_p, config_p config_p
 #ifdef __FORCES_NON_CONS__  
   double           friction;
 #endif /* __FORCES_NON_CONS__ */ 
-#ifndef __NO_CEID__
   int              j_coor;
   int              K_matrix_index;
   double           dummy;
-#endif /* __NO_CEID__ */
   int              info=0;
 
 
@@ -76,21 +74,21 @@ int forces_update( const constants constants, state_p state_p, config_p config_p
 
     forces_cons_p->rvector[ i_coor ] = REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
     
-#ifndef __NO_CEID__
+    if( !constants.flag_Ehrenfest ){
 
-    for( j_coor=0; j_coor<N_coor; j_coor++ ){
+      for( j_coor=0; j_coor<N_coor; j_coor++ ){
 
-      K_matrix_index = COORDINATE_INDEX( i_coor, j_coor );
+        K_matrix_index = COORDINATE_INDEX( i_coor, j_coor );
 
-      if( MATRIX_MATRIX_PRODUCT( mu10_p->array[ j_coor ], K_matrix_p->array[ K_matrix_index ], *dummy_matrix1_p ) ) info=1;
+        if( MATRIX_MATRIX_PRODUCT( mu10_p->array[ j_coor ], K_matrix_p->array[ K_matrix_index ], *dummy_matrix1_p ) ) info=1;
 
-      dummy = REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
+        dummy = REAL( MATRIX_TRACE( *dummy_matrix1_p ) );
 
-      forces_cons_p->rvector[ i_coor ] -= dummy; //WARNING: minus sign
+        forces_cons_p->rvector[ i_coor ] -= dummy; //WARNING: minus sign
 
-    } /* end j_coor loop */
+      } /* end j_coor loop */
 
-#endif /* __NO_CEID__ */
+    }
 
   } /* end i_coor loop */
 

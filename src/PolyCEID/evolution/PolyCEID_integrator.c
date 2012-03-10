@@ -352,31 +352,29 @@ int single_step_CEID_integrator( const constants constants, state_p state_p, con
 
 
   /* the following part is useless in a pure Ehrenfest simulation */
-#ifndef __NO_CEID__
+  if( !constants.flag_Ehrenfest ){
 
+    /* compute nonadiabaticity */
+    if( 0 == (state_p->step_counter) %(constants.skip_write) ){
 
-  /* compute nonadiabaticity */
-  if( 0 == (state_p->step_counter) %(constants.skip_write) ){
-
-    // WARNING! It needs the transformed Hamiltonian!
-    if( COMPUTE_NONADIABATICITY( constants, *state_p, *config_tmp_p ) ) info=1;
+      // WARNING! It needs the transformed Hamiltonian!
+      if( COMPUTE_NONADIABATICITY( constants, *state_p, *config_tmp_p ) ) info=1;
       
-    // if( COMPUTE_NONADIABATIC_RATE( constants, *state_p, *config_tmp_p ) ) info=1;
+      // if( COMPUTE_NONADIABATIC_RATE( constants, *state_p, *config_tmp_p ) ) info=1;
       
-  }
-
+    }
 
 #ifndef __DEBUG__ 
 
-  if( 0 == ( state_p->step_counter ) %( constants.skip_write ) ){
+    if( 0 == ( state_p->step_counter ) %( constants.skip_write ) ){
 
-    if( RHO_NORM_AND_PROJECTION_UPDATE( constants, *state_p, *config_tmp_p ) ) info=1;
+      if( RHO_NORM_AND_PROJECTION_UPDATE( constants, *state_p, *config_tmp_p ) ) info=1;
 
-  }
+    }
 
 #else /* __DEBUG__ */
 
-  if( RHO_NORM_AND_PROJECTION_UPDATE( constants, *state_p, *config_tmp_p ) ) info=1;
+    if( RHO_NORM_AND_PROJECTION_UPDATE( constants, *state_p, *config_tmp_p ) ) info=1;
 
 #endif /* __DEBUG__ */
 
@@ -385,11 +383,11 @@ int single_step_CEID_integrator( const constants constants, state_p state_p, con
 
 #ifndef __RK4__
 
-  fprintf( stdout, "   DOING: RK2\n" );
+    fprintf( stdout, "   DOING: RK2\n" );
 
 #else /* __RK4__ */
 
-  fprintf( stdout, "   DOING: RK4\n" );
+    fprintf( stdout, "   DOING: RK4\n" );
 
 #endif /* __RK4__ */
 
@@ -399,15 +397,15 @@ int single_step_CEID_integrator( const constants constants, state_p state_p, con
   /* single step electrons */
 #ifndef __RK4__
 
-  if( RK2_ELECTRONS( constants, *state_p, *config_tmp_p, *config_def_p, 1.0e0 ) ) info=1;
+    if( RK2_ELECTRONS( constants, *state_p, *config_tmp_p, *config_def_p, 1.0e0 ) ) info=1;
 
 #else /* __RK4__ */
 
-  if( RK4_ELECTRONS( constants, *state_p, *config_tmp_p, *config_def_p, 1.0e0 ) ) info=1;
+    if( RK4_ELECTRONS( constants, *state_p, *config_tmp_p, *config_def_p, 1.0e0 ) ) info=1;
 
 #endif /* __RK4__ */
 
-#endif /* __NO_CEID__ */
+  }
 
 
   if( !flag_no_Ehrenfest_frame ){
