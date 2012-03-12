@@ -73,6 +73,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
     fprintf( stdout, "#         step         time         energy\n" );
     fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+    fflush( stdout );
 
     /* compute observables */
     if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=0;
@@ -187,6 +188,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
       if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
       fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+      fflush( stdout );
 
       /* compute observables */
       if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
@@ -243,6 +245,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
     if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
     fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+    fflush( stdout );
 
     /* compute observables */
     if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
