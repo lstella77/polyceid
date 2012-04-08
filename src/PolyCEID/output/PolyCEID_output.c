@@ -55,6 +55,7 @@ FILE*      single_level_populations_adiabatic_fp;
 FILE*      nonadiabatic_couplings_fp;
 FILE*      nonadiabatic_rates_fp;
 FILE*      one_body_electronic_density_matrix_fp;
+FILE*      one_body_electronic_density_matrix_Ehrenfest_fp;
 FILE*      one_body_electronic_hole_matrix_fp;
 FILE*      one_body_electronic_particle_matrix_fp;
 FILE*      natural_orbitals_fp;
@@ -222,9 +223,11 @@ int print_observables( const constants constants, const state state, const confi
 
   if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
 
-    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, state ) )  info=1;
+    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, state ) )           info=1;
 
-    if( PRINT_NATURAL_ORBITALS( constants, state ) )                    info=1;
+    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX_EHRENFEST( constants, state ) )  info=1;
+
+    if( PRINT_NATURAL_ORBITALS( constants, state ) )                             info=1;
 
   }  
 
@@ -1426,6 +1429,70 @@ int print_one_body_electronic_density_matrix( const constants constants, const s
   return info;
 
 }
+
+//------------------------------------------
+
+int print_one_body_electronic_density_matrix_Ehrenfest( const constants constants, const state state ){
+
+  /* constants */
+  int       N_levels_single;
+  /* state */
+  double    time;
+  const matrix*  one_body_electronic_density_matrix_Ehrenfest_p;
+  /* dummies */
+  int       i, j;
+  int       index;
+  double    dummy;
+  int       info=0;
+
+
+  N_levels_single                      =  constants.N_levels_single;
+
+  time                                 =  state.time;
+  one_body_electronic_density_matrix_Ehrenfest_p = &(state.one_body_electronic_density_matrix_Ehrenfest);
+
+
+  fprintf( one_body_electronic_density_matrix_Ehrenfest_fp, "# time = %le\n", time );
+
+  for( i=0; i<N_levels_single; i++ ){
+
+    for( j=0; j<N_levels_single; j++ ){
+
+      index = ELECTRON_SINGLE_INDEX( i, j );
+
+      fprintf( one_body_electronic_density_matrix_Ehrenfest_fp, DOUBLE_FORMAT"  ", CMPLX_NORM( one_body_electronic_density_matrix_Ehrenfest_p->matrix[ index ]) );
+
+    } /* j loop */
+
+    fprintf( one_body_electronic_density_matrix_Ehrenfest_fp, "\n" );
+
+  } /* i loop */
+
+  //
+  dummy = REAL( MATRIX_TRACE( *one_body_electronic_density_matrix_Ehrenfest_p ) );
+
+  fprintf( one_body_electronic_density_matrix_Ehrenfest_fp, "# trace = %le  ", dummy );
+
+  dummy = IMAG( MATRIX_TRACE( *one_body_electronic_density_matrix_Ehrenfest_p ) );
+
+  fprintf( one_body_electronic_density_matrix_Ehrenfest_fp, "%le\n", dummy );
+
+
+  //
+  dummy  = MATRIX_NORM( *one_body_electronic_density_matrix_Ehrenfest_p );
+
+  fprintf( one_body_electronic_density_matrix_Ehrenfest_fp, "# norm = %le\n", dummy );
+
+  //
+  fprintf( one_body_electronic_density_matrix_Ehrenfest_fp, "\n\n" );
+
+  fflush( one_body_electronic_density_matrix_Ehrenfest_fp );
+
+
+  return info;
+
+}
+
 //------------------------------------------
 
 int print_one_body_electronic_hole_matrix( const constants constants, const state state ){
@@ -2454,6 +2521,11 @@ int output_files_opening( const constants constants ){
 
     OPEN_FILE( one_body_electronic_density_matrix_fp, buffer );	
 
+    /* one_body_electronic_density_matrix_Ehrenfest file */
+    sprintf( buffer, "one_body_electronic_density_matrix_Ehrenfest_%s.dat", constants.output_label );
+
+    OPEN_FILE( one_body_electronic_density_matrix_Ehrenfest_fp, buffer );	
+
     /* natural_orbitals file */
     sprintf( buffer, "natural_orbitals_%s.dat", constants.output_label );
 
@@ -2787,6 +2859,11 @@ int output_files_closing( const constants constants ){
     sprintf( buffer, "one_body_electronic_density_matrix_%s.dat", constants.output_label );
 
     CLOSE_FILE( one_body_electronic_density_matrix_fp, buffer );	
+
+    /* one_body_electronic_density_matrix_Ehrenfest file */
+    sprintf( buffer, "one_body_electronic_density_matrix_Ehrenfest_%s.dat", constants.output_label );
+
+    CLOSE_FILE( one_body_electronic_density_matrix_Ehrenfest_fp, buffer );	
 
     /* natural_orbitals file */
     sprintf( buffer, "natural_orbitals_%s.dat", constants.output_label );

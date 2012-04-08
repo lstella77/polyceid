@@ -182,6 +182,12 @@ int print_one_body_electronic_density_matrix( const constants, const state );
 
 //------------------------------------------
 
+int print_one_body_electronic_density_matrix_Ehrenfest( const constants, const state );
+
+#define PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX_EHRENFEST( co, st ) FUNCTION_CHECK(  print_one_body_electronic_density_matrix_Ehrenfest( (co), (st) ), print_one_body_electronic_density_matrix_Ehrenfest ) 
+
+//------------------------------------------
+
 int print_one_body_electronic_hole_matrix( const constants, const state );
 
 #define PRINT_ONE_BODY_ELECTRONIC_HOLE_MATRIX( co, st ) FUNCTION_CHECK(  print_one_body_electronic_hole_matrix( (co), (st) ), print_one_body_electronic_hole_matrix ) 
