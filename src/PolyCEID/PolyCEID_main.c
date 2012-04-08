@@ -90,10 +90,8 @@ int main( int argc, char* argv[] ){
       }
 
       //      fprintf( stdout, "input file name: %s\n\n", argv[ 1 ] );
-
-
+           
 #endif /* __DEBUG__ */
-      
 
       
       /* read the input file */
@@ -162,6 +160,43 @@ int main( int argc, char* argv[] ){
       fprintf( stdout, "# N_levels_many_saved = %d\n", N_levels_many_saved );
       fprintf( stdout, "# N_levels_many       = %d\n", constants.N_levels_many );
       fprintf( stdout, "\n" );
+
+      /* initial writing */
+      if( !info ){
+      
+        fprintf( stdout, "# constants [at the beginning]\n" );
+       
+      }
+      else{
+
+        fprintf( stdout, "# constants [at the beginning --- after an error occurred]\n" );
+         
+      }
+     
+      if( CONSTANTS_VERBOSE_PRINT( stdout, constants ) ) info=1;
+       
+      fprintf( stdout, "\n" );
+
+
+      if( !info ){
+
+        fprintf( stdout, "# config & state [at the beginning]\n" );
+       
+      }
+      else{
+       
+        fprintf( stdout, "# config & state [at the beginning --- after an error occurred]\n" );
+         
+      }
+     
+      if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
+       
+      if( CONFIG_VERBOSE_PRINT( stdout, config_tmp ) ) info=1;
+       
+      if( STATE_VERBOSE_PRINT( stdout, state ) ) info=1;
+       
+      fprintf( stdout, "\n" );
+      fflush( stdout );
 
 #endif /* __DEBUG__ */
 
