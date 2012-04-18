@@ -56,9 +56,9 @@ int rho_hermiticity_test( const constants, state_p, config_p );
 
 /* rho_dot_hermiticity_test */
 
-int rho_dot_hermiticity_test( const constants, state_p );
+int rho_dot_hermiticity_test( const constants, state_p, config_p );
 
-#define RHO_DOT_HERMITICITY_TEST( co, st ) FUNCTION_CHECK( rho_dot_hermiticity_test( (co), &(st) ), rho_dot_hermiticity_test ) 
+#define RHO_DOT_HERMITICITY_TEST( co, st, cf ) FUNCTION_CHECK( rho_dot_hermiticity_test( (co), &(st), &(cf) ), rho_dot_hermiticity_test ) 
 
 //------------------------------------------
 

@@ -43,7 +43,6 @@
 typedef struct{
 
   long unsigned int     step_counter;                                     // integration step counter
-  double                time;                                             // internal time
   //
   matrix                initial_rho_electron;                             //[N_levels_many, N_levels_many]
   matrix_array          rho_dot;                                          //[max_rho_index]

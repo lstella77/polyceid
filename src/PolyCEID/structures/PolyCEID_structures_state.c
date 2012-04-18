@@ -456,9 +456,6 @@ int PolyCEID_state_read( FILE* fp, state_p state_p ){
   if( fscanf( fp, "%lu", &dummy_lu ) < 1 ) info=1;
   state_p->step_counter = dummy_lu;
 
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  state_p->time = dummy;
-
   /* initial_rho_electron */
   if( MATRIX_READ( fp, state_p->initial_rho_electron ) ) info=1;
   
@@ -591,19 +588,14 @@ int PolyCEID_state_print( FILE* fp, const state state ){
 
   /* dummies */
   long unsigned int step_counter;
-  double time;
   int    info=0;
 
 
   step_counter = state.step_counter;
-  time         = state.time;
 
 
   /* step_counter */
   if( fprintf( fp, "%lu\n", step_counter ) < 1 ) info=1;
-
-  /* time */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", time ) < 1 ) info=1;
 
   /* initial_rho_electron */
   if( MATRIX_PRINT( fp, state.initial_rho_electron ) ) info=1;
@@ -736,24 +728,16 @@ int PolyCEID_state_verbose_print( FILE* fp, const state state ){
 
   /* dummies */
   long unsigned int step_counter;
-  double time;
   int    info=0;
 
 
   step_counter = state.step_counter;
-  time         = state.time;
 
   /* step_counter */
   fprintf( fp, "#------------------------------------------#\n" );
   fprintf( fp, "# step_counter:\n");
 
   if( fprintf( fp, "# %lu\n", step_counter ) < 1 ) info=1;
-
-  /* time */
-  fprintf( fp, "#------------------------------------------#\n" );
-  fprintf( fp, "# time:\n");
-
-  if( fprintf( fp, "# "DOUBLE_FORMAT"\n", time ) < 1 ) info=1;
 
   /* initial_rho_electron */
   fprintf( fp, "#------------------------------------------#\n" );
@@ -1015,8 +999,6 @@ int PolyCEID_state_copy( state_p state_p, const state state ){
 
 
   state_p->step_counter = state.step_counter;
-
-  state_p->time    = state.time;
 
   /* initial_rho_electron */
   if( MATRIX_COPY( state_p->initial_rho_electron, state.initial_rho_electron ) ) info=1;

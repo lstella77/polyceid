@@ -39,7 +39,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
   double              time_length;
   /* state */
   long unsigned int*  step_counter_p;
-  double*             time_p;
+  double              time;
   /* dummies */
   int  info=0;
 
@@ -49,7 +49,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
   time_length           =  constants.time_length;
 
   step_counter_p        = &(state_p->step_counter);
-  time_p                = &(state_p->time);
+  time                  =  config_def_p->time;
 
 
 #ifdef __DEBUG_PLUS__
@@ -72,7 +72,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
     if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
     fprintf( stdout, "#         step         time         energy\n" );
-    fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+    fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );    
     fflush( stdout );
 
     /* compute observables */
@@ -99,7 +99,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
   /*--------------------------------
    -------MAIN INTEGRATOR LOOP------
    ---------------------------------*/
-  while( ( time_length - (*time_p) ) > EPS ){
+  while( ( time_length -time ) > EPS ){
 
 
 #ifdef __DEBUG__
@@ -116,7 +116,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 #ifdef __DEBUG_PLUS__
 
     fprintf( stdout, "# ---> integration step %lu.\n", *step_counter_p );
-    fprintf( stdout, "# ---> started at time = %e ...\n", *time_p );
+    fprintf( stdout, "# ---> started at time = %e ...\n", config_def_p->time );
     fflush( stdout );
       
 #endif /* __DEBUG_PLUS__ */
@@ -159,8 +159,9 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
       
     /* time increasing */
-    *time_p += dt;
-   
+    config_def_p->time = time +dt;
+
+    time = config_def_p->time;
 
     /* energy corrections */
 #ifndef __NO_ENERGY_CORRECTION__
@@ -187,7 +188,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
       /* update energy */
       if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
-      fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+      fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );    
       fflush( stdout );
 
       /* compute observables */
@@ -209,7 +210,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
       
 #ifdef __DEBUG_PLUS__
 
-    fprintf( stdout, "# ---> ... concluded at time = %e.\n\n", *time_p );
+    fprintf( stdout, "# ---> ... concluded at time = %e.\n\n", config_def_p->time );
     fflush( stdout );
 
 #endif /* __DEBUG_PLUS__ */
@@ -244,7 +245,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
     /* update energy */
     if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
-    fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, *time_p, state_p->observables.total_energy_system );    
+    fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );    
     fflush( stdout );
 
     /* compute observables */

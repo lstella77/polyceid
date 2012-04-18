@@ -121,7 +121,7 @@ int H_matrix_single_CHAIN_MOD2_update( const constants constants, state_p state_
     }
     else{
 	
-      fprintf( stdout, "WARNING: jump at time %le\n", state_p->time );
+      fprintf( stdout, "WARNING: jump at time %le\n", config_p->time );
 	  	
     }
       
@@ -168,7 +168,7 @@ int H_matrix_single_CHAIN_MOD2_update( const constants constants, state_p state_
     }
     else{
       
-      fprintf( stdout, "WARNING: jump at time %le\n", state_p->time );
+      fprintf( stdout, "WARNING: jump at time %le\n", config_p->time );
 	  	
     }
       
@@ -220,7 +220,7 @@ int H_matrix_single_CHAIN_MOD2_update( const constants constants, state_p state_
       }
       else{
 	
-	fprintf( stdout, "WARNING: jump at time %le\n", state_p->time );
+	fprintf( stdout, "WARNING: jump at time %le\n", config_p->time );
 	  	
       }
       

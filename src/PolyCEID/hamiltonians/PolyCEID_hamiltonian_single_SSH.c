@@ -111,7 +111,7 @@ int H_matrix_single_SSH_update( const constants constants, state_p state_p, conf
 	}
 	else{
 
-	  fprintf( stdout, "[ H_matrix ] WARNING: jump at time %le\n", state_p->time );
+	  fprintf( stdout, "[ H_matrix ] WARNING: jump at time %le\n", config_p->time );
 
 	}
 
@@ -248,7 +248,7 @@ int F_matrix_single_SSH_update( const constants constants, state_p state_p, conf
       }
       else{
 
-        fprintf( stdout, "[ F_matrix ] WARNING: jump at time %le\n", state_p->time );
+        fprintf( stdout, "[ F_matrix ] WARNING: jump at time %le\n", config_p->time );
 
       }
 
@@ -395,7 +395,7 @@ int K_matrix_single_SSH_update( const constants constants, state_p state_p, conf
         }
         else{
 
-          fprintf( stdout, "[ K_matrix ] WARNING: jump at time %le\n", state_p->time );
+          fprintf( stdout, "[ K_matrix ] WARNING: jump at time %le\n", config_p->time );
 
         }
 

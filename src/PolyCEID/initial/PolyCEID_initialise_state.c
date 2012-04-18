@@ -102,7 +102,7 @@ int initialise_state( const constants constants, state_p state_p, config_p confi
     /* step_counter already initialised */
 
     /* time */
-    state_p->time = 0;
+    config_def_p->time = 0;
 
   }
   else{
