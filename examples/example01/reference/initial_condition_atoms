@@ -1,0 +1,62 @@
+# initial_condition_atoms
+
+initial_ionic_state  { 0 }
+
+#1
+atom {
+
+  name { CH }
+
+  mass { 0.96485312e-2 }
+
+  position { -20.0 }
+
+  momentum { 0.0e0 }
+
+  fixed
+
+}
+
+#2
+atom {
+
+  name { CH }
+
+  mass { 0.96485312e-2 }
+
+  position { 0.0 }
+
+  momentum { 0.0e0 }
+
+
+}
+
+#3
+atom {
+
+  name { CH }
+
+  mass { 0.96485312e-2 }
+
+  position { 20.0 }
+
+  momentum { 0.0e0 }
+
+
+}
+
+#4
+atom {
+
+  name { CH }
+
+  mass { 0.96485312e-2 }
+
+  position { 40.0 }
+
+  momentum { 0.0e0 }
+
+  fixed
+
+}
+
