@@ -169,107 +169,107 @@ int print_observables( const constants constants, const state state, const confi
 
   if( constants.flag_observable_all || constants.flag_observable_energies ){
 
-    if( PRINT_ENERGIES( constants, state ) )                            info=1;
+    if( PRINT_ENERGIES( constants, state, config ) )                            info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_adiabatic_populations ){
 
-    if( PRINT_ADIABATIC_POPULATIONS( constants, state ) )               info=1;
+    if( PRINT_ADIABATIC_POPULATIONS( constants, state, config ) )               info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_projections ){
 
-    if( PRINT_ADIABATIC_PROJECTIONS( constants, state ) )               info=1;
+    if( PRINT_ADIABATIC_PROJECTIONS( constants, state, config ) )               info=1;
 
-    if( PRINT_PROJECTIONS( state ) )                                    info=1;
+    if( PRINT_PROJECTIONS( state, config ) )                                    info=1;
 
   }
 
   if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_many ){
 
-    if( PRINT_ADIABATIC_PES_MANY( constants, state ) )                  info=1;
+    if( PRINT_ADIABATIC_PES_MANY( constants, state, config ) )                  info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_adiabatic_pes_single ){
 
-    if( PRINT_ADIABATIC_PES_SINGLE( constants, state ) )                info=1;
+    if( PRINT_ADIABATIC_PES_SINGLE( constants, state, config ) )                info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_single_level_populations ){
 
-    if( PRINT_SINGLE_LEVEL_POPULATIONS_EHRENFEST( constants, state ) )  info=1;
+    if( PRINT_SINGLE_LEVEL_POPULATIONS_EHRENFEST( constants, state, config ) )  info=1;
 
-    if( PRINT_SINGLE_LEVEL_POPULATIONS_ADIABATIC( constants, state ) )  info=1;
+    if( PRINT_SINGLE_LEVEL_POPULATIONS_ADIABATIC( constants, state, config ) )  info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_nonadiabatic_couplings ){
 
-    if( PRINT_NONADIABATIC_COUPLINGS( constants, state ) )              info=1; 
+    if( PRINT_NONADIABATIC_COUPLINGS( constants, state, config ) )              info=1; 
 
   }  
 
   /*
   if( constants.flag_observable_all ){
 
-    if( PRINT_NONADIABATIC_RATES( constants, state ) )                  info=1; 
+    if( PRINT_NONADIABATIC_RATES( constants, state, config ) )                  info=1; 
 
   }
   */
 
   if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
 
-    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, state ) )           info=1;
+    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX( constants, state, config ) )           info=1;
 
-    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX_EHRENFEST( constants, state ) )  info=1;
+    if( PRINT_ONE_BODY_ELECTRONIC_DENSITY_MATRIX_EHRENFEST( constants, state, config ) )  info=1;
 
-    if( PRINT_NATURAL_ORBITALS( constants, state ) )                             info=1;
+    if( PRINT_NATURAL_ORBITALS( constants, state, config ) )                             info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_transition_matrices ){
 
-    if( PRINT_ONE_BODY_ELECTRONIC_HOLE_MATRIX( constants, state ) )     info=1;
+    if( PRINT_ONE_BODY_ELECTRONIC_HOLE_MATRIX( constants, state, config ) )     info=1;
 
-    if( PRINT_ONE_BODY_ELECTRONIC_PARTICLE_MATRIX( constants, state ) ) info=1;
+    if( PRINT_ONE_BODY_ELECTRONIC_PARTICLE_MATRIX( constants, state, config ) ) info=1;
 
-    if( PRINT_HOLE_ORBITALS( constants, state ) )                       info=1;
+    if( PRINT_HOLE_ORBITALS( constants, state, config ) )                       info=1;
 
-    if( PRINT_PARTICLE_ORBITALS( constants, state ) )                   info=1;
+    if( PRINT_PARTICLE_ORBITALS( constants, state, config ) )                   info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_adiabatic_states ){
 
-    if( PRINT_ADIABATIC_STATES( constants, state ) )                    info=1;
+    if( PRINT_ADIABATIC_STATES( constants, state, config ) )                    info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_electronic_density_states ){
 
-    if( PRINT_ELECTRONIC_DENSITY_STATES( constants, state ) )           info=1;
+    if( PRINT_ELECTRONIC_DENSITY_STATES( constants, state, config ) )           info=1;
 
   }  
 
   if( constants.flag_observable_all || constants.flag_observable_ionic_density_states ){
 
-    if( PRINT_IONIC_DENSITY_STATES( constants, state ) )                info=1;
+    if( PRINT_IONIC_DENSITY_STATES( constants, state, config ) )                info=1;
 
   }  
 
   if( ( N_levels_many > 1 && constants.flag_observable_all ) || constants.flag_observable_dipoles_many ){
 
-    if( PRINT_DIPOLES_MANY( constants, state ) )                        info=1;
+    if( PRINT_DIPOLES_MANY( constants, state, config ) )                        info=1;
 
   }
 
   if( constants.flag_observable_all || constants.flag_observable_dipoles_single ){
 
-    if( PRINT_DIPOLES_SINGLE( constants, state ) )                       info=1;
+    if( PRINT_DIPOLES_SINGLE( constants, state, config ) )                       info=1;
 
   }  
 
@@ -296,7 +296,7 @@ int print_positions( const constants constants, const state state, const config 
 
   N_coor               =  constants.N_coor;
 
-  time                 =  state.time;
+  time                 =  config.time;
   positions_p          = &(config.atoms.positions);
 
 
@@ -357,7 +357,7 @@ int print_momenta( const constants constants, const state state, const config co
 
   N_coor               =  constants.N_coor;
 
-  time                 =  state.time;
+  time                 =  config.time;
   momenta_p            = &(config.atoms.momenta);
 
 
@@ -395,7 +395,7 @@ int print_forces( const constants constants, const state state, const config con
 
   N_coor               =  constants.N_coor;
 
-  time                 =  state.time;
+  time                 =  config.time;
   forces_p             = &(config.atoms.forces);
 
 
@@ -457,7 +457,7 @@ int print_positions_thermostat( const constants constants, const state state, co
 
   N_chain                  =  constants.N_chain;
 
-  time                     =  state.time;
+  time                     =  config.time;
   positions_thermostat_p  = &(config.thermostat.positions);
 
 
@@ -495,7 +495,7 @@ int print_momenta_thermostat( const constants constants, const state state, cons
 
   N_chain                  =  constants.N_chain;
 
-  time                     =  state.time;
+  time                     =  config.time;
   momenta_thermostat_p     = &(config.thermostat.momenta);
 
 
@@ -533,7 +533,7 @@ int print_forces_thermostat( const constants constants, const state state, const
 
   N_chain                  =  constants.N_chain;
 
-  time                     =  state.time;
+  time                     =  config.time;
   forces_thermostat_p      = &(config.thermostat.forces);
 
 
@@ -571,7 +571,7 @@ int print_populations( const constants constants, const state state, const confi
 
   N_levels_many     =  constants.N_levels_many;
 
-  time              =  state.time;
+  time              =  config.time;
   density_matrix_p  = &(config.electrons.mu00);
 
 
@@ -598,7 +598,7 @@ int print_populations( const constants constants, const state state, const confi
 
 //------------------------------------------
 
-int print_energies( const constants constants, const state state ){
+int print_energies( const constants constants, const state state, const config config ){
 
   /* constants */
   int      N_chain;
@@ -617,7 +617,7 @@ int print_energies( const constants constants, const state state ){
 
   N_chain                             =  constants.N_chain;
   
-  time                                =  state.time;
+  time                                =  config.time;
   kinetic_energy_system_p             = &(state.observables.kinetic_energy_system);
   potential_energy_system_p           = &(state.observables.potential_energy_system);
   kinetic_energy_thermostat_p         = &(state.observables.kinetic_energy_thermostat);
@@ -696,7 +696,7 @@ int print_mu_traces( const constants constants, const state state, const config 
 
   N_coor  = constants.N_coor;
 
-  time    =  state.time;
+  time    =  config.time;
   mu00_p  = &(config.electrons.mu00);
   mu01_p  = &(config.electrons.mu01);
   mu10_p  = &(config.electrons.mu10);
@@ -799,7 +799,7 @@ int print_mu_norms( const constants constants, const state state, const config c
 
   N_coor  = constants.N_coor;
 
-  time    =  state.time;
+  time    =  config.time;
   mu00_p  = &(config.electrons.mu00);
   mu01_p  = &(config.electrons.mu01);
   mu10_p  = &(config.electrons.mu10);
@@ -892,7 +892,7 @@ int print_purity( const constants constants, const state state, const config con
   int       info=0;
 
 
-  time                                 =  state.time;
+  time                                 =  config.time;
   mu00_p                               = &(config.electrons.mu00);
   one_body_electronic_density_matrix_p = &(state.one_body_electronic_density_matrix);
 
@@ -932,7 +932,7 @@ int print_rho_traces( const constants constants, const state state, const config
 
   max_rho_index    =  constants.max_rho_index;
 
-  time             =  state.time;
+  time             =  config.time;
   rho_p            = &(config.electrons.rho);
 
 
@@ -984,7 +984,7 @@ int print_rho_norms( const constants constants, const state state, const config 
 
   max_rho_index    =  constants.max_rho_index;
 
-  time             =  state.time;
+  time             =  config.time;
   rho_p            = &(config.electrons.rho);
 
 
@@ -1014,7 +1014,7 @@ int print_rho_norms( const constants constants, const state state, const config 
 
 //------------------------------------------
 
-int print_adiabatic_populations( const constants constants, const state state ){
+int print_adiabatic_populations( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_many;
@@ -1028,7 +1028,7 @@ int print_adiabatic_populations( const constants constants, const state state ){
 
   N_levels_many                     =  constants.N_levels_many;
 
-  time                              =  state.time;
+  time                              =  config.time;
   adiabatic_populations_p           = &(state.adiabatic_populations);
 
 
@@ -1051,7 +1051,7 @@ int print_adiabatic_populations( const constants constants, const state state ){
 
 //------------------------------------------
 //
-int print_adiabatic_projections( const constants constants, const state state ){
+int print_adiabatic_projections( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_many;
@@ -1068,7 +1068,7 @@ int print_adiabatic_projections( const constants constants, const state state ){
 
   N_levels_many                     =  constants.N_levels_many;
 
-  time                              = state.time;
+  time                              = config.time;
   electronic_density_eigenvalues_p  = &(state.electronic_density_eigenvalues);
   adiabatic_projection_p            = &(state.adiabatic_projection);
 
@@ -1119,7 +1119,7 @@ int print_adiabatic_projections( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_projections( const state state ){
+int print_projections( const state state, const config config ){
 
   /* state */
   double    time;
@@ -1130,7 +1130,7 @@ int print_projections( const state state ){
   int       info=0;
 
 
-  time             = state.time;
+  time             = config.time;
   rho_norm         = state.rho_norm;
   rho_dot_norm     = state.rho_dot_norm;
   rho_projection   = state.rho_projection;
@@ -1147,7 +1147,7 @@ int print_projections( const state state ){
 
 //------------------------------------------
 
-int print_adiabatic_PES_many( const constants constants, const state state ){
+int print_adiabatic_PES_many( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_many;
@@ -1161,7 +1161,7 @@ int print_adiabatic_PES_many( const constants constants, const state state ){
 
   N_levels_many        = constants.N_levels_many;
 
-  time                 = state.time;
+  time                 = config.time;
   adiabatic_PES_many_p = &(state.adiabatic_PES_many);
 
 
@@ -1184,7 +1184,7 @@ int print_adiabatic_PES_many( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_adiabatic_PES_single( const constants constants, const state state ){
+int print_adiabatic_PES_single( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1198,7 +1198,7 @@ int print_adiabatic_PES_single( const constants constants, const state state ){
 
   N_levels_single        =  constants.N_levels_single;
 
-  time                   =  state.time;
+  time                   =  config.time;
   adiabatic_PES_single_p = &(state.adiabatic_PES_single);
 
 
@@ -1221,7 +1221,7 @@ int print_adiabatic_PES_single( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_single_level_populations_Ehrenfest( const constants constants, const state state ){
+int print_single_level_populations_Ehrenfest( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1235,7 +1235,7 @@ int print_single_level_populations_Ehrenfest( const constants constants, const s
 
   N_levels_single                      =  constants.N_levels_single;
 
-  time                                 =  state.time;
+  time                                 =  config.time;
   single_level_populations_Ehrenfest_p = &(state.single_level_populations_Ehrenfest);
 
 
@@ -1258,7 +1258,7 @@ int print_single_level_populations_Ehrenfest( const constants constants, const s
 
 //------------------------------------------
 
-int print_single_level_populations_adiabatic( const constants constants, const state state ){
+int print_single_level_populations_adiabatic( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1272,7 +1272,7 @@ int print_single_level_populations_adiabatic( const constants constants, const s
 
   N_levels_single                      =  constants.N_levels_single;
 
-  time                                 =  state.time;
+  time                                 =  config.time;
   single_level_populations_adiabatic_p = &(state.single_level_populations_adiabatic);
 
 
@@ -1295,7 +1295,7 @@ int print_single_level_populations_adiabatic( const constants constants, const s
 
 //------------------------------------------
 
-int print_nonadiabatic_couplings( const constants constants, const state state ){
+int print_nonadiabatic_couplings( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_coor;
@@ -1309,7 +1309,7 @@ int print_nonadiabatic_couplings( const constants constants, const state state )
 
   N_coor                  =  constants.N_coor;
 
-  time                    =  state.time;
+  time                    =  config.time;
   nonadiabatic_coupling_p = &(state.nonadiabatic_coupling);
 
 
@@ -1332,7 +1332,7 @@ int print_nonadiabatic_couplings( const constants constants, const state state )
 
 //------------------------------------------
 
-int print_nonadiabatic_rates( const constants constants, const state state ){
+int print_nonadiabatic_rates( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_coor;
@@ -1346,7 +1346,7 @@ int print_nonadiabatic_rates( const constants constants, const state state ){
 
   N_coor                  =  constants.N_coor;
 
-  time                    =  state.time;
+  time                    =  config.time;
   nonadiabatic_rate_p     = &(state.nonadiabatic_rate);
 
 
@@ -1369,7 +1369,7 @@ int print_nonadiabatic_rates( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_one_body_electronic_density_matrix( const constants constants, const state state ){
+int print_one_body_electronic_density_matrix( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1385,7 +1385,7 @@ int print_one_body_electronic_density_matrix( const constants constants, const s
 
   N_levels_single                      =  constants.N_levels_single;
 
-  time                                 =  state.time;
+  time                                 =  config.time;
   one_body_electronic_density_matrix_p = &(state.one_body_electronic_density_matrix);
 
 
@@ -1432,7 +1432,7 @@ int print_one_body_electronic_density_matrix( const constants constants, const s
 
 //------------------------------------------
 
-int print_one_body_electronic_density_matrix_Ehrenfest( const constants constants, const state state ){
+int print_one_body_electronic_density_matrix_Ehrenfest( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1448,7 +1448,7 @@ int print_one_body_electronic_density_matrix_Ehrenfest( const constants constant
 
   N_levels_single                      =  constants.N_levels_single;
 
-  time                                 =  state.time;
+  time                                 =  config.time;
   one_body_electronic_density_matrix_Ehrenfest_p = &(state.one_body_electronic_density_matrix_Ehrenfest);
 
 
@@ -1495,7 +1495,7 @@ int print_one_body_electronic_density_matrix_Ehrenfest( const constants constant
 
 //------------------------------------------
 
-int print_one_body_electronic_hole_matrix( const constants constants, const state state ){
+int print_one_body_electronic_hole_matrix( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1511,7 +1511,7 @@ int print_one_body_electronic_hole_matrix( const constants constants, const stat
 
   N_levels_single                   =  constants.N_levels_single;
 
-  time                              =  state.time;
+  time                              =  config.time;
   one_body_electronic_hole_matrix_p = &(state.one_body_electronic_hole_matrix);
 
 
@@ -1558,7 +1558,7 @@ int print_one_body_electronic_hole_matrix( const constants constants, const stat
 
 //------------------------------------------
 
-int print_one_body_electronic_particle_matrix( const constants constants, const state state ){
+int print_one_body_electronic_particle_matrix( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1574,7 +1574,7 @@ int print_one_body_electronic_particle_matrix( const constants constants, const 
 
   N_levels_single                       =  constants.N_levels_single;
 
-  time                                  =  state.time;
+  time                                  =  config.time;
   one_body_electronic_particle_matrix_p = &(state.one_body_electronic_particle_matrix);
 
 
@@ -1621,7 +1621,7 @@ int print_one_body_electronic_particle_matrix( const constants constants, const 
 
 //------------------------------------------
 
-int print_natural_orbitals( const constants constants, state state ){
+int print_natural_orbitals( const constants constants, state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1639,7 +1639,7 @@ int print_natural_orbitals( const constants constants, state state ){
 
   N_levels_single                      =  constants.N_levels_single;
 
-  time                                 =  state.time;
+  time                                 =  config.time;
   one_body_electronic_density_matrix_p = &(state.one_body_electronic_density_matrix);
   dummy_matrix_single1_p               = &(state.dummy_matrix_single1);
   dummy_rvector_single_p               = &(state.dummy_rvector_single);
@@ -1695,7 +1695,7 @@ int print_natural_orbitals( const constants constants, state state ){
 
 //------------------------------------------
 
-int print_hole_orbitals( const constants constants, const state state ){
+int print_hole_orbitals( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1712,7 +1712,7 @@ int print_hole_orbitals( const constants constants, const state state ){
 
   N_levels_single                         =  constants.N_levels_single;
 
-  time                                    =  state.time;
+  time                                    =  config.time;
   hole_orbitals_p                         = &(state.hole_orbitals);
   hole_populations_p                      = &(state.hole_populations);
 
@@ -1763,7 +1763,7 @@ int print_hole_orbitals( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_particle_orbitals( const constants constants, const state state ){
+int print_particle_orbitals( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -1780,7 +1780,7 @@ int print_particle_orbitals( const constants constants, const state state ){
 
   N_levels_single                         =  constants.N_levels_single;
 
-  time                                    =  state.time;
+  time                                    =  config.time;
   particle_orbitals_p                     = &(state.particle_orbitals);
   particle_populations_p                  = &(state.particle_populations);
 
@@ -1831,7 +1831,7 @@ int print_particle_orbitals( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_adiabatic_states( const constants constants, const state state ){
+int print_adiabatic_states( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_many;
@@ -1848,7 +1848,7 @@ int print_adiabatic_states( const constants constants, const state state ){
 
   N_levels_many            =  constants.N_levels_many;
 
-  time                     =  state.time;
+  time                     =  config.time;
   adiabatic_PES_many_p     = &(state.adiabatic_PES_many);
   adiabatic_states_many_p  = &(state.adiabatic_states_many);
 
@@ -1899,7 +1899,7 @@ int print_adiabatic_states( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_electronic_density_states( const constants constants, const state state ){
+int print_electronic_density_states( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_many;
@@ -1916,7 +1916,7 @@ int print_electronic_density_states( const constants constants, const state stat
 
   N_levels_many                     =  constants.N_levels_many;
 
-  time                              =  state.time;
+  time                              =  config.time;
   electronic_density_eigenvalues_p  = &(state.electronic_density_eigenvalues);
   electronic_density_eigenvectors_p = &(state.electronic_density_eigenvectors);
 
@@ -1967,7 +1967,7 @@ int print_electronic_density_states( const constants constants, const state stat
 
 //------------------------------------------
 
-int print_ionic_density_states( const constants constants, const state state ){
+int print_ionic_density_states( const constants constants, const state state, const config config ){
 
   /* constants */
   int       sqrt_max_rho_index;
@@ -1984,7 +1984,7 @@ int print_ionic_density_states( const constants constants, const state state ){
 
   sqrt_max_rho_index           =  constants.sqrt_max_rho_index;
 
-  time                         =  state.time;
+  time                         =  config.time;
   ionic_density_eigenvalues_p  = &(state.ionic_density_eigenvalues);
   ionic_density_eigenvectors_p = &(state.ionic_density_eigenvectors);
 
@@ -2035,7 +2035,7 @@ int print_ionic_density_states( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_dipoles_many( const constants constants, const state state ){
+int print_dipoles_many( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_many;
@@ -2054,7 +2054,7 @@ int print_dipoles_many( const constants constants, const state state ){
 
   N_levels_many                =  constants.N_levels_many;
 
-  time                         =  state.time;
+  time                         =  config.time;
   oscillator_strength_many_p   = &(state.observables.oscillator_strength_many);
   oscillator_frequency_many_p  = &(state.observables.oscillator_frequency_many);
   adiabatic_populations_p      = &(state.adiabatic_populations);
@@ -2091,7 +2091,7 @@ int print_dipoles_many( const constants constants, const state state ){
 
 //------------------------------------------
 
-int print_dipoles_single( const constants constants, const state state ){
+int print_dipoles_single( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_levels_single;
@@ -2108,7 +2108,7 @@ int print_dipoles_single( const constants constants, const state state ){
 
   N_levels_single               =  constants.N_levels_single;
 
-  time                          =  state.time;
+  time                          =  config.time;
   hole_populations_p            = &(state.hole_populations);
   oscillator_strength_single_p  = &(state.observables.oscillator_strength_single);
   oscillator_frequency_single_p = &(state.observables.oscillator_frequency_single);
@@ -2171,7 +2171,7 @@ int print_geometry( const constants constants, const state state, const config c
   N_atoms          =  constants.N_atoms;
   sdim             =  constants.spacial_dimension; 
 
-  time             =  state.time;
+  time             =  config.time;
   positions_p      = &(config.atoms.positions);
 
   fprintf( geometry_fp, "%d\n", N_atoms );

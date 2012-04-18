@@ -60,7 +60,7 @@ int rho_norm_and_projection_update( const constants constants, state_p state_p, 
     
     if( RHO_HERMITICITY_TEST( constants, *state_p, *config_p ) ) info=1;
     
-    if( RHO_DOT_HERMITICITY_TEST( constants, *state_p ) ) info=1;
+    if( RHO_DOT_HERMITICITY_TEST( constants, *state_p, *config_p ) ) info=1;
     
   }
 
@@ -97,7 +97,7 @@ int rho_norm_and_projection_update( const constants constants, state_p state_p, 
     /*
     if( fabs( dummy.z[1] ) > EPS ){
 
-      fprintf( stderr, "ERROR: unexpected imaginary part found at time %le, %d, %le].\n", state_p->time, index, dummy.z[1] );
+      fprintf( stderr, "ERROR: unexpected imaginary part found at time %le, %d, %le].\n", config_p->time, index, dummy.z[1] );
       fflush( stderr );
       
       info=1;
@@ -118,7 +118,7 @@ int rho_norm_and_projection_update( const constants constants, state_p state_p, 
     /*
     if( fabs( dummy.z[1] ) > EPS ){
 
-      fprintf( stderr, "ERROR: unexpected imaginary part found at time %le, %d, %le].\n", state_p->time, index, dummy.z[1] );
+      fprintf( stderr, "ERROR: unexpected imaginary part found at time %le, %d, %le].\n", config_p->time, index, dummy.z[1] );
       fflush( stderr );
       
       info=1;
@@ -145,7 +145,7 @@ int rho_norm_and_projection_update( const constants constants, state_p state_p, 
   /* sqrt rho_norm */
   if( *rho_norm_p <0.0e0 ){
 
-    fprintf( stderr, "ERROR: unexpected sqrt of a negative value found at time %le [%le].\n", state_p->time, *rho_norm_p );
+    fprintf( stderr, "ERROR: unexpected sqrt of a negative value found at time %le [%le].\n", config_p->time, *rho_norm_p );
     fflush( stderr );
 
     info=1;
@@ -161,7 +161,7 @@ int rho_norm_and_projection_update( const constants constants, state_p state_p, 
   /* sqrt rho_dot_norm */
   if( *rho_dot_norm_p <0.0e0 ){
 
-    fprintf( stderr, "ERROR: unexpected sqrt of a negative value found at time %le [%le].\n", state_p->time, *rho_dot_norm_p );
+    fprintf( stderr, "ERROR: unexpected sqrt of a negative value found at time %le [%le].\n", config_p->time, *rho_dot_norm_p );
     fflush( stderr );
 
     info=1;
@@ -177,7 +177,7 @@ int rho_norm_and_projection_update( const constants constants, state_p state_p, 
   /* checking projection*/
   if( fabs( projection.z[1] ) > EPS *( *rho_norm_p ) *( *rho_dot_norm_p ) && fabs( projection.z[1] ) > EPS ){
     
-    fprintf( stderr, "ERROR: unexpected imaginary part found at time %le, %le].\n", state_p->time, projection.z[1] );
+    fprintf( stderr, "ERROR: unexpected imaginary part found at time %le, %le].\n", config_p->time, projection.z[1] );
     fflush( stderr );
     
     info=1;
@@ -192,7 +192,7 @@ int rho_norm_and_projection_update( const constants constants, state_p state_p, 
 
   if( fabs( *rho_projection_p ) > EPS *( *rho_norm_p ) *( *rho_dot_norm_p ) && fabs( *rho_projection_p ) > EPS ){
 
-    fprintf( stderr, "ERROR: the projection of rho_dot on rho is not zero at time %le, %le]\n", state_p->time, *rho_projection_p );
+    fprintf( stderr, "ERROR: the projection of rho_dot on rho is not zero at time %le, %le]\n", config_p->time, *rho_projection_p );
     fflush( stderr ); 
 
     info=1;
@@ -249,7 +249,7 @@ int rho_hermiticity_test( const constants constants, state_p state_p, config_p c
 
       if( dummy > EPS ){
 
-	fprintf( stderr, "ERROR: Hermiticity violation in rho at time %le.\n", state_p->time );
+	fprintf( stderr, "ERROR: Hermiticity violation in rho at time %le.\n", config_p->time );
 	fflush( stderr );
 
 	info=1;
@@ -271,7 +271,7 @@ int rho_hermiticity_test( const constants constants, state_p state_p, config_p c
 
 /* rho_dot_hermiticity_test */
 
-int rho_dot_hermiticity_test( const constants constants, state_p state_p ){
+int rho_dot_hermiticity_test( const constants constants, state_p state_p, config_p config_p ){
 
   /* constants */
   int             max_rho_index;
@@ -305,7 +305,7 @@ int rho_dot_hermiticity_test( const constants constants, state_p state_p ){
 
       if( dummy > EPS ){
 
-	fprintf( stderr, "ERROR: Hermiticity violation in rho_dot at time %le.\n", state_p->time );
+	fprintf( stderr, "ERROR: Hermiticity violation in rho_dot at time %le.\n", config_p->time );
 	fflush( stderr );
 
 	info=1;

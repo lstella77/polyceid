@@ -43,12 +43,13 @@
 
 typedef struct{
 
+  double       time;
+  //
   atoms        atoms; 
   //
   thermostat   thermostat; 
   //
   electrons    electrons;
-  //
 
 } PolyCEID_config;
 

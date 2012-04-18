@@ -139,7 +139,13 @@ int PolyCEID_config_free( config_p config_p ){
 int PolyCEID_config_read( FILE* fp, config_p config_p ){
 
   /* dummies */
+  double dummy;
   int    info=0;
+
+
+  /* time */
+  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
+  config_p->time = dummy;
 
 
   /* atoms */
@@ -170,6 +176,10 @@ int PolyCEID_config_print( FILE* fp, const config config ){
 
   /* dummies */
   int    info=0;
+
+
+  /* time */
+  if( fprintf( fp, DOUBLE_FORMAT"\n", config.time ) < 1 ) info=1;
 
 
   /* atoms */
@@ -203,6 +213,13 @@ int PolyCEID_config_verbose_print( FILE* fp, const config config ){
 
   /* dummies */
   int    info=0;
+
+
+  /* time */
+  fprintf( fp, "#------------------------------------------#\n" );
+  fprintf( fp, "# time:\n");
+
+  if( fprintf( fp, "# "DOUBLE_FORMAT"\n", config.time ) < 1 ) info=1;
 
 
   /* atoms */
@@ -245,6 +262,10 @@ int PolyCEID_config_copy( config_p config_p, const config config ){
 
   /* dummies */
   int info=0;
+
+
+  /* time */
+  config_p->time = config.time;
 
 
   /* atoms */
