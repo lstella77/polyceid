@@ -104,32 +104,51 @@ typedef struct{
   unsigned short int   flag_no_Ehrenfest_frame;     //
   unsigned short int   flag_periodic_boundary_condition; //
   unsigned short int   flag_Ehrenfest;              //
+  unsigned short int   flag_pruning;                //
+  unsigned long  int   seed;                        // random number generator seed
+  /* atoms */
   rvector              cell_dim;                    //
-  int                  N_atoms;                     // Number of atoms
-  int                  N_levels_single;             // Number of 1-electronic levels
-  int                  N_electrons;                 // filling
-  int                  N_electrons_CAS;             // filling
   int                  spacial_dimension;           //
+  int                  N_atoms;                     // Number of atoms
+  int                  N_coor;                      // N_atoms *sdim or effective number of atomic degrees of freedom
   int                  N_coor_red;                  //
-  int                  N_chain;                     //
-  rvector              thermostat_masses;           //
-  double               temperature;                 //
-  int                  N_chain_steps;               //
   ivector              relevant_modes;              // [N_coor_red] vector with indeces of the effective coordinates
   int                  CEID_order;                  //
+  hamiltonian          hamiltonian;                 // the hamiltonian
+  atoms                initial_atoms;
+  /* electrons */
+  int                  N_levels_single;             // Number of 1-electronic levels
+  int                  N_levels_single_CAS;              // Number of 1-electronic levels
+  int                  N_levels_many;                    // Number of many-electronic levels
+  int                  N_electrons;                 // filling
+  int                  N_electrons_CAS;             // filling
+  imatrix              single_level_occupation;          // [N_levels_many][N_levels_single*SPIN_DEG]
+  imatrix              single_level_occupation_reduced;  // [N_levels_many][N_levels_single]
+  imatrix              many_body_hybridisation_table;    // [N_levels_many*(N_levels_many-1)/2][6]
+  vector               symmetry_coefficient;             // [N_levels_many*(N_levels_many-1)/2]
+  imatrix              symmetry_multiplicity;            // [N_levels_many][2 *N_SYMMETRIES +1]
+  int                  max_rho_index;                    //
+  int                  sqrt_max_rho_index;               //
+  int                  rho_index_border_length;
+  int                  rho_index_next_to_border_length;
+  int                  initial_ionic_state;
+  char                 initial_condition_type[MAX_STRING_LENGTH];
+  char                 initial_many_body_occup[MAX_STRING_LENGTH];
+  char                 excited_many_body_occup[MAX_STRING_LENGTH];
+  rvector              initial_many_body_state;
+  rvector              excited_many_body_state;
+  double               cutoff_energy;
+  /* time evolution */
   double               dt;                          // integrators time_step (input)
   double               time_length;                 // simulation time
   int                  skip_write;                  // steps skipped before recording on file
   int                  skip_save;                   // steps skipped before saving the reference position
-  char                 hamiltonian_label[MAX_STRING_LENGTH];
-  int                  initial_ionic_state;
-  atoms                initial_atoms;
-  double               cutoff_energy;
-  char                 initial_condition_type[MAX_STRING_LENGTH];
-  char                 initial_many_body_occup[MAX_STRING_LENGTH];
-  char                 excited_many_body_occup[MAX_STRING_LENGTH];
-  unsigned long  int   seed;                        // random number generator seed
-  hamiltonian          hamiltonian;                 // the hamiltonian
+  /* thermostat */
+  int                  N_chain;                     //
+  int                  N_chain_steps;               //
+  rvector              thermostat_masses;           //
+  double               temperature;                 //
+  /* observables */
   unsigned short int   flag_observable_all;
   unsigned short int   flag_observable_geometry;
   unsigned short int   flag_observable_positions;
@@ -154,21 +173,6 @@ typedef struct{
   unsigned short int   flag_observable_dipoles_single;
 
   /* derived constants */
-  unsigned short int   flag_pruning;                //
-  int                  N_coor;                      // N_atoms *sdim or effective number of atomic degrees of freedom
-  int                  N_levels_single_CAS;              // Number of 1-electronic levels
-  int                  N_levels_many;                    // Number of many-electronic levels
-  imatrix              single_level_occupation;          // [N_levels_many][N_levels_single*SPIN_DEG]
-  imatrix              single_level_occupation_reduced;  // [N_levels_many][N_levels_single]
-  imatrix              many_body_hybridisation_table;    // [N_levels_many*(N_levels_many-1)/2][6]
-  imatrix              symmetry_multiplicity;            // [N_levels_many][2 *N_SYMMETRIES +1]
-  vector               symmetry_coefficient;             // [N_levels_many*(N_levels_many-1)/2]
-  int                  max_rho_index;                    //
-  int                  sqrt_max_rho_index;               //
-  int                  rho_index_border_length;
-  int                  rho_index_next_to_border_length;
-  rvector              initial_many_body_state;
-  rvector              excited_many_body_state;
 
 } PolyCEID_constants;
 

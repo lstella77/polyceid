@@ -144,12 +144,12 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
 
 
   /* time */
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
+  if( fscanf( fp, "%le", &dummy ) < 1 )               info=1;
   config_p->time = dummy;
 
 
   /* atoms */
-  if( ATOMS_READ( fp, config_p->atoms ) ) info=1;
+  if( ATOMS_READ( fp, config_p->atoms ) )             info=1;
 
 
   /* thermostat */
@@ -161,7 +161,7 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
 
 
   /* electrons */
-  if( ELECTRONS_READ( fp, config_p->electrons ) ) info=1;
+  if( ELECTRONS_READ( fp, config_p->electrons ) )     info=1;
   
 
   return info;

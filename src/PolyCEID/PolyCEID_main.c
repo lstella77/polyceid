@@ -45,6 +45,7 @@ int main( int argc, char* argv[] ){
   time_t             time1, time2;
   struct tm*         timeinfo;
   int                days, hours, mins;
+  double             time_length;
   double             secs;
   rvector            initial_positions_saved;
   unsigned short int flag_static=1; //WARNING: at the beginning a static calculation is assumed
@@ -205,33 +206,46 @@ int main( int argc, char* argv[] ){
       /* check_pruning */
       if( 0 == constants.flag_relaxation || N_levels_many_saved == constants.N_levels_many ){
 
-	if( counter ){
+        if( counter ){
 
-	  if( RVECTOR_FREE( initial_positions_saved ) ) info=1;
+          if( RVECTOR_FREE( initial_positions_saved ) ) info=1;
 
-	}
+        }
 
-	flag_static=0;
+        flag_static=0;
 
       }
       else{
 
-	if( !counter ){
+        if( !counter ){
 
-	  if( RVECTOR_ALLOCATE( constants.N_atoms, initial_positions_saved ) ) info=1;
+          if( RVECTOR_ALLOCATE( constants.N_atoms, initial_positions_saved ) ) info=1;
 
-	}
+        }
 
-	if( RVECTOR_COPY( initial_positions_saved, config_def.atoms.positions ) ) info=1;
+        if( RVECTOR_COPY( initial_positions_saved, config_def.atoms.positions ) ) info=1;
 
-	N_levels_many_saved = constants.N_levels_many;
+        N_levels_many_saved = constants.N_levels_many;
 	
-	counter++;
+        counter++;
 
       }
 
 
       if( !flag_static ){
+
+        /* in the case, restart */
+        if( constants.flag_restart ){
+
+          time_length = constants.time_length;
+
+          if( READ_START_FILE( constants, state, config_def ) )  info=1;
+
+          // state.step_counter = (int) ( config_def.time /constants.dt +EPS );
+	   
+          constants.time_length = time_length;
+
+        }
 
 	/* opening output files */
 	if( !info ){

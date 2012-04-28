@@ -824,7 +824,7 @@ int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
   unsigned short int flag_fixed=0;
   entry_p  entry_found_p;
   int      pp_atoms[ NP_ATOMS ]; 
-  atoms_p  atoms_p;
+  atoms_p  initial_atoms_p;
   int      comp;
   int      N_atoms_check;
   double*  dummy_position;
@@ -835,13 +835,13 @@ int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
 
   N_atoms                     =  constants_p->N_atoms;
   sdim                        =  constants_p->spacial_dimension;
-  atoms_p                     = &constants_p->initial_atoms;
+  initial_atoms_p             = &constants_p->initial_atoms;
 
   // setting default for "initial_atoms"
   pp_atoms[0] = N_atoms;
   pp_atoms[1] = sdim;
 
-  if( ATOMS_ALLOCATE( NP_ATOMS, pp_atoms, *atoms_p ) );
+  if( ATOMS_ALLOCATE( NP_ATOMS, pp_atoms, *initial_atoms_p ) );
 
   // dummy allocations
   dummy_position= ( double* ) calloc( (size_t) sdim, sizeof( double ) );
@@ -869,23 +869,23 @@ int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
     }
 
     // setting default for "name"
-    strcpy( atoms_p->names[ N_atoms_check ], "noname" );
+    strcpy( initial_atoms_p->names[ N_atoms_check ], "noname" );
 
     // extracting "name"
-    if( ASSING_STRING_VARIABLE( entry_found_p->sublist_p, "name", atoms_p->names[ N_atoms_check ], atoms_p->names[ N_atoms_check ] ) ) info=1;
+    if( ASSING_STRING_VARIABLE( entry_found_p->sublist_p, "name", initial_atoms_p->names[ N_atoms_check ], initial_atoms_p->names[ N_atoms_check ] ) ) info=1;
 
     // extracting "mass"    
     if( ASSING_DOUBLE_VARIABLE( entry_found_p->sublist_p, "mass", 1, &mass, NULL ) ) info=1;
 
     for( comp=0; comp<sdim; comp++ ){
 
-      atoms_p->masses.rvector[ sdim *N_atoms_check +comp ] = mass;
+      initial_atoms_p->masses.rvector[ sdim *N_atoms_check +comp ] = mass;
 
     }        
 
     // mass rescaling
     // BUGFIX: this is not very transparent...
-    atoms_p->masses.rvector[ N_atoms_check  ] *= AMU_TO_INTERNAL;
+    initial_atoms_p->masses.rvector[ N_atoms_check  ] *= AMU_TO_INTERNAL;
 
 
     // extracting "flag_fixed"
@@ -895,7 +895,7 @@ int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
 
       for( comp=0; comp<sdim; comp++ ){ 
 
-        atoms_p->mask.ivector[ N_atoms_check *sdim +comp ] = 1;
+        initial_atoms_p->mask.ivector[ N_atoms_check *sdim +comp ] = 1;
 
       }  
 
@@ -910,9 +910,9 @@ int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
     // copy
     for( comp=0; comp<sdim; comp++ ){
       
-      atoms_p->positions.rvector[ N_atoms_check *sdim +comp ] =  dummy_position[ comp ];
+      initial_atoms_p->positions.rvector[ N_atoms_check *sdim +comp ] =  dummy_position[ comp ];
 
-      atoms_p->momenta.rvector[ N_atoms_check *sdim +comp ]   =  dummy_momentum[ comp ];
+      initial_atoms_p->momenta.rvector[ N_atoms_check *sdim +comp ]   =  dummy_momentum[ comp ];
 
     }        
 
@@ -1094,11 +1094,12 @@ int initial_condition_atoms_parsing( constants_p constants_p, int counter, rvect
 int initial_condition_electrons_parsing( constants_p constants_p ){
 
   /* constants */
-  int      N_levels_single;
-  int*     N_levels_many_p;
+  char  buffer[ MAX_STRING_LENGTH ];
+  int   N_levels_single;
+  int*  N_levels_many_p;
   /* dummies */
-  int      i, j, k;
-  int      info=0;
+  int   i, j, k;
+  int   info=0;
 
 
   N_levels_single               =   constants_p->N_levels_single;
@@ -1182,11 +1183,16 @@ int initial_condition_electrons_parsing( constants_p constants_p ){
 
   }
 
-      
-  if( CONSTRUCT_TRANSITION( *constants_p, constants_p->initial_many_body_occup, constants_p->initial_many_body_state ) ) info=1;
-
   
-  if( CONSTRUCT_TRANSITION( *constants_p, constants_p->excited_many_body_occup, constants_p->excited_many_body_state ) ) info=1;
+  /* WARNING: cpy needed to avoid side effects! */
+  strcpy( buffer, constants_p->initial_many_body_occup );
+
+  if( CONSTRUCT_TRANSITION( *constants_p, buffer, constants_p->initial_many_body_state ) ) info=1;
+
+  /* WARNING: cpy needed to avoid side effects! */
+  strcpy( buffer, constants_p->excited_many_body_occup );
+
+  if( CONSTRUCT_TRANSITION( *constants_p, buffer, constants_p->excited_many_body_state ) ) info=1;
 
 
   return info;
