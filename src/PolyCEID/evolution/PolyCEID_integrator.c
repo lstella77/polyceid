@@ -68,12 +68,17 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 #endif /* __DEBUG_PLUS__ */
 
 
+  //if( CONFIG_COMPARE( *config_def_p, *config_tmp_p ) ) info=1;
+  if( CONFIG_COPY( *config_tmp_p, *config_def_p ) ) info=1;
+
+
+
   if( !info ){
 
-    /* update energy */
-    if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
+    if( !constants.flag_restart ){ 
 
-    //if( !constants.flag_restart ){ 
+      /* update energy */
+      if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
       fprintf( stdout, "#         step         time         energy\n" );
       fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );
@@ -85,7 +90,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
       /* print observables */
       if( PRINT_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
 
-    //}  
+    }  
 
   }
 
@@ -99,6 +104,8 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
   /* initial copy */
   // BUGFIX: in principle they should equal after the initialisation...
+  if( CONFIG_COMPARE( *config_def_p, *config_tmp_p ) ) info=1;
+	
   if( CONFIG_COPY( *config_tmp_p, *config_def_p ) ) info=1;
 
 
@@ -169,6 +176,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
     time = config_def_p->time;
 
+
     /* energy corrections */
 #ifndef __NO_ENERGY_CORRECTION__
 
@@ -191,17 +199,22 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
 #endif /* __DEBUG_PLUS__ */
 
-      /* update energy */
-      if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
-      fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );    
-      fflush( stdout );
+      if( !info ){
 
-      /* compute observables */
-      if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
+        /* update energy */
+        if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
+
+        fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );    
+        fflush( stdout );
+
+        /* compute observables */
+        if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
 	  
-      /* print observables */
-      if( PRINT_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
+        /* print observables */
+        if( PRINT_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
+
+      }
 
 
 #ifdef __DEBUG__
@@ -246,17 +259,21 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 #endif /* __DEBUG_PLUS__ */
 
 
-    /* update energy */
-    if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
+    if( !info ){
 
-    fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );    
-    fflush( stdout );
+      /* update energy */
+      if( ENERGIES_UPDATE( constants, *state_p, *config_def_p ) ) info=1;
 
-    /* compute observables */
-    if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
+      fprintf( stdout, "    %10lu   %10.3lf   %12.5le\n", *step_counter_p, config_def_p->time, state_p->observables.total_energy_system );
+      fflush( stdout );
+
+      /* compute observables */
+      if( COMPUTE_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
 	  
-    /* print observables */
-    if( PRINT_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
+      /* print observables */
+      if( PRINT_OBSERVABLES( constants, *state_p, *config_def_p ) ) info=1;
+
+    }  
 
 
 #ifdef __DEBUG__

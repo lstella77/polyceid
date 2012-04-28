@@ -140,7 +140,7 @@ int Ehrenfest_frame_update( const constants constants, state_p state_p, config_p
 #endif /* __DEBUG_PLUS__ */
 
 
-  if(  EXACT_EHRENFEST( constants, *state_p, *config_def_p, *config_tmp_p, ratio ) ) info=1;
+  if( EXACT_EHRENFEST( constants, *state_p, *config_def_p, *config_tmp_p, ratio ) ) info=1;
 
 
 #ifdef __ORTHONORMALISE__
@@ -212,6 +212,30 @@ int exact_Ehrenfest( const constants constants, state_p state_p, config_p config
   fprintf( stdout, "DOING: exact_Ehrenfest\n" );
 
 #endif /* __DEBUG_PLUS__ */
+
+
+#ifdef __DEBUG__
+
+  // if( ORTHONORMALISE_EHRENFEST_FRAME( constants, *state_p, *config_tmp_p ) ) info=1;
+
+  /* unitarity check */
+  if( MATRIX_ADJOINT( *Ehrenfest_frame_p, *dummy_matrix_single2_p ) ) info=1;
+
+  if( MATRIX_MATRIX_PRODUCT( *Ehrenfest_frame_p, *dummy_matrix_single2_p, *dummy_matrix_single3_p ) ) info=1;
+
+  if( MATRIX_UNIT( *dummy_matrix_single4_p ) ) info=1;
+
+  if( MATRIX_COMPARE( *dummy_matrix_single3_p, *dummy_matrix_single4_p ) ){
+
+    fprintf( stderr, "ERROR: Ehrenfest frame is not orthonormal [ini]\n");
+
+    info=1;
+
+    MATRIX_PRINT_PLUS( stdout, *dummy_matrix_single3_p );
+
+  }
+
+#endif /* __DEBUG__ */
 
 
   /* initial copy */
@@ -413,11 +437,11 @@ int exact_Ehrenfest( const constants constants, state_p state_p, config_p config
 
   if( MATRIX_MATRIX_PRODUCT( *Ehrenfest_frame_p, *dummy_matrix_single2_p, *dummy_matrix_single3_p ) ) info=1;
 
-  //  if( MATRIX_UNIT( *dummy_matrix_single4_p ) ) info=1;
+  if( MATRIX_UNIT( *dummy_matrix_single4_p ) ) info=1;
 
   if( MATRIX_COMPARE( *dummy_matrix_single3_p, *dummy_matrix_single4_p ) ){
 
-    fprintf( stderr, "ERROR: Ehrenfest frame is not orthonormal\n");
+    fprintf( stderr, "ERROR: Ehrenfest frame is not orthonormal [end]\n");
 
     info=1;
 
