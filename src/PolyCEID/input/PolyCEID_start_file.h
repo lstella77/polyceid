@@ -31,23 +31,6 @@
 #include "../structures/PolyCEID_structures_state.h"
 #include "../structures/PolyCEID_structures_config.h"
 
-
-//------------------------------------------
-
-/* OPEN */
-
-int open_start_file( const constants );
-
-#define OPEN_START_FILE( co ) FUNCTION_CHECK( open_start_file( (co) ), open_start_file )
-
-//------------------------------------------
-
-/* CLOSE */
-
-int close_start_file( const constants );
-
-#define CLOSE_START_FILE( co ) FUNCTION_CHECK( close_start_file( (co) ), close_start_file )
-
 //------------------------------------------
 
 /* READ */

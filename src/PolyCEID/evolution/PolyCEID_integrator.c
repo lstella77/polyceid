@@ -35,6 +35,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
   /* constants */
   int                 skip_write;
+  int                 skip_save;
   double              dt;
   double              time_length;
   /* state */
@@ -45,6 +46,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
 
   skip_write            =  constants.skip_write;
+  skip_save             =  constants.skip_save;
   dt                    =  constants.dt;
   time_length           =  constants.time_length;
 
@@ -207,25 +209,23 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
     } /* end step_counter conditional */
 
-      
+
+    /* write restart */
+    if( 0 == (*step_counter_p) %skip_save ){
+
+      if( PRINT_START_FILE( constants, *state_p, *config_def_p ) ) info=1;
+
+      fprintf( stdout, "#   Saved!\n" );
+
+    } /* end step_counter conditional */
+
+
 #ifdef __DEBUG_PLUS__
 
     fprintf( stdout, "# ---> ... concluded at time = %e.\n\n", config_def_p->time );
     fflush( stdout );
 
 #endif /* __DEBUG_PLUS__ */
-
-
-#ifdef __DEBUG__
-
-    if( 0 == ( (*step_counter_p) %skip_write) ){
-
-      fprintf( stderr, "+" );
-      fflush( stderr );
-
-      }
-
-#endif /* __DEBUG__ */
 
 
   } /* end while */
@@ -264,6 +264,16 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
   } /* end time_length conditional */
      
+
+  /* write restart */
+  if( 0 != (*step_counter_p) %skip_save ){
+
+    if( PRINT_START_FILE( constants, *state_p, *config_def_p ) ) info=1;
+
+    fprintf( stdout, "#   Saved!\n" );
+
+  } /* end step_counter conditional */
+
 
   if( !info ){
 

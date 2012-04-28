@@ -24,6 +24,7 @@
 ******************************************************************************/
 
 #include "input/PolyCEID_input_parsing.h"
+#include "input/PolyCEID_start_file.h"
 #include "initial/PolyCEID_initialise_state.h"
 #include "evolution/PolyCEID_integrator.h"
 #include "output/PolyCEID_output.h" 
@@ -209,7 +210,6 @@ int main( int argc, char* argv[] ){
 	  if( RVECTOR_FREE( initial_positions_saved ) ) info=1;
 
 	}
-
 
 	flag_static=0;
 

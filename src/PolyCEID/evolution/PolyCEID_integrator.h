@@ -39,6 +39,7 @@
 
 #endif /* __RK4__ */
 
+#include "../input/PolyCEID_start_file.h"
 #include "../output/PolyCEID_output.h"
 #include "../output/PolyCEID_energies.h"
 #include "../evolution/PolyCEID_rho_dot.h"
