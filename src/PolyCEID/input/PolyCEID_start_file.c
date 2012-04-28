@@ -43,7 +43,7 @@ int read_start_file( constants_p constants_p, state_p state_p, config_p config_p
   if( !strcpy(  buffer, "restart.dat" ) ) info=1;
 
   /* open */
-  start_file_p = fopen( buffer, "r");
+  start_file_p = fopen( buffer, "rb");
 
   if( FILE_CHECK( start_file_p, output_start_file ) ){
     fprintf( stderr, "ERROR occured when opening file %s.\n", buffer );
@@ -86,7 +86,7 @@ int print_start_file( const constants constants, const state state, const config
   if( !strcpy(  buffer, "restart.dat" ) ) info=1;
 
   /* open */
-  start_file_p = fopen( buffer, "w");
+  start_file_p = fopen( buffer, "wb");
 
   if( FILE_CHECK( start_file_p, output_start_file ) ){
     fprintf( stderr, "ERROR occured when opening file %s.\n", buffer );

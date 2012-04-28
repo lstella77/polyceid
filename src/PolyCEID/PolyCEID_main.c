@@ -49,6 +49,7 @@ int main( int argc, char* argv[] ){
   double             secs;
   rvector            initial_positions_saved;
   unsigned short int flag_static=1; //WARNING: at the beginning a static calculation is assumed
+  unsigned short int flag_restart;
   int                N_levels_many_saved=-1;
   int                counter=0;
   int                info=0;
@@ -239,11 +240,15 @@ int main( int argc, char* argv[] ){
 
           time_length = constants.time_length;
 
+          flag_restart = constants.flag_restart;
+
           if( READ_START_FILE( constants, state, config_def ) )  info=1;
 
           // state.step_counter = (int) ( config_def.time /constants.dt +EPS );
 	   
           constants.time_length = time_length;
+
+          constants.flag_restart = flag_restart;
 
         }
 
