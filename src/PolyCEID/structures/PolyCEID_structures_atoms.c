@@ -338,25 +338,27 @@ int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
 
   }
 
-  if( RVECTOR_READ( fp, atoms_p->masses ) )          info=1;
+  if( RVECTOR_READ( fp, atoms_p->masses ) )           info=1;
 
-  if( RVECTOR_READ( fp, atoms_p->masses_aux ) )      info=1;
+  if( RVECTOR_READ( fp, atoms_p->masses_aux ) )       info=1;
 
-  if( fscanf( fp, "%le", &atoms_p->mass_tot ) < 1 )  info=1;
+  if( fscanf( fp, "%le", &atoms_p->mass_tot ) < 1 )   info=1;
 
-  if( fscanf( fp, "%le", &atoms_p->mass_ave ) < 1 )  info=1;
+  if( fscanf( fp, "%le", &atoms_p->mass_ave ) < 1 )   info=1;
 
-  if( RVECTOR_READ( fp, atoms_p->positions ) )       info=1;
+  if( RVECTOR_READ( fp, atoms_p->positions ) )        info=1;
 
-  if( RVECTOR_READ( fp, atoms_p->momenta ) )         info=1;
+  if( RVECTOR_READ( fp, atoms_p->momenta ) )          info=1;
 
-  if( RVECTOR_READ( fp, atoms_p->forces ) )          info=1;
+  if( RVECTOR_READ( fp, atoms_p->forces ) )           info=1;
 
-  if( RVECTOR_READ( fp, atoms_p->distances ) )       info=1;
+  if( RVECTOR_READ( fp, atoms_p->forces_cons ) )      info=1;
 
-  if( RVECTOR_READ( fp, atoms_p->centre_of_mass ) )  info=1;
+  if( RVECTOR_READ( fp, atoms_p->distances ) )        info=1;
 
-  if( IVECTOR_READ( fp, atoms_p->mask ) )            info=1;
+  if( RVECTOR_READ( fp, atoms_p->centre_of_mass ) )   info=1;
+
+  if( IVECTOR_READ( fp, atoms_p->mask ) )             info=1;
 
 
   return info;
@@ -379,16 +381,16 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
 
   for( i=0; i<N_atoms; i++ ){
 
-    if( fprintf( fp, "%s  ", atoms.names[ i ] ) < 1 ) info=1;
+    if( fprintf( fp, "%s  ", atoms.names[ i ] ) < 1 )  info=1;
 
   }
   fprintf( fp, "\n");
 
   /* masses */
-  if( RVECTOR_PRINT( fp, atoms.masses ) )         info=1;
+  if( RVECTOR_PRINT( fp, atoms.masses ) )              info=1;
 
   /* masses_aux */
-  if( RVECTOR_PRINT( fp, atoms.masses_aux ) )    info=1;
+  if( RVECTOR_PRINT( fp, atoms.masses_aux ) )          info=1;
 
   /* masses_tot */
   if( fprintf( fp, "%12.5le\n", atoms.mass_tot ) < 1 ) info=1;
@@ -397,25 +399,25 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
   if( fprintf( fp, "%12.5le\n", atoms.mass_ave ) < 1 ) info=1;
 
   /* positions */
-  if( RVECTOR_PRINT( fp, atoms.positions ) )      info=1;
+  if( RVECTOR_PRINT( fp, atoms.positions ) )           info=1;
 
   /* momenta */
-  if( RVECTOR_PRINT( fp, atoms.momenta ) )        info=1;
+  if( RVECTOR_PRINT( fp, atoms.momenta ) )             info=1;
 
   /* forces */
-  if( RVECTOR_PRINT( fp, atoms.forces ) )         info=1;
+  if( RVECTOR_PRINT( fp, atoms.forces ) )              info=1;
 
   /* forces_cons */
-  if( RVECTOR_PRINT( fp, atoms.forces_cons ) )    info=1;
+  if( RVECTOR_PRINT( fp, atoms.forces_cons ) )         info=1;
 
   /* distances */
-  if( RVECTOR_PRINT( fp, atoms.distances ) )      info=1;
+  if( RVECTOR_PRINT( fp, atoms.distances ) )           info=1;
 
   /* distances */
-  if( RVECTOR_PRINT( fp, atoms.centre_of_mass ) ) info=1;
+  if( RVECTOR_PRINT( fp, atoms.centre_of_mass ) )      info=1;
 
   /* mask */
-  if( IVECTOR_PRINT( fp, atoms.mask ) )           info=1;
+  if( IVECTOR_PRINT( fp, atoms.mask ) )                info=1;
 
   fflush( fp );
 

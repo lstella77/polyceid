@@ -35,9 +35,9 @@
 
 /* READ */
 
-int read_start_file( constants, state, config );
+int read_start_file( constants_p, state_p, config_p );
 
-#define READ_START_FILE( co, st, cf ) FUNCTION_CHECK( read_start_file( (c), (s), (cf) ), read_start_file )
+#define READ_START_FILE( co, st, cf ) FUNCTION_CHECK( read_start_file( &(co), &(st), &(cf) ), read_start_file )
 
 
 //------------------------------------------

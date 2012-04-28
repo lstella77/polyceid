@@ -459,11 +459,23 @@ int PolyCEID_state_read( FILE* fp, state_p state_p ){
   /* initial_rho_electron */
   if( MATRIX_READ( fp, state_p->initial_rho_electron ) ) info=1;
   
+  /* rho_dot */
+  if( MATRIX_ARRAY_READ( fp, state_p->rho_dot ) ) info=1;
+
   /* Ehrenfest_frame_dot */
   if( MATRIX_READ( fp, state_p->Ehrenfest_frame_dot ) ) info=1;
 
-  /* rho_dot */
-  if( MATRIX_ARRAY_READ( fp, state_p->rho_dot ) ) info=1;
+  /* rho_norm */
+  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
+  state_p->rho_norm = dummy;
+
+  /* rho_dot_norm */
+  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
+  state_p->rho_dot_norm = dummy;
+
+  /* rho_projection */
+  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
+  state_p->rho_projection = dummy;
 
   /* adiabatic_populations */
   if( RVECTOR_READ( fp, state_p->adiabatic_populations ) ) info=1;
@@ -528,11 +540,11 @@ int PolyCEID_state_read( FILE* fp, state_p state_p ){
   /* adiabatic_states_many */
   if( MATRIX_READ( fp, state_p->adiabatic_states_many ) )           info=1;
 
-  /* adiabatic_states_single */
-  if( MATRIX_READ( fp, state_p->adiabatic_states_single ) )         info=1;
-
   /* adiabatic_PES_single */
   if( RVECTOR_READ( fp, state_p->adiabatic_PES_single ) )           info=1;
+
+  /* adiabatic_states_single */
+  if( MATRIX_READ( fp, state_p->adiabatic_states_single ) )         info=1;
 
   /* electronic_density_eigenvalues */
   if( RVECTOR_READ( fp, state_p->electronic_density_eigenvalues ) ) info=1;
@@ -554,18 +566,6 @@ int PolyCEID_state_read( FILE* fp, state_p state_p ){
 
   /* nonadiabatic_rate */
   if( RVECTOR_READ( fp, state_p->nonadiabatic_rate ) )              info=1;
-
-  /* rho_norm */
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  state_p->rho_norm = dummy;
-
-  /* rho_dot_norm */
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  state_p->rho_dot_norm = dummy;
-
-  /* rho_projection */
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  state_p->rho_projection = dummy;
 
   /* phonons */
   if( PHONONS_READ( fp, state_p->phonons ) ) info=1;
@@ -600,11 +600,20 @@ int PolyCEID_state_print( FILE* fp, const state state ){
   /* initial_rho_electron */
   if( MATRIX_PRINT( fp, state.initial_rho_electron ) ) info=1;
 
+  /* rho_dot */
+  if( MATRIX_ARRAY_PRINT( fp, state.rho_dot ) ) info=1;
+
   /* Ehrenfest_frame_dot */
   if( MATRIX_PRINT( fp, state.Ehrenfest_frame_dot ) ) info=1;
 
-  /* rho_dot */
-  if( MATRIX_ARRAY_PRINT( fp, state.rho_dot ) ) info=1;
+  /* rho_norm */
+  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_norm ) < 1) info=1;
+
+  /* rho_dot_norm */
+  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_dot_norm ) < 1) info=1;
+
+  /* rho_projection */
+  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_projection ) < 1 ) info=1;
 
   /* adiabatic_populations */
   if( RVECTOR_PRINT( fp, state.adiabatic_populations ) ) info=1;
@@ -695,15 +704,6 @@ int PolyCEID_state_print( FILE* fp, const state state ){
 
   /* nonadiabatic_rate */
   if( RVECTOR_PRINT( fp, state.nonadiabatic_rate ) )              info=1;
-
-  /* rho_norm */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_norm ) < 1) info=1;
-
-  /* rho_dot_norm */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_dot_norm ) < 1) info=1;
-
-  /* rho_projection */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_projection ) < 1 ) info=1;
 
   /* phonons */
   if( PHONONS_PRINT( fp, state.phonons ) ) info=1;

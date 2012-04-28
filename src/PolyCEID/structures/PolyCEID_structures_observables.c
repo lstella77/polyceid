@@ -263,10 +263,10 @@ int PolyCEID_observables_print( FILE* fp, const observables observables ){
   
   //
   /* superposition_instantaneous_and_initial_state */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.superposition_instantaneous_and_initial_state ) ) info=1;
+  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.superposition_instantaneous_and_initial_state ) < 1 ) info=1;
 
   /* superposition_instantaneous_and_excited_state */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.superposition_instantaneous_and_excited_state ) ) info=1;
+  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.superposition_instantaneous_and_excited_state ) < 1 ) info=1;
 
   //
   if( is_dipole_many ){

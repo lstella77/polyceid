@@ -105,12 +105,7 @@ int initialise_state( const constants constants, state_p state_p, config_p confi
     config_def_p->time = 0;
 
   }
-  else{
 
-    fprintf( stderr, "ERROR: restarting is not coded yet!\n" );
-    fflush( stderr );
-
-  }
 
   /* copy initial configurations */
 

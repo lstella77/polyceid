@@ -175,8 +175,6 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
   /* general */
   if( fscanf( fp, "%s", constants_p->output_label ) < 1 ) info=1;
 
-  if( fscanf( fp, "%lu", &constants_p->seed ) < 1 ) info=1;
-
   if( fscanf( fp, "%hu", &constants_p->flag_restart ) < 1 ) info=1;
 
   if( fscanf( fp, "%hu", &constants_p->flag_relaxation ) < 1 ) info=1;
@@ -195,7 +193,13 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
   if( fscanf( fp, "%hu", &constants_p->flag_pruning ) < 1 ) info=1;
 
+  if( fscanf( fp, "%lu", &constants_p->seed ) < 1 ) info=1;
+
   /* atoms */
+  if( RVECTOR_READ( fp, constants_p->cell_dim ) ) info=1;
+
+  if( fscanf( fp, "%d", &constants_p->spacial_dimension ) < 1 ) info=1;
+
   if( fscanf( fp, "%d", &constants_p->N_atoms ) < 1 ) info=1;
 
   if( fscanf( fp, "%d", &constants_p->N_coor ) < 1 ) info=1;
@@ -204,11 +208,11 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
   if( IVECTOR_READ( fp, constants_p->relevant_modes ) ) info=1;
 
-  if( fscanf( fp, "%d", &constants_p->CEID_order ) ) info=1;
+  if( fscanf( fp, "%d", &constants_p->CEID_order ) < 1 ) info=1;
 
   if( HAMILTONIAN_READ( fp, constants_p->hamiltonian ) ) info=1;
 
-  if( RVECTOR_READ( fp, constants_p->cell_dim ) ) info=1;
+  if( ATOMS_READ( fp, constants_p->initial_atoms ) ) info=1;
 
   /* electrons */
   if( fscanf( fp, "%d", &constants_p->N_levels_single ) < 1 ) info=1;
@@ -271,19 +275,62 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
   if( fscanf( fp, "%d", &constants_p->skip_save ) < 1 ) info=1;
 
   /* thermostat  */
-  if( fscanf( fp, "%d",  &constants_p->N_chain         ) < 1 ) info=1;
+  if( fscanf( fp, "%d",  &constants_p->N_chain ) < 1 ) info=1;
 
   if( is_thermostat_constants ){
 	  
+    if( fscanf( fp, "%d",  &constants_p->N_chain_steps ) < 1 ) info=1;
+
     if( RVECTOR_READ( fp, constants_p->thermostat_masses ) ) info=1;
 
-    if( fscanf( fp, "%le", &constants_p->temperature     ) < 1 ) info=1;
-
-    if( fscanf( fp, "%d",  &constants_p->N_chain_steps ) < 1 ) info=1;
+    if( fscanf( fp, "%le", &constants_p->temperature ) < 1 ) info=1;
 
   }
 
+  /* observables */
   if( fscanf( fp, "%hu", &constants_p->flag_observable_all ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_geometry ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_positions ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_momenta ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_forces ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_populations ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_mus ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_purity ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_energies ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_adiabatic_populations ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_projections ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_adiabatic_pes_many ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_adiabatic_pes_single ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_single_level_populations ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_nonadiabatic_couplings ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_density_matrix ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_transition_matrices ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_adiabatic_states ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_electronic_density_states ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_ionic_density_states ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_dipoles_many ) < 1 ) info=1;
+
+  if( fscanf( fp, "%hu", &constants_p->flag_observable_dipoles_single ) < 1 ) info=1;
 
   
   return info;
@@ -303,8 +350,6 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
   /* general */
   if( fprintf( fp, "%s\n", constants.output_label ) < 1 ) info=1;
 
-  if( fprintf( fp, "%lu\n", constants.seed ) < 1 ) info=1;
-
   if( fprintf( fp, "%hu\n", constants.flag_restart ) < 1 ) info=1;
 
   if( fprintf( fp, "%hu\n", constants.flag_relaxation ) < 1 ) info=1;
@@ -323,7 +368,13 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
   if( fprintf( fp, "%hu\n", constants.flag_pruning ) < 1 ) info=1;
 
+  if( fprintf( fp, "%lu\n", constants.seed ) < 1 ) info=1;
+
   /* atoms */
+  if( RVECTOR_PRINT( fp, constants.cell_dim ) ) info=1;
+
+  if( fprintf( fp, "%d\n", constants.spacial_dimension ) < 1 ) info=1;
+
   if( fprintf( fp, "%d\n", constants.N_atoms ) < 1 ) info=1;
 
   if( fprintf( fp, "%d\n", constants.N_coor ) < 1 ) info=1;
@@ -336,7 +387,7 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
  
   if( HAMILTONIAN_PRINT( fp, constants.hamiltonian ) ) info=1;
 
-  if( RVECTOR_PRINT( fp, constants.cell_dim ) ) info=1;
+  if( ATOMS_PRINT( fp, constants.initial_atoms ) ) info=1;
 
   /* electrons */
   if( fprintf( fp, "%d\n", constants.N_levels_single ) < 1 ) info=1;
@@ -349,9 +400,9 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
   if( fprintf( fp, "%d\n", constants.N_electrons_CAS ) < 1 ) info=1;
 
-  if( IMATRIX_PRINT( fp, constants.single_level_occupation ) < 1 ) info=1;
+  if( IMATRIX_PRINT( fp, constants.single_level_occupation ) ) info=1;
 
-  if( IMATRIX_PRINT( fp, constants.single_level_occupation_reduced ) < 1 ) info=1;
+  if( IMATRIX_PRINT( fp, constants.single_level_occupation_reduced ) ) info=1;
 
   if( constants.N_levels_many > 1 ){
 
@@ -371,7 +422,7 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
   if( fprintf( fp, "%d\n", constants.rho_index_next_to_border_length ) < 1 ) info=1;
 
-  if( fprintf( fp, "%d\n", constants.initial_ionic_state ) ) info=1;
+  if( fprintf( fp, "%d\n", constants.initial_ionic_state ) < 1 ) info=1;
 
   if( fprintf( fp, "%s\n", constants.initial_condition_type ) < 1 ) info=1;
 
@@ -399,19 +450,61 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
   if( fprintf( fp, "%d\n", constants.skip_save ) < 1 ) info=1;
 
   /* thermostat  */
-  if( fprintf( fp, "%d\n", constants.N_chain          ) < 1 ) info=1;
+  if( fprintf( fp, "%d\n", constants.N_chain ) < 1 ) info=1;
 
   if( is_thermostat_constants ){
 	  
+    if( fprintf( fp, "%d\n",  constants.N_chain_steps ) < 1 ) info=1;
+
     if( RVECTOR_PRINT( fp, constants.thermostat_masses ) ) info=1;
 
-    if( fprintf( fp, DOUBLE_FORMAT"\n", constants.temperature     ) < 1 ) info=1;
-
-    if( fprintf( fp, "%d\n",  constants.N_chain_steps ) < 1 ) info=1;
+    if( fprintf( fp, DOUBLE_FORMAT"\n", constants.temperature ) < 1 ) info=1;
 
   }
 
   if( fprintf( fp, "%hu\n", constants.flag_observable_all ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_geometry ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_positions ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_momenta ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_forces ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_populations ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_mus ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_purity ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_energies ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_adiabatic_populations ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_projections ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_adiabatic_pes_many ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_adiabatic_pes_single ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_single_level_populations ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_nonadiabatic_couplings ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_density_matrix ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_transition_matrices ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_adiabatic_states ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_electronic_density_states ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_ionic_density_states ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_dipoles_many ) < 1 ) info=1;
+
+  if( fprintf( fp, "%hu\n", constants.flag_observable_dipoles_single ) < 1 ) info=1;
 
 
   fflush( fp );
