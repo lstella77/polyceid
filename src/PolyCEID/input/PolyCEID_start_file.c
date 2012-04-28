@@ -27,31 +27,23 @@
 #include "PolyCEID_start_file.h"
 
 
-FILE* start_file_p;  /* private variable */
-
-
 //------------------------------------------
 
-/* OPEN */
+/* READ */
 
-int open_start_file( const constants constants ){
+int read_start_file( constants constants, state state, config config ){
 
-  /* constants */
-  char*     output_label;
   /* dummies */
-  char      buffer[MAX_STRING_LENGTH];
-  int       info=0;
+  char  buffer[MAX_STRING_LENGTH];
+  FILE* start_file_p;
+  int   info=0;
 
-
-  output_label = (char*)constants.output_label;
 
   /* file name */
-  if( !strcpy(  buffer, "start_file_" ) ) info=1;
-  if( !strcat(  buffer, output_label )  ) info=1;
-  if( !strcat(  buffer, ".dat" )        ) info=1;
+  if( !strcpy(  buffer, "restart.dat" ) ) info=1;
 
-
-  start_file_p = fopen( buffer, "wt");
+  /* open */
+  start_file_p = fopen( buffer, "r");
 
   if( FILE_CHECK( start_file_p, output_start_file ) ){
     fprintf( stderr, "ERROR occured when opening file %s.\n", buffer );
@@ -59,32 +51,11 @@ int open_start_file( const constants constants ){
     info=1;
   }
 
+  // if( CONSTANTS_READ( start_file_p, constants ) )  info=1;
+  // if( STATE_READ( start_file_p, state ) )          info=1;
+  if( CONFIG_READ( start_file_p, config ) )        info=1;
 
-  return info;
-
-}
-
-//------------------------------------------
-
-/* CLOSE */
-
-int close_start_file( const constants constants ){
-
-  /* constants */
-  char*     output_label;
-  /* dummies */
-  char      buffer[MAX_STRING_LENGTH];
-  int       info=0;
-
-
-  output_label = (char*)constants.output_label;
-
-  /* file name */
-  if( !strcpy(  buffer, "start_file_" ) ) info=1;
-  if( !strcat(  buffer, output_label )  ) info=1;
-  if( !strcat(  buffer, ".dat" )        ) info=1;
-
-
+  /* close */
   if( FILE_CHECK( start_file_p, output_files_opening ) ){
     fprintf( stderr, "ERROR occured when closing file %s.\n", buffer );
     fflush( stderr);
@@ -98,24 +69,6 @@ int close_start_file( const constants constants ){
 
 }
 
-//------------------------------------------
-
-/* READ */
-
-int read_start_file( constants constants, state state, config config ){
-
-  int info=0;
-
-
-  // if( CONSTANTS_READ( start_file_p, constants ) )  info=1;
-  // if( STATE_READ( start_file_p, state ) )          info=1;
-  if( CONFIG_READ( start_file_p, config ) )        info=1;
-
-
-  return info;
-
-}
-
 
 //------------------------------------------
 
@@ -123,12 +76,36 @@ int read_start_file( constants constants, state state, config config ){
 
 int print_start_file( const constants constants, const state state, const config config ){
 
-  int info=0;
+  /* dummies */
+  char  buffer[MAX_STRING_LENGTH];
+  FILE* start_file_p;
+  int   info=0;
 
+
+  /* file name */
+  if( !strcpy(  buffer, "restart.dat" ) ) info=1;
+
+  /* open */
+  start_file_p = fopen( buffer, "w");
+
+  if( FILE_CHECK( start_file_p, output_start_file ) ){
+    fprintf( stderr, "ERROR occured when opening file %s.\n", buffer );
+    fflush( stderr);
+    info=1;
+  }
 
   // if( CONSTANTS_PRINT( start_file_p, constants ) )  info=1;
   // if( STATE_PRINT( start_file_p, state ) )          info=1;
   if( CONFIG_PRINT( start_file_p, config ) )        info=1;
+
+  /* close */
+  if( FILE_CHECK( start_file_p, output_files_opening ) ){
+    fprintf( stderr, "ERROR occured when closing file %s.\n", buffer );
+    fflush( stderr);
+    info=1;
+  }
+
+  fclose( start_file_p );
 
 
   return info;

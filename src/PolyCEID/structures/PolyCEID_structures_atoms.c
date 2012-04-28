@@ -334,7 +334,7 @@ int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
 
   for( i=0; i<N_atoms; i++ ){
 
-    if( fscanf( fp, "%s", atoms_p->names[ i ] ) ) info=1;
+    if( fscanf( fp, "%s", atoms_p->names[ i ] ) < 1 ) info=1;
 
   }
 
@@ -379,7 +379,7 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
 
   for( i=0; i<N_atoms; i++ ){
 
-    fprintf( fp, "%s  ", atoms.names[ i ] );
+    if( fprintf( fp, "%s  ", atoms.names[ i ] ) < 1 ) info=1;
 
   }
   fprintf( fp, "\n");
@@ -391,10 +391,10 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
   if( RVECTOR_PRINT( fp, atoms.masses_aux ) )    info=1;
 
   /* masses_tot */
-  if( fprintf( fp, "# %12.5le\n", atoms.mass_tot ) ) info=1;
+  if( fprintf( fp, "%12.5le\n", atoms.mass_tot ) < 1 ) info=1;
 
   /* masses_ave */
-  if( fprintf( fp, "# %12.5le\n", atoms.mass_ave ) ) info=1;
+  if( fprintf( fp, "%12.5le\n", atoms.mass_ave ) < 1 ) info=1;
 
   /* positions */
   if( RVECTOR_PRINT( fp, atoms.positions ) )      info=1;
@@ -441,7 +441,7 @@ int PolyCEID_atoms_verbose_print( FILE* fp, const atoms atoms ){
   /* names */
   for( i=0; i<N_atoms; i++ ){
 
-    fprintf( fp, "# %s\n", atoms.names[ i ] );
+    if( fprintf( fp, "# %s\n", atoms.names[ i ] ) < 1 ) info=1;
 
   }
 
