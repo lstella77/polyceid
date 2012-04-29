@@ -106,20 +106,23 @@ int       __my_vector_compare( const vector vec1, const vector vec2  ){
 
 }
 
-int       __my_vector_read( FILE* file_p, const vector vec ){
+int __my_vector_read( FILE* file_p, const vector vec ){
 
   /* dummies */
   int dim, i;
   int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_vector_print )) || (VECTOR_CHECK( vec )) ) info=1;
+  if( ( FILE_CHECK( file_p, __my_vector_print ) ) || (VECTOR_CHECK( vec ) ) ) info=1;
 
-  if( fscanf( file_p, "%d", &dim ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
   if( dim != vec.vector_dim ) info=1;
 
   for( i=0; i<dim; i++){
-    CMPLX_READ( file_p, vec.vector[i] );
+
+    CMPLX_READ( file_p, vec.vector[ i ] );
+
   }
 
 
@@ -127,27 +130,27 @@ int       __my_vector_read( FILE* file_p, const vector vec ){
 
 }
 
-int       __my_vector_print( FILE* file_p, const vector vec ){
+int __my_vector_print( FILE* file_p, const vector vec ){
 
+  /* dummies */
   int i, dim;
+  int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_vector_print )) || (VECTOR_CHECK( vec )) ) return 1;
+  if( ( FILE_CHECK( file_p, __my_vector_print ) ) || ( VECTOR_CHECK( vec ) ) ) info=1;
 
   dim = vec.vector_dim;
 
-  fprintf( file_p, "%d\n", dim );
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  for( i=0; i<dim-1; i++){
-    CMPLX_PRINT( file_p, vec.vector[i] );
-    fprintf( file_p, "  ");
+  for( i=0; i<dim; i++ ){
+
+    CMPLX_PRINT( file_p, vec.vector[ i ] );
+
   }
-  CMPLX_PRINT( file_p, vec.vector[i] );
-  fprintf( file_p, "\n");
-  fflush( file_p );
 
 
-  return 0;
+  return info;
 
 }
 
@@ -354,20 +357,23 @@ int     __my_vector_array_compare( const vector_array az1, const vector_array az
 
 }
 
-int     __my_vector_array_read( FILE* fp, vector_array_p ap ){
+int __my_vector_array_read( FILE* fp, vector_array_p ap ){
 
   /* dummies */
   int dim, i;
   int info=0;
 
+
   if( FILE_CHECK( fp, __my_vector_array_copy ) ) info=1;
 
-  if( fscanf( fp, "%d", &dim ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   ap->dim = dim;
 
-  for( i=0; i<dim; i++){
-    if( VECTOR_READ( fp, ap->array[i] ) ) info=1;
+  for( i=0; i<dim; i++ ){
+
+    if( VECTOR_READ( fp, ap->array[ i ] ) ) info=1;
+
   }
 
 
@@ -375,23 +381,23 @@ int     __my_vector_array_read( FILE* fp, vector_array_p ap ){
 
 }
 
-int     __my_vector_array_print( FILE* fp, vector_array az ){
+int __my_vector_array_print( FILE* fp, vector_array az ){
 
- /* dummies */
+  /* dummies */
   int dim, i;
   int info=0;
 
 
-  if( FILE_CHECK( fp, __my_vector_array_copy ) ||
-      POINTER_CHECK( az.array, __my_vector_array_copy )
-      ) info=1;
+  if( FILE_CHECK( fp, __my_vector_array_copy ) || POINTER_CHECK( az.array, __my_vector_array_copy ) ) info=1;
 
   dim = az.dim;
 
-  fprintf( fp, "%d\n", dim );
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   for( i=0; i<dim; i++){
-    if( VECTOR_PRINT( fp, az.array[i] ) ) info=1;
+
+    if( VECTOR_PRINT( fp, az.array[ i ] ) ) info=1;
+
   }
 
 
@@ -566,50 +572,43 @@ int       __my_ivector_compare_mute( const ivector vec1, const ivector vec2  ){
 
 }
 
-int       __my_ivector_read( FILE* file_p, const ivector vec ){
+int __my_ivector_read( FILE* file_p, const ivector vec ){
 
   /* dummies */
-  int dim, i;
+  int dim;
   int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_ivector_print )) || (IVECTOR_CHECK( vec )) ) info=1;
+  if( ( FILE_CHECK( file_p, __my_ivector_print ) ) || ( IVECTOR_CHECK( vec ) ) ) info=1;
 
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  if( fscanf( file_p, "%d", &dim ) < 1 ) info=1;
   if( dim != vec.ivector_dim ) info=1;
 
-  for( i=0; i<dim; i++){
-    if( fscanf( file_p, "%d", &vec.ivector[i] ) < 1 ) info=1;
-  }
+  if( fread( ( void* ) &vec.ivector, sizeof( int ), dim, file_p ) < 1 ) info=1;
 
 
   return info;
 
 }
 
-int       __my_ivector_print( FILE* file_p, const ivector vec ){
+int  __my_ivector_print( FILE* file_p, const ivector vec ){
 
-  int i, dim;
+  /* dummies */
+  int dim;
+  int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_ivector_print )) || (IVECTOR_CHECK( vec )) ) return 1;
-
+  if( ( FILE_CHECK( file_p, __my_ivector_print ) ) || ( IVECTOR_CHECK( vec ) ) ) info=1;
 
   dim = vec.ivector_dim;
 
-  fprintf( file_p, "%d\n", dim );
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  for( i=0; i<dim-1; i++){
-    fprintf( file_p, "%d", vec.ivector[i] );
-    fprintf( file_p, "  ");
-  }
-  fprintf( file_p, "%d", vec.ivector[i] );
-  fprintf( file_p, "\n");
-  fflush( file_p );
+  if( fwrite( ( const void* ) &vec.ivector, sizeof( int ), dim, file_p ) < 1 ) info=1;
 
 
-  return 0;
+  return info;
 
 }
 
@@ -806,53 +805,47 @@ int       __my_rvector_compare( const rvector vec1, const rvector vec2  ){
 
 }
 
-int       __my_rvector_read( FILE* file_p, const rvector vec ){
+int __my_rvector_read( FILE* file_p, const rvector vec ){
 
   /* dummies */
-  int dim, i;
+  int dim;
   int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_rvector_print )) || (RVECTOR_CHECK( vec )) ) info=1;
+  if( ( FILE_CHECK( file_p, __my_rvector_print ) ) || ( RVECTOR_CHECK( vec ) ) ) info=1;
 
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  if( fscanf( file_p, "%d", &dim ) < 1 ) info=1;
   if( dim != vec.rvector_dim ) info=1;
 
-  for( i=0; i<dim; i++){
-    if( fscanf( file_p, "%le", &vec.rvector[i] ) < 1 ) info=1;
-  }
+  if( fread( ( void* ) &vec.rvector, sizeof( double ), dim, file_p ) < 1 ) info=1;
 
 
   return info;
 
 }
 
-int       __my_rvector_print( FILE* file_p, const rvector vec ){
+int __my_rvector_print( FILE* file_p, const rvector vec ){
 
-  int i, dim;
+  /* dummies */
+  int dim;
+  int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_rvector_print )) || (RVECTOR_CHECK( vec )) ) return 1;
-
+  if( ( FILE_CHECK( file_p, __my_rvector_print ) ) || ( RVECTOR_CHECK( vec ) ) ) info=1;
 
   dim = vec.rvector_dim;
 
-  fprintf( file_p, "%d\n", dim );
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  for( i=0; i<dim-1; i++){
-    fprintf( file_p, DOUBLE_FORMAT"  ", vec.rvector[i] );
-  }
-  fprintf( file_p, DOUBLE_FORMAT, vec.rvector[i] );
-  fprintf( file_p, "\n");
-  fflush( file_p );
+  if( fwrite( ( const void* ) &vec.rvector, sizeof( double ), dim, file_p ) < 1 ) info=1;
 
 
   return 0;
 
 }
 
-int       __my_rvector_print_plus( FILE* file_p, const rvector vec ){
+int __my_rvector_print_plus( FILE* file_p, const rvector vec ){
 
   int i, dim;
 

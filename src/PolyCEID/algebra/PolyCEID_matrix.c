@@ -133,25 +133,29 @@ int       __my_matrix_compare( const matrix mat1, const matrix mat2 ){
 }
 
 
-int       __my_matrix_read( FILE* file_p, matrix_p mat_p ){
+int __my_matrix_read( FILE* file_p, matrix_p mat_p ){
 
   /* dummies */
   int dim, i;
   int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_matrix_read  )) || (MATRIX_CHECK( *mat_p )) ) info=1;
+  if( ( FILE_CHECK( file_p, __my_matrix_read ) ) || ( MATRIX_CHECK( *mat_p ) ) ) info=1;
 
-  if( fscanf( file_p, "%d", &dim ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
   if( dim != mat_p->matrix_dim_row ) info=1;
 
-  if( fscanf( file_p, "%d", &dim ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
   if( dim != mat_p->matrix_dim_column ) info=1;
 
-  dim        = mat_p->matrix_dim;
+  dim = mat_p->matrix_dim;
 
-  for( i=0; i<dim; i++){
+  for( i=0; i<dim; i++ ){
+
     CMPLX_READ( file_p, mat_p->matrix[ i ] );
+
   }
 
   
@@ -159,33 +163,35 @@ int       __my_matrix_read( FILE* file_p, matrix_p mat_p ){
 
 }
 
-int       __my_matrix_print( FILE* file_p, const matrix mat){
+int __my_matrix_print( FILE* file_p, const matrix mat ){
 
+  /* dummies */
   int dim_row, dim_column, dim, i;
+  int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_matrix_print  )) || (MATRIX_CHECK( mat )) ) return 1;
+  if( ( FILE_CHECK( file_p, __my_matrix_print ) ) || ( MATRIX_CHECK( mat ) ) ) info=1;
 
   dim_row    = mat.matrix_dim_row;
   dim_column = mat.matrix_dim_column;
   dim        = mat.matrix_dim;
 
-  fprintf( file_p, "%d %d\n", dim_row, dim_column );
+  if( fwrite( ( const void* ) &dim_row, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  for( i=0; i<dim-1; i++){
+  if( fwrite( ( const void* ) &dim_column, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
+  for( i=0; i<dim; i++ ){
+
     CMPLX_PRINT( file_p, mat.matrix[ i ] );
-    fprintf( file_p, "  ");
+  
   }
-  CMPLX_PRINT( file_p, mat.matrix[ i ] );
-  fprintf( file_p, "\n");
-  fflush( file_p );
 
   
-  return 0;
+  return info;
 
 }
 
-int       __my_matrix_print_plus( FILE* file_p, const matrix mat){
+int __my_matrix_print_plus( FILE* file_p, const matrix mat){
 
   int dim_row, dim_column, i_row, i_column;
 
@@ -333,20 +339,23 @@ int     __my_matrix_array_compare( const matrix_array az1, const matrix_array az
 
 }
 
-int     __my_matrix_array_read( FILE* fp, matrix_array_p ap ){
+int  __my_matrix_array_read( FILE* fp, matrix_array_p ap ){
 
   /* dummies */
   int dim, i;
   int info=0;
 
+
   if( FILE_CHECK( fp, __my_matrix_array_copy ) ) info=1;
 
-  if( fscanf( fp, "%d", &dim ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   ap->dim = dim;
 
-  for( i=0; i<dim; i++){
-    if( MATRIX_READ( fp, ap->array[i] ) ) info=1;
+  for( i=0; i<dim; i++ ){
+
+    if( MATRIX_READ( fp, ap->array[ i ] ) ) info=1;
+
   }
 
 
@@ -354,30 +363,31 @@ int     __my_matrix_array_read( FILE* fp, matrix_array_p ap ){
 
 }
 
-int     __my_matrix_array_print( FILE* fp, matrix_array az ){
+int __my_matrix_array_print( FILE* fp, matrix_array az ){
 
- /* dummies */
+  /* dummies */
   int dim, i;
   int info=0;
 
 
-  if( FILE_CHECK( fp, __my_matrix_array_copy ) ||
-      POINTER_CHECK( az.array, __my_matrix_array_copy )
-      ) info=1;
+  if( FILE_CHECK( fp, __my_matrix_array_copy ) || POINTER_CHECK( az.array, __my_matrix_array_copy ) ) info=1;
 
   dim = az.dim;
 
-  fprintf( fp, "%d\n", dim );
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  for( i=0; i<dim; i++){
-    if( MATRIX_PRINT( fp, az.array[i] ) ) info=1;
+  for( i=0; i<dim; i++ ){
+
+    if( MATRIX_PRINT( fp, az.array[ i ] ) ) info=1;
+
   }
 
 
   return info;
 
 }
-int     __my_matrix_array_print_plus( FILE* fp, matrix_array az ){
+
+int __my_matrix_array_print_plus( FILE* fp, matrix_array az ){
 
  /* dummies */
   int dim, i;
@@ -775,28 +785,29 @@ int       __my_imatrix_compare( const imatrix imat1, const imatrix imat2 ){
 }
 
 
-int       __my_imatrix_read( FILE* file_p, imatrix_p imat_p ){
+int __my_imatrix_read( FILE* file_p, imatrix_p imat_p ){
 
   /* dummies */
   int i, j, dummy;
   int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_imatrix_print  )) || (IMATRIX_CHECK( *imat_p ) ) ) info=1;
+  if( (FILE_CHECK( file_p, __my_imatrix_print ) ) || (IMATRIX_CHECK( *imat_p ) ) ) info=1;
 
 
-  if( fscanf( file_p, "%d", &dummy ) < 1 ) info=1;
+  if( fread( ( void* ) &dummy, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
   if( dummy != imat_p->imatrix_dim_row ) info=1;
 
-  if( fscanf( file_p, "%d", &dummy ) < 1 ) info=1;
-  if( dummy != imat_p->imatrix_dim_column ) info=1;
+  if( fread( ( void* ) &dummy, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
+  if( dummy != imat_p->imatrix_dim_column ) info=1;
 
   for( i=0; i<imat_p->imatrix_dim_row ; i++){
 
     for( j=0; j<imat_p->imatrix_dim_column ; j++){
 
-      if( fscanf( file_p, "%d", &dummy ) < 1 ) info=1;
+      if( fread( ( void* ) &dummy, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
       imat_p->imatrix[i][j] = dummy;
 
@@ -809,38 +820,41 @@ int       __my_imatrix_read( FILE* file_p, imatrix_p imat_p ){
 
 }
 
-int       __my_imatrix_print( FILE* file_p, const imatrix imat){
+int __my_imatrix_print( FILE* file_p, const imatrix imat){
 
-  int dim_row, dim_column, i, j;
+  /* dummies */
+  int dummy, i, j;
+  int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_imatrix_print  )) || (IMATRIX_CHECK( imat )) ) return 1;
+  if( ( FILE_CHECK( file_p, __my_imatrix_print ) ) || ( IMATRIX_CHECK( imat ) ) ) info=1;
 
-  dim_row    = imat.imatrix_dim_row;
-  dim_column = imat.imatrix_dim_column;
+  dummy = imat.imatrix_dim_row;
 
-  fprintf( file_p, "%d %d\n", dim_row, dim_column );
+  if( fwrite( ( const void* ) &dummy, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
+  dummy = imat.imatrix_dim_column;
+
+  if( fwrite( ( const void* ) &dummy, sizeof( int ), 1, file_p ) < 1 ) info=1;
   
-  for( i=0; i<imat.imatrix_dim_row ; i++){
+  for( i=0; i<imat.imatrix_dim_row; i++ ){
 
-    for( j=0; j<( imat.imatrix_dim_column -1 ); j++){
+    for( j=0; j<imat.imatrix_dim_column; j++ ){
 
-      fprintf( file_p, "%d  ", imat.imatrix[ i ][ j ] );
+      dummy = imat.imatrix[ i ][ j ];
 
+      if( fwrite( ( const void* ) &dummy, sizeof( int ), 1, file_p ) < 1 ) info=1;
+  
     }
 
-    fprintf( file_p, "%d\n", imat.imatrix[ i ][ j ] );
-
   }
-  fflush( file_p );
 
   
-  return 0;
+  return info;
 
 }
 
-int       __my_imatrix_print_plus( FILE* file_p, const imatrix imat){
+int __my_imatrix_print_plus( FILE* file_p, const imatrix imat){
 
   int dim_row, dim_column, i, j;
 
@@ -1034,61 +1048,57 @@ int       __my_rmatrix_compare( const rmatrix mat1, const rmatrix mat2 ){
 }
 
 
-int       __my_rmatrix_read( FILE* file_p, rmatrix_p mat_p ){
+int __my_rmatrix_read( FILE* file_p, rmatrix_p mat_p ){
 
   /* dummies */
-  int dim, i;
+  int dim;
   int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_rmatrix_print  )) || (RMATRIX_CHECK( *mat_p )) ) info=1;
+  if( ( FILE_CHECK( file_p, __my_rmatrix_print ) ) || ( RMATRIX_CHECK( *mat_p ) ) ) info=1;
 
-  if( fscanf( file_p, "%d", &dim ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
   if( dim != mat_p->rmatrix_dim_row ) info=1;
 
-  if( fscanf( file_p, "%d", &dim ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
   if( dim != mat_p->rmatrix_dim_column ) info=1;
 
-  dim        = mat_p->rmatrix_dim;
+  dim = mat_p->rmatrix_dim;
 
-  for( i=0; i<dim; i++){
-	  
-    if( fscanf( file_p, "%le", &mat_p->rmatrix[ i ] ) < 1 ) info=1;
-
-  }
+  if( fread( ( void* ) &mat_p->rmatrix, sizeof( double ), dim, file_p ) < 1 ) info=1;
 
   
   return info;
 
 }
 
-int       __my_rmatrix_print( FILE* file_p, const rmatrix mat){
+int __my_rmatrix_print( FILE* file_p, const rmatrix mat){
 
-  int dim_row, dim_column, dim, i;
+  /* dummies */
+  int dim_row, dim_column, dim;
+  int info=0;
 
 
-  if( (FILE_CHECK( file_p, __my_rmatrix_print  )) || (RMATRIX_CHECK( mat )) ) return 1;
+  if( ( FILE_CHECK( file_p, __my_rmatrix_print ) ) || ( RMATRIX_CHECK( mat ) ) ) info=1;
 
   dim_row    = mat.rmatrix_dim_row;
   dim_column = mat.rmatrix_dim_column;
   dim        = mat.rmatrix_dim;
 
-  fprintf( file_p, "%d %d\n", dim_row, dim_column );
+  if( fwrite( ( const void* ) &dim_row, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  for( i=0; i<dim-1; i++){
-    fprintf( file_p, DOUBLE_FORMAT, mat.rmatrix[ i ] );
-    fprintf( file_p, "  ");
-  }
-  fprintf( file_p, DOUBLE_FORMAT, mat.rmatrix[ i ] );
-  fprintf( file_p, "\n");
-  fflush( file_p );
+  if( fwrite( ( const void* ) &dim_column, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
+  if( fwrite( ( const void* ) &mat.rmatrix, sizeof( double ), dim, file_p ) < 1 ) info=1;
 
   
-  return 0;
+  return info;
 
 }
 
-int       __my_rmatrix_print_plus( FILE* file_p, const rmatrix mat){
+int __my_rmatrix_print_plus( FILE* file_p, const rmatrix mat){
 
   int dim_row, dim_column, i_row, i_column;
 
