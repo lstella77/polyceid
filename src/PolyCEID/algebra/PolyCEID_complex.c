@@ -261,10 +261,11 @@ int __my_complex_read( FILE* file_p, complex_p zp ){
   int info=0;
 
 
-  if( FILE_CHECK( file_p, __my_complex_print  ) ) return 1;
+  if( FILE_CHECK( file_p, __my_complex_print  ) ) info=1;
 
-  if( fscanf( file_p, "%le", &zp->z[0] ) < 1 ) info=1;
-  if( fscanf( file_p, "%le", &zp->z[1] ) < 1  ) info=1;
+  if( fread( (void*) &zp->z, sizeof( double ), 2, file_p ) < 1 ) info=1;
+  // if( fscanf( file_p, "%le", &zp->z[0] ) < 1 ) info=1;
+  // if( fscanf( file_p, "%le", &zp->z[1] ) < 1 ) info=1;
   //  fflush( file_p ); // Why?
 
 
@@ -274,13 +275,18 @@ int __my_complex_read( FILE* file_p, complex_p zp ){
 
 int __my_complex_print( FILE* file_p, const complex z ){
 
-  if( FILE_CHECK( file_p, __my_complex_print  ) ) return 1;
-
-  fprintf( file_p, DOUBLE_FORMAT"  "DOUBLE_FORMAT, z.z[0], z.z[1] );
-  fflush( file_p );
+  /* dummies */
+  int info=0;
 
 
-  return 0;
+  if( FILE_CHECK( file_p, __my_complex_print  ) ) info=1;
+
+  if( fwrite( (const void*) &z.z, sizeof( double ), 2 ,file_p ) < 1 ) info=1;
+  // fprintf( file_p, DOUBLE_FORMAT"  "DOUBLE_FORMAT, z.z[0], z.z[1] );
+  // fflush( file_p );
+
+
+  return info;
 
 }
 
