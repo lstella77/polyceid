@@ -469,9 +469,6 @@ int PolyCEID_electrons_print( FILE* fp, const electrons electrons ){
   if( MATRIX_ARRAY_PRINT( fp, electrons.mu20 ) ) info=1;
 
 
-  fflush( fp );
-
-
   return info;
 
 }

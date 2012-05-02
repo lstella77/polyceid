@@ -156,7 +156,6 @@ int PolyCEID_observables_free( observables_p observables_p ){
 int PolyCEID_observables_read( FILE* fp, observables_p observables_p ){
 
   /* dummies */
-  double dummy;
   int info=0;
 
 
@@ -174,28 +173,22 @@ int PolyCEID_observables_read( FILE* fp, observables_p observables_p ){
 
   }  
 
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  observables_p->kinetic_energy_system_correction = dummy;
+  if( fread( ( void* ) &observables_p->kinetic_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
 
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  observables_p->potential_energy_system_correction = dummy;
+  if( fread( ( void* ) &observables_p->potential_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
 
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  observables_p->total_energy_system = dummy;
+  if( fread( ( void* ) &observables_p->total_energy_system, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   if( is_thermostat_observables ){
 	  
-    if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-    observables_p->pseudo_energy_system = dummy;
+    if( fread( ( void* ) &observables_p->pseudo_energy_system, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   }  
 
   //
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  observables_p->superposition_instantaneous_and_initial_state = dummy;
+  if( fread( ( void* ) &observables_p->superposition_instantaneous_and_initial_state, sizeof( double ), 1, fp ) < 1 ) info=1;
 
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  observables_p->superposition_instantaneous_and_excited_state = dummy;
+  if( fread( ( void* ) &observables_p->superposition_instantaneous_and_excited_state, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   //
   if( is_dipole_many ){
@@ -246,27 +239,27 @@ int PolyCEID_observables_print( FILE* fp, const observables observables ){
   }  
 
   /* correction to the kinetic energy of the system */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.kinetic_energy_system_correction ) < 1) info=1;
+  if( fwrite( ( const void* ) &observables.kinetic_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* correction to the potential energy of the system */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.potential_energy_system_correction ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &observables.potential_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* total energy of the system */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.total_energy_system ) < 1) info=1;
+  if( fwrite( ( const void* ) &observables.total_energy_system, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   if( is_thermostat_observables ){
   
     /* total energy of the system */
-    if( fprintf( fp, DOUBLE_FORMAT"\n", observables.pseudo_energy_system ) < 1) info=1;
+    if( fwrite( ( const void* ) &observables.pseudo_energy_system, sizeof( double ), 1, fp ) < 1 ) info=1;
   
   }
   
   //
   /* superposition_instantaneous_and_initial_state */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.superposition_instantaneous_and_initial_state ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &observables.superposition_instantaneous_and_initial_state, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* superposition_instantaneous_and_excited_state */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", observables.superposition_instantaneous_and_excited_state ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &observables.superposition_instantaneous_and_excited_state, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   //
   if( is_dipole_many ){
@@ -285,9 +278,6 @@ int PolyCEID_observables_print( FILE* fp, const observables observables ){
 
   /* oscillator_frequency_many */
   if( RVECTOR_PRINT( fp, observables.oscillator_frequency_single ) ) info=1;
-
-
-  fflush( fp );
 
 
   return info;

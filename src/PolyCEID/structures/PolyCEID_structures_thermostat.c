@@ -178,8 +178,6 @@ int PolyCEID_thermostat_print( FILE* fp, const thermostat thermostat ){
   /* forces */
   if( RVECTOR_PRINT( fp, thermostat.forces ) ) info=1;
 
-  fflush( fp );
-
 
   return info;
 

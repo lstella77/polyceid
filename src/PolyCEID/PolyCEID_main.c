@@ -45,11 +45,11 @@ int main( int argc, char* argv[] ){
   time_t             time1, time2;
   struct tm*         timeinfo;
   int                days, hours, mins;
-  double             time_length;
+  double             time_length=0.0e0;
   double             secs;
   rvector            initial_positions_saved;
   unsigned short int flag_static=1; //WARNING: at the beginning a static calculation is assumed
-  unsigned short int flag_restart;
+  unsigned short int flag_restart=0;
   int                N_levels_many_saved=-1;
   int                counter=0;
   int                info=0;

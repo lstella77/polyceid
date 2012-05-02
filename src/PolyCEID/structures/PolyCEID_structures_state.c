@@ -448,13 +448,11 @@ int PolyCEID_state_free( state_p state_p ){
 int PolyCEID_state_read( FILE* fp, state_p state_p ){
 
   /* dummies */
-  long unsigned int dummy_lu;
-  double dummy;
   int    info=0;
 
 
-  if( fscanf( fp, "%lu", &dummy_lu ) < 1 ) info=1;
-  state_p->step_counter = dummy_lu;
+  /* step counter */
+  if( fread( ( void* ) &state_p->step_counter, sizeof( unsigned long ), 1, fp ) < 1 ) info=1;
 
   /* initial_rho_electron */
   if( MATRIX_READ( fp, state_p->initial_rho_electron ) ) info=1;
@@ -466,16 +464,13 @@ int PolyCEID_state_read( FILE* fp, state_p state_p ){
   if( MATRIX_READ( fp, state_p->Ehrenfest_frame_dot ) ) info=1;
 
   /* rho_norm */
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  state_p->rho_norm = dummy;
+  if( fread( ( void* ) &state_p->rho_norm, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* rho_dot_norm */
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  state_p->rho_dot_norm = dummy;
+  if( fread( ( void* ) &state_p->rho_dot_norm, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* rho_projection */
-  if( fscanf( fp, "%le", &dummy ) < 1 ) info=1;
-  state_p->rho_projection = dummy;
+  if( fread( ( void* ) &state_p->rho_projection, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* adiabatic_populations */
   if( RVECTOR_READ( fp, state_p->adiabatic_populations ) ) info=1;
@@ -587,15 +582,11 @@ int PolyCEID_state_read( FILE* fp, state_p state_p ){
 int PolyCEID_state_print( FILE* fp, const state state ){
 
   /* dummies */
-  long unsigned int step_counter;
   int    info=0;
 
 
-  step_counter = state.step_counter;
-
-
   /* step_counter */
-  if( fprintf( fp, "%lu\n", step_counter ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &state.step_counter, sizeof( unsigned long ), 1, fp ) < 1 ) info=1;	
 
   /* initial_rho_electron */
   if( MATRIX_PRINT( fp, state.initial_rho_electron ) ) info=1;
@@ -607,13 +598,13 @@ int PolyCEID_state_print( FILE* fp, const state state ){
   if( MATRIX_PRINT( fp, state.Ehrenfest_frame_dot ) ) info=1;
 
   /* rho_norm */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_norm ) < 1) info=1;
+  if( fwrite( ( const void* ) &state.rho_norm, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* rho_dot_norm */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_dot_norm ) < 1) info=1;
+  if( fwrite( ( const void* ) &state.rho_dot_norm, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* rho_projection */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", state.rho_projection ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &state.rho_projection, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* adiabatic_populations */
   if( RVECTOR_PRINT( fp, state.adiabatic_populations ) ) info=1;
