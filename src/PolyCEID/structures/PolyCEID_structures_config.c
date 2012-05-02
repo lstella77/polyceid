@@ -143,7 +143,7 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
 
 
   /* time */
-  if( fread( ( void* ) &config_p->time, sizeof( double ), 1, fp ) < 1 ) info=1;
+  if( fread( ( void* ) &config_p->time, sizeof( config_p->time ), 1, fp ) < 1 ) info=1;
 
   /* atoms */
   if( ATOMS_READ( fp, config_p->atoms ) )             info=1;
@@ -176,7 +176,7 @@ int PolyCEID_config_print( FILE* fp, const config config ){
 
 
   /* time */
-  if( fwrite( ( void* ) &config.time, sizeof( double ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &config.time, sizeof( config.time ), 1, fp ) < 1 ) info=1;
 
 
   /* atoms */
@@ -193,9 +193,6 @@ int PolyCEID_config_print( FILE* fp, const config config ){
 
   /* electrons */
   if( ELECTRONS_PRINT( fp, config.electrons ) ) info=1;
-
-
-  fflush( fp );
 
 
   return info;

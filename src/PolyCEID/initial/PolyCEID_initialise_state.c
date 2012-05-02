@@ -96,15 +96,8 @@ int initialise_state( const constants constants, state_p state_p, config_p confi
   // STATE_VERBOSE_PRINT( stdout, *state_p );
 
 
-  /* other state variables */
-  if( !(constants.flag_restart) ){
-
-    /* step_counter already initialised */
-
-    /* time */
-    config_def_p->time = 0;
-
-  }
+  /* time */
+  config_def_p->time = 0;
 
 
   /* copy initial configurations */

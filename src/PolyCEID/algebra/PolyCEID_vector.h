@@ -71,9 +71,9 @@ int       __my_vector_compare( const vector, const vector );
 
 #define VECTOR_COMPARE( vec1, vec2 )   FUNCTION_CHECK(  __my_vector_compare( (vec1), (vec2) ), __my_vector_compare )
 
-int       __my_vector_read( FILE*, const vector );
+int       __my_vector_read( FILE*, vector_p );
 
-#define VECTOR_READ( x, y )        FUNCTION_CHECK( __my_vector_read( (x), (y) ), __my_vector_read )
+#define VECTOR_READ( x, y )        FUNCTION_CHECK( __my_vector_read( (x), &(y) ), __my_vector_read )
 
 int       __my_vector_print( FILE*, const vector );
 
@@ -169,9 +169,9 @@ int       __my_ivector_compare_mute( const ivector, const ivector );
 
 #define IVECTOR_COMPARE_MUTE( vec1, vec2 )   __my_ivector_compare_mute( (vec1), (vec2) )
 
-int       __my_ivector_read( FILE*, const ivector );
+int       __my_ivector_read( FILE*, ivector_p );
 
-#define IVECTOR_READ( x, y )        FUNCTION_CHECK( __my_ivector_read( (x), (y) ), __my_ivector_read )
+#define IVECTOR_READ( x, y )        FUNCTION_CHECK( __my_ivector_read( (x), &(y) ), __my_ivector_read )
 
 int       __my_ivector_print( FILE*, const ivector );
 
@@ -233,9 +233,9 @@ int       __my_rvector_compare( const rvector, const rvector );
 
 #define RVECTOR_COMPARE( vec1, vec2 )   FUNCTION_CHECK(  __my_rvector_compare( (vec1), (vec2) ), __my_rvector_compare )
 
-int       __my_rvector_read( FILE*, const rvector );
+int       __my_rvector_read( FILE*, rvector_p );
 
-#define RVECTOR_READ( x, y )        FUNCTION_CHECK( __my_rvector_read( (x), (y) ), __my_rvector_read )
+#define RVECTOR_READ( x, y )        FUNCTION_CHECK( __my_rvector_read( (x), &(y) ), __my_rvector_read )
 
 int       __my_rvector_print( FILE*, const rvector );
 

@@ -48,7 +48,7 @@ typedef struct{
   int spacial_dimension;
   int N_atoms;
 
-  char**   names;           // [ATOM_NAME_LEGTH][N_coor]           vectorised!
+  char**   names;           // [N_atoms][ATOM_NAME_LENGTH] vectorised!
   rvector  masses;          // [N_coor]           vectorised!
   rvector  masses_aux;      // [N_coor]
   double   mass_tot;        // total mass

@@ -263,10 +263,7 @@ int __my_complex_read( FILE* file_p, complex_p zp ){
 
   if( FILE_CHECK( file_p, __my_complex_print  ) ) info=1;
 
-  if( fread( (void*) &zp->z, sizeof( double ), 2, file_p ) < 1 ) info=1;
-  // if( fscanf( file_p, "%le", &zp->z[0] ) < 1 ) info=1;
-  // if( fscanf( file_p, "%le", &zp->z[1] ) < 1 ) info=1;
-  //  fflush( file_p ); // Why?
+  if( fread( (void*) &zp->z, sizeof( zp->z ), 1, file_p ) < 1 ) info=1;
 
 
   return info;
@@ -281,9 +278,7 @@ int __my_complex_print( FILE* file_p, const complex z ){
 
   if( FILE_CHECK( file_p, __my_complex_print  ) ) info=1;
 
-  if( fwrite( (const void*) &z.z, sizeof( double ), 2 ,file_p ) < 1 ) info=1;
-  // fprintf( file_p, DOUBLE_FORMAT"  "DOUBLE_FORMAT, z.z[0], z.z[1] );
-  // fflush( file_p );
+  if( fwrite( (const void*) &z.z, sizeof( z.z ), 1 ,file_p ) < 1 ) info=1;
 
 
   return info;
