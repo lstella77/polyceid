@@ -139,14 +139,11 @@ int PolyCEID_config_free( config_p config_p ){
 int PolyCEID_config_read( FILE* fp, config_p config_p ){
 
   /* dummies */
-  double dummy;
-  int    info=0;
+  int info=0;
 
 
   /* time */
-  if( fscanf( fp, "%le", &dummy ) < 1 )               info=1;
-  config_p->time = dummy;
-
+  if( fread( ( void* ) &config_p->time, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* atoms */
   if( ATOMS_READ( fp, config_p->atoms ) )             info=1;
@@ -175,11 +172,11 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
 int PolyCEID_config_print( FILE* fp, const config config ){
 
   /* dummies */
-  int    info=0;
+  int info=0;
 
 
   /* time */
-  if( fprintf( fp, DOUBLE_FORMAT"\n", config.time ) < 1 ) info=1;
+  if( fwrite( ( void* ) &config.time, sizeof( double ), 1, fp ) < 1 ) info=1;
 
 
   /* atoms */

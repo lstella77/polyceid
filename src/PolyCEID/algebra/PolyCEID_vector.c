@@ -841,7 +841,7 @@ int __my_rvector_print( FILE* file_p, const rvector vec ){
   if( fwrite( ( const void* ) &vec.rvector, sizeof( double ), dim, file_p ) < 1 ) info=1;
 
 
-  return 0;
+  return info;
 
 }
 

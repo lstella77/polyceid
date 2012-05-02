@@ -324,27 +324,18 @@ int PolyCEID_atoms_compare( const atoms atoms1, const atoms atoms2 ){
 int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
 
   /* dummies */
-  int N_atoms;
-  int i;
   int info=0;
 
 
-  N_atoms = atoms_p->N_atoms;
-
-
-  for( i=0; i<N_atoms; i++ ){
-
-    if( fscanf( fp, "%s", atoms_p->names[ i ] ) < 1 ) info=1;
-
-  }
+  if( fread( ( void* ) &atoms_p->names, sizeof( char** ), atoms_p->N_atoms, fp ) < 1 ) info=1;
 
   if( RVECTOR_READ( fp, atoms_p->masses ) )           info=1;
 
   if( RVECTOR_READ( fp, atoms_p->masses_aux ) )       info=1;
 
-  if( fscanf( fp, "%le", &atoms_p->mass_tot ) < 1 )   info=1;
+  if( fread( ( void* ) &atoms_p->mass_tot, sizeof( double ), 1, fp ) < 1 ) info=1;
 
-  if( fscanf( fp, "%le", &atoms_p->mass_ave ) < 1 )   info=1;
+  if( fread( ( void* ) &atoms_p->mass_ave, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   if( RVECTOR_READ( fp, atoms_p->positions ) )        info=1;
 
@@ -372,19 +363,10 @@ int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
 int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
 
   /* dummies */
-  int N_atoms;
-  int i;
   int info=0;
 
 
-  N_atoms = atoms.N_atoms;
-
-  for( i=0; i<N_atoms; i++ ){
-
-    if( fprintf( fp, "%s  ", atoms.names[ i ] ) < 1 )  info=1;
-
-  }
-  fprintf( fp, "\n");
+  if( fwrite( ( void* ) &atoms.names, sizeof( char** ), atoms.N_atoms, fp ) < 1 ) info=1;
 
   /* masses */
   if( RVECTOR_PRINT( fp, atoms.masses ) )              info=1;
@@ -393,10 +375,10 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
   if( RVECTOR_PRINT( fp, atoms.masses_aux ) )          info=1;
 
   /* masses_tot */
-  if( fprintf( fp, "%12.5le\n", atoms.mass_tot ) < 1 ) info=1;
+  if( fwrite( ( void* ) &atoms.mass_tot, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* masses_ave */
-  if( fprintf( fp, "%12.5le\n", atoms.mass_ave ) < 1 ) info=1;
+  if( fwrite( ( void* ) &atoms.mass_ave, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* positions */
   if( RVECTOR_PRINT( fp, atoms.positions ) )           info=1;
@@ -418,8 +400,6 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
 
   /* mask */
   if( IVECTOR_PRINT( fp, atoms.mask ) )                info=1;
-
-  fflush( fp );
 
 
   return info;

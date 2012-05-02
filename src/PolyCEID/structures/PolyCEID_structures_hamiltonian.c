@@ -136,61 +136,49 @@ int PolyCEID_hamiltonian_compare( const hamiltonian hamiltonian1, const hamilton
 int PolyCEID_hamiltonian_read( FILE* fp, hamiltonian_p hamiltonian_p ){
 
   /* dummies */
-  int i,j;
-  int info=0;
+  int    i,j;
+  double dummy;
+  int    info=0;
 
 
   /* class */
-  if( fscanf( fp, "%s", hamiltonian_p->class ) < 1 ) info=1;
+  if( fread( ( void* ) &hamiltonian_p->class, sizeof( char* ), 1, fp ) < 1 ) info=1;
 
   /* N_nodes */
-  if( fscanf( fp, "%d", &hamiltonian_p->N_nodes ) < 1 ) info=1;
+  if( fread( ( void* ) &hamiltonian_p->N_nodes, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   /* N_links */
-  if( fscanf( fp, "%d", &hamiltonian_p->N_links ) < 1 ) info=1;
+  if( fread( ( void* ) &hamiltonian_p->N_links, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   if( hamiltonian_p->N_links > 0 ){
   
-    /* neighbour_index */
-    for( i=0; i<(hamiltonian_p->N_nodes +1); i++ ){
+    if( fread( ( void* ) &hamiltonian_p->neighbour_index, sizeof( int* ), hamiltonian_p->N_nodes +1, fp ) < 1 ) info=1;
 
-      if( fscanf( fp, "%d", &hamiltonian_p->neighbour_index[ i ] ) < 1 );
-    
-    }        
+    if( fread( ( void* ) &hamiltonian_p->neighbour_list, sizeof( int* ), 2 *hamiltonian_p->N_links, fp ) < 1 ) info=1;
 
-    /* neighbour_list */
-    for( i=0; i<(2 *hamiltonian_p->N_links); i++ ){
+    if( fread( ( void* ) &hamiltonian_p->neighbour_link, sizeof( int* ), 2 *hamiltonian_p->N_links, fp ) < 1 ) info=1;
 
-      if( fscanf( fp, "%d", &hamiltonian_p->neighbour_list[ i ] ) < 1 );
-
-    }        
-    
-    /* neighbour_link */
-    for( i=0; i<(2 *hamiltonian_p->N_links); i++ ){
-
-      if( fscanf( fp, "%d", &hamiltonian_p->neighbour_link[ i ] ) < 1 );
-
-    }        
-    
   }
 
   /* N_par_node */
-  if( fscanf( fp, "%d", &hamiltonian_p->N_par_node ) < 1 ) info=1;
+  if( fread( ( void* ) &hamiltonian_p->N_par_node, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   /* N_par_link */
-  if( fscanf( fp, "%dn", &hamiltonian_p->N_par_link ) < 1 ) info=1;
+  if( fread( ( void* ) &hamiltonian_p->N_par_link, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   /* N_par_extra */
-  if( fscanf( fp, "%dn", &hamiltonian_p->N_par_extra ) < 1 ) info=1;
+  if( fread( ( void* ) &hamiltonian_p->N_par_extra, sizeof( int ), 1, fp ) < 1 ) info=1;
 
+  /* par_node */
   if( hamiltonian_p->N_nodes > 0 ){
 
-    /* par_node */
     for( i=0; i<hamiltonian_p->N_nodes; i++ ){
 
       for( j=0; j<hamiltonian_p->N_par_node; j++ ){
 
-        if( fscanf( fp, "%le", &hamiltonian_p->par_node[i][j] ) < 1 );
+        if( fread( ( void* ) &dummy, sizeof( double ), 1, fp ) < 1 ) info=1;
+
+        hamiltonian_p->par_node[i][j] = dummy;
     
       }        
 
@@ -198,30 +186,28 @@ int PolyCEID_hamiltonian_read( FILE* fp, hamiltonian_p hamiltonian_p ){
 
   }        
 
+  /* par_link */
   if( hamiltonian_p->N_links > 0 ){
 
-    /* par_link */
     for( i=0; i<hamiltonian_p->N_links; i++ ){
 
       for( j=0; j<hamiltonian_p->N_par_link; j++ ){
 
-        if( fscanf( fp, "%le", &hamiltonian_p->par_link[i][j] ) < 1 );
-    
+        if( fread( ( void* ) &dummy, sizeof( double ), 1, fp ) < 1 ) info=1;
+
+        hamiltonian_p->par_link[i][j] = dummy;
+
       }        
 
     }
 
   }
 
+  /* par_extra */
   if( hamiltonian_p->N_par_extra > 0 ){
 
-    /* par_extra */
-    for( i=0; i<hamiltonian_p->N_par_extra; i++ ){
-
-      if( fscanf( fp, "%le", &hamiltonian_p->par_extra[i] ) < 1 );
+    if( fread( ( void* ) &hamiltonian_p->par_extra, sizeof( double* ), hamiltonian_p->N_par_extra, fp ) < 1 ) info=1;
     
-    }        
-
   }
 
 
@@ -236,112 +222,78 @@ int PolyCEID_hamiltonian_read( FILE* fp, hamiltonian_p hamiltonian_p ){
 int PolyCEID_hamiltonian_print( FILE* fp, const hamiltonian hamiltonian ){
 
   /* dummies */
-  int i,j;
-  int info=0;
+  int    i,j;
+  double dummy;
+  int    info=0;
 
 
   /* class */
-  if( fprintf( fp, "%s\n", hamiltonian.class ) < 1 ) info=1;
+  if( fwrite( ( void* ) &hamiltonian.class, sizeof( char* ), 1, fp ) < 1 ) info=1;
 
   /* N_nodes */
-  if( fprintf( fp, "%d\n", hamiltonian.N_nodes ) < 1 ) info=1;
+  if( fwrite( ( void* ) &hamiltonian.N_nodes, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   /* N_links */
-  if( fprintf( fp, "%d\n", hamiltonian.N_links ) < 1 ) info=1;
+  if( fwrite( ( void* ) &hamiltonian.N_links, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   if( hamiltonian.N_links > 0 ){
   
-    /* neighbour_index */
-    for( i=0; i<(hamiltonian.N_nodes +1); i++ ){
+    if( fwrite( ( void* ) &hamiltonian.neighbour_index, sizeof( int* ), hamiltonian.N_nodes +1, fp ) < 1 ) info=1;
 
-      fprintf( fp, " " );
+    if( fwrite( ( void* ) &hamiltonian.neighbour_list, sizeof( int* ), 2 *hamiltonian.N_links, fp ) < 1 ) info=1;
 
-      if( fprintf( fp, "%d", hamiltonian.neighbour_index[ i ] ) < 1 );
-    
-    }        
+    if( fwrite( ( void* ) &hamiltonian.neighbour_link, sizeof( int* ), 2 *hamiltonian.N_links, fp ) < 1 ) info=1;
 
-    fprintf( fp, "\n" );
-
-    /* neighbour_list */
-    for( i=0; i<(2 *hamiltonian.N_links); i++ ){
-
-      fprintf( fp, " " );
-
-      if( fprintf( fp, "%d", hamiltonian.neighbour_list[ i ] ) < 1 );
-
-    }        
-    
-    fprintf( fp, "\n" );
-
-    /* neighbour_link */
-    for( i=0; i<(2 *hamiltonian.N_links); i++ ){
-
-      fprintf( fp, " " );
-
-      if( fprintf( fp, "%d", hamiltonian.neighbour_link[ i ] ) < 1 );
-
-    }        
-    
-    fprintf( fp, "\n" );
-    
   }
 
   /* N_par_node */
-  if( fprintf( fp, "%d\n", hamiltonian.N_par_node ) < 1 ) info=1;
+  if( fwrite( ( void* ) &hamiltonian.N_par_node, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   /* N_par_link */
-  if( fprintf( fp, "%d\n", hamiltonian.N_par_link ) < 1 ) info=1;
+  if( fwrite( ( void* ) &hamiltonian.N_par_link, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   /* N_par_extra */
-  if( fprintf( fp, "%d\n", hamiltonian.N_par_extra ) < 1 ) info=1;
+  if( fwrite( ( void* ) &hamiltonian.N_par_extra, sizeof( int ), 1, fp ) < 1 ) info=1;
 
+  /* par_node */
   if( hamiltonian.N_nodes > 0 ){
 
-    /* par_node */
     for( i=0; i<hamiltonian.N_nodes; i++ ){
 
       for( j=0; j<hamiltonian.N_par_node; j++ ){
 
-        fprintf( fp, " " );
+        dummy = hamiltonian.par_node[i][j];
 
-        if( fprintf( fp, "%le", hamiltonian.par_node[i][j] ) < 1 );
-    
+        if( fwrite( ( void* ) &dummy, sizeof( double ), 1, fp ) < 1 ) info=1;
+
       }        
-
-      fprintf( fp, "\n" );
 
     }
 
   }        
 
+  /* par_link */
   if( hamiltonian.N_links > 0 ){
 
-    /* par_link */
     for( i=0; i<hamiltonian.N_links; i++ ){
 
       for( j=0; j<hamiltonian.N_par_link; j++ ){
 
-        fprintf( fp, " " );
+        dummy = hamiltonian.par_link[i][j];
 
-        if( fprintf( fp, "%le", hamiltonian.par_link[i][j] ) < 1 );
-    
+        if( fwrite( ( void* ) &dummy, sizeof( double ), 1, fp ) < 1 ) info=1;
+
       }        
-
-      fprintf( fp, "\n" );
 
     }
 
   }
 
+  /* par_extra */
   if( hamiltonian.N_par_extra > 0 ){
 
-    /* par_extra */
-    for( i=0; i<hamiltonian.N_par_extra; i++ ){
-
-      if( fprintf( fp, "%le\n", hamiltonian.par_extra[i] ) < 1 );
+    if( fwrite( ( void* ) &hamiltonian.par_extra, sizeof( double* ), hamiltonian.N_par_extra, fp ) < 1 ) info=1;
     
-    }        
-
   }
 
 

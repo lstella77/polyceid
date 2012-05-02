@@ -212,9 +212,6 @@ int PolyCEID_phonons_print( FILE* fp, const phonons phonons ){
   if( MATRIX_PRINT( fp, phonons.conjugate_symplectic_transform_P ) ) info=1;
 
 
-  fflush( fp );
-
-
   return info;
 
 }

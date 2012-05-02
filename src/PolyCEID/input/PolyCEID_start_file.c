@@ -51,8 +51,8 @@ int read_start_file( constants_p constants_p, state_p state_p, config_p config_p
     info=1;
   }
 
-  if( CONSTANTS_READ( start_file_p, *constants_p ) )  info=1;
-  if( STATE_READ( start_file_p, *state_p ) )          info=1;
+  // if( CONSTANTS_READ( start_file_p, *constants_p ) )  info=1;
+  // if( STATE_READ( start_file_p, *state_p ) )          info=1;
   if( CONFIG_READ( start_file_p, *config_p ) )        info=1;
 
   /* close */
@@ -94,8 +94,8 @@ int print_start_file( const constants constants, const state state, const config
     info=1;
   }
 
-  if( CONSTANTS_PRINT( start_file_p, constants ) )  info=1;
-  if( STATE_PRINT( start_file_p, state ) )          info=1;
+  // if( CONSTANTS_PRINT( start_file_p, constants ) )  info=1;
+  // if( STATE_PRINT( start_file_p, state ) )          info=1;
   if( CONFIG_PRINT( start_file_p, config ) )        info=1;
 
   /* close */
