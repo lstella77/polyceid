@@ -95,7 +95,7 @@
 typedef struct{
 
   /* input constants */
-  char                 output_label[MAX_STRING_LENGTH];
+  char                 output_label[ MAX_STRING_LENGTH ];
   unsigned short int   flag_restart;                //
   unsigned short int   flag_relaxation;             //
   unsigned short int   flag_no_spin;                //
@@ -132,9 +132,9 @@ typedef struct{
   int                  rho_index_border_length;
   int                  rho_index_next_to_border_length;
   int                  initial_ionic_state;
-  char                 initial_condition_type[MAX_STRING_LENGTH];
-  char                 initial_many_body_occup[MAX_STRING_LENGTH];
-  char                 excited_many_body_occup[MAX_STRING_LENGTH];
+  char                 initial_condition_type[ MAX_STRING_LENGTH ];
+  char                 initial_many_body_occup[ MAX_STRING_LENGTH ];
+  char                 excited_many_body_occup[ MAX_STRING_LENGTH ];
   rvector              initial_many_body_state;
   rvector              excited_many_body_state;
   double               cutoff_energy;

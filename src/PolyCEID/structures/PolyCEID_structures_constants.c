@@ -173,7 +173,7 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
 
   /* general */
-  if( fread( ( void* ) &constants_p->output_label, sizeof( char* ), 1, fp ) < 1 ) info=1;
+  if( fread( ( void* ) &constants_p->output_label, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   if( fread( ( void* ) &constants_p->flag_restart, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
@@ -249,13 +249,13 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
   if( fread( ( void* ) &constants_p->initial_ionic_state, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fread( ( void* ) &constants_p->initial_condition_type, sizeof( char* ), 1, fp ) < 1 ) info=1;
+  if( fread( ( void* ) &constants_p->initial_condition_type, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   if( !strcmp( constants_p->initial_condition_type, "pure" ) ){
 
-    if( fread( ( void* ) &constants_p->initial_many_body_occup , sizeof( char* ), 1, fp ) < 1 ) info=1;
+    if( fread( ( void* ) &constants_p->initial_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
-    if( fread( ( void* ) &constants_p->excited_many_body_occup , sizeof( char* ), 1, fp ) < 1 ) info=1;
+    if( fread( ( void* ) &constants_p->excited_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
     if( RVECTOR_READ( fp, constants_p->initial_many_body_state ) ) info=1;
 
@@ -347,57 +347,57 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
   int info=0;
 
   /* general */
-  if( fwrite( ( void* ) &constants.output_label, sizeof( char* ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.output_label, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_restart, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_restart, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_relaxation, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_relaxation, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_no_spin, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_no_spin, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_no_spin_flip, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_no_spin_flip, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_normal_mode_expansion, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_normal_mode_expansion, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_no_Ehrenfest_frame, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_no_Ehrenfest_frame, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_periodic_boundary_condition, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_periodic_boundary_condition, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_Ehrenfest, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_Ehrenfest, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_pruning, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_pruning, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.seed, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.seed, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
   /* atoms */
   if( RVECTOR_PRINT( fp, constants.cell_dim ) ) info=1;
 
-  if( fwrite( ( void* ) &constants.spacial_dimension, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.spacial_dimension, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.N_atoms, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_atoms, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.N_coor, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_coor, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.N_coor_red, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_coor_red, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   if( IVECTOR_PRINT( fp, constants.relevant_modes ) ) info=1;
 
-  if( fwrite( ( void* ) &constants.CEID_order, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.CEID_order, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   if( HAMILTONIAN_PRINT( fp, constants.hamiltonian ) ) info=1;
 
   if( ATOMS_PRINT( fp, constants.initial_atoms ) ) info=1;
 
   /* electrons */
-  if( fwrite( ( void* ) &constants.N_levels_single, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_levels_single, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.N_levels_single_CAS, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_levels_single_CAS, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.N_levels_many, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_levels_many, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.N_electrons, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_electrons, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.N_electrons_CAS, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_electrons_CAS, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   if( IMATRIX_PRINT( fp, constants.single_level_occupation ) ) info=1;
 
@@ -413,23 +413,23 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
   if( IMATRIX_PRINT( fp, constants.symmetry_multiplicity ) ) info=1;
 
-  if( fwrite( ( void* ) &constants.max_rho_index, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.max_rho_index, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.sqrt_max_rho_index, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.sqrt_max_rho_index, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.rho_index_border_length, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.rho_index_border_length, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.rho_index_next_to_border_length, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.rho_index_next_to_border_length, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.initial_ionic_state, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.initial_ionic_state, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.initial_condition_type, sizeof( char* ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.initial_condition_type, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   if( !strcmp( constants.initial_condition_type, "pure" ) ){
 
-    if( fwrite( ( void* ) &constants.initial_many_body_occup , sizeof( char* ), 1, fp ) < 1 ) info=1;
+    if( fwrite( ( const void* ) &constants.initial_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
-    if( fwrite( ( void* ) &constants.excited_many_body_occup , sizeof( char* ), 1, fp ) < 1 ) info=1;
+    if( fwrite( ( const void* ) &constants.excited_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
     if( RVECTOR_PRINT( fp, constants.initial_many_body_state ) ) info=1;
 
@@ -437,74 +437,74 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
   }  
 
-  if( fwrite( ( void* ) &constants.cutoff_energy, sizeof( double ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.cutoff_energy, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* time evolution */
-  if( fwrite( ( void* ) &constants.dt, sizeof( double ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.dt, sizeof( double ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.time_length, sizeof( double ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.time_length, sizeof( double ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.skip_write, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.skip_write, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.skip_save, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.skip_save, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   /* thermostat  */
-  if( fwrite( ( void* ) &constants.N_chain, sizeof( int ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.N_chain, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   if( is_thermostat_constants ){
 	  
-    if( fwrite( ( void* ) &constants.N_chain_steps, sizeof( int ), 1, fp ) < 1 ) info=1;
+    if( fwrite( ( const void* ) &constants.N_chain_steps, sizeof( int ), 1, fp ) < 1 ) info=1;
 
     if( RVECTOR_PRINT( fp, constants.thermostat_masses ) ) info=1;
 
-    if( fwrite( ( void* ) &constants.temperature, sizeof( double ), 1, fp ) < 1 ) info=1;
+    if( fwrite( ( const void* ) &constants.temperature, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   }
 
   /* observables */
-  if( fwrite( ( void* ) &constants.flag_observable_all, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_all, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_geometry, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_geometry, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_positions, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_positions, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_momenta, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_momenta, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_forces, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_forces, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_populations, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_populations, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_mus, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_mus, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_purity, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_purity, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_energies, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_energies, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_adiabatic_populations, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_adiabatic_populations, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_projections, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_projections, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_adiabatic_pes_many, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_adiabatic_pes_many, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_adiabatic_pes_single, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_adiabatic_pes_single, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_single_level_populations, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_single_level_populations, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_nonadiabatic_couplings, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_nonadiabatic_couplings, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_density_matrix, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_density_matrix, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_transition_matrices, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_transition_matrices, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_adiabatic_states, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_adiabatic_states, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_electronic_density_states, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_electronic_density_states, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_ionic_density_states, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_ionic_density_states, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_dipoles_many, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_dipoles_many, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( void* ) &constants.flag_observable_dipoles_single, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &constants.flag_observable_dipoles_single, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
 
   return info;

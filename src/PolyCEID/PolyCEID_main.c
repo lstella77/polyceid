@@ -194,9 +194,9 @@ int main( int argc, char* argv[] ){
      
       if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
        
-      if( CONFIG_VERBOSE_PRINT( stdout, config_tmp ) ) info=1;
-       
       if( STATE_VERBOSE_PRINT( stdout, state ) ) info=1;
+       
+      if( CONFIG_VERBOSE_PRINT( stdout, config_tmp ) ) info=1;
        
       fprintf( stdout, "\n" );
       fflush( stdout );
@@ -232,7 +232,6 @@ int main( int argc, char* argv[] ){
 
       }
 
-
       if( !flag_static ){
 
         /* in the case, restart */
@@ -249,6 +248,10 @@ int main( int argc, char* argv[] ){
           constants.time_length = time_length;
 
           constants.flag_restart = flag_restart;
+
+	  fprintf( stdout, "# ----> config after restart\n" );      
+          if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
+          fflush( stdout );
 
         }
 
