@@ -145,8 +145,34 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
   /* time */
   if( fread( ( void* ) &config_p->time, sizeof( config_p->time ), 1, fp ) < 1 ) info=1;
 
+
+#ifdef __DEBUG__
+
+  /* time */
+  fprintf( stdout, "#------------------------------------------#\n" );
+  fprintf( stdout, "# time [restart]:\n");
+
+  if( fprintf( stdout, "# "DOUBLE_FORMAT"\n", config_p->time ) < 1 ) info=1;
+
+  fflush( stdout );
+
+#endif /* __DEBUG__ */
+
+
   /* atoms */
   if( ATOMS_READ( fp, config_p->atoms ) )             info=1;
+
+
+#ifdef __DEBUG__
+
+  /* atoms */
+  fprintf( stdout, "#------------------------------------------#\n" );
+  fprintf( stdout, "# atoms [restart]:\n");
+
+  if( ATOMS_VERBOSE_PRINT( stdout, config_p->atoms ) ) info=1;
+
+
+#endif /* __DEBUG__ */
 
 
   /* thermostat */
@@ -154,12 +180,37 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
 	  
     if( THERMOSTAT_READ( fp, config_p->thermostat ) ) info=1;
 
+
+#ifdef __DEBUG__
+
+
+    /* thermostat */
+    fprintf( stdout, "#------------------------------------------#\n" );
+    fprintf( stdout, "# thermostat [restart]:\n");
+
+    if( THERMOSTAT_VERBOSE_PRINT( stdout, config_p->thermostat ) ) info=1;
+
+
+#endif /* __DEBUG__ */
+
+
   }
 
 
   /* electrons */
   if( ELECTRONS_READ( fp, config_p->electrons ) )     info=1;
   
+
+#ifdef __DEBUG__
+
+  /* electrons */
+  fprintf( stdout, "#------------------------------------------#\n" );
+  fprintf( stdout, "# electron [restart]:\n");
+
+  if( ELECTRONS_VERBOSE_PRINT( stdout, config_p->electrons ) ) info=1;
+
+#endif /* __DEBUG__ */
+
 
   return info;
 

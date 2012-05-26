@@ -58,7 +58,7 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
 
 
   // setting default for "output_label"
-  strcpy( constants_p->output_label, "noname" );
+  if( !strncpy( constants_p->output_label, "noname", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "output_label"
   if( ASSING_STRING_VARIABLE( &input_list, "output_label", constants_p->output_label, constants_p->output_label ) ) info=1;
@@ -243,21 +243,21 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
 
 
   // setting default for "initial_condition_type"
-  strcpy( constants_p->initial_condition_type, "pure" );
+ if( !strncpy( constants_p->initial_condition_type, "pure", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "initial_condition_type"
   if( ASSING_STRING_VARIABLE( &input_list, "initial_condition_type", constants_p->initial_condition_type, constants_p->initial_condition_type ) ) info=1;
 
 
   // setting default for "initial_many_body_occup"
-  strcpy( constants_p->initial_many_body_occup, "0-0" );
+  if( !strncpy( constants_p->initial_many_body_occup, "0-0", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "initial_many_body_occup"
   if( ASSING_STRINGCAT_VARIABLE( &input_list, "initial_many_body_occup", constants_p->initial_many_body_occup, constants_p->initial_many_body_occup ) ) info=1;
 
 
   // setting default for "excited_many_body_occup"
-  strcpy( constants_p->excited_many_body_occup, "1-1" );
+  if( !strncpy( constants_p->excited_many_body_occup, "1-1", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "excited_many_body_occup"
   if( ASSING_STRINGCAT_VARIABLE( &input_list, "excited_many_body_occup", constants_p->excited_many_body_occup, constants_p->excited_many_body_occup ) ) info=1;
@@ -869,7 +869,7 @@ int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
     }
 
     // setting default for "name"
-    strcpy( initial_atoms_p->names[ N_atoms_check ], "noname" );
+    if( !strncpy( initial_atoms_p->names[ N_atoms_check ], "noname", ATOM_NAME_LENGTH ) ) info=1;
 
     // extracting "name"
     if( ASSING_STRING_VARIABLE( entry_found_p->sublist_p, "name", initial_atoms_p->names[ N_atoms_check ], initial_atoms_p->names[ N_atoms_check ] ) ) info=1;
@@ -1185,12 +1185,12 @@ int initial_condition_electrons_parsing( constants_p constants_p ){
 
   
   /* WARNING: cpy needed to avoid side effects! */
-  strcpy( buffer, constants_p->initial_many_body_occup );
+  if( !strncpy( buffer, constants_p->initial_many_body_occup, MAX_STRING_LENGTH ) ) info=1;
 
   if( CONSTRUCT_TRANSITION( *constants_p, buffer, constants_p->initial_many_body_state ) ) info=1;
 
   /* WARNING: cpy needed to avoid side effects! */
-  strcpy( buffer, constants_p->excited_many_body_occup );
+  if( !strncpy( buffer, constants_p->excited_many_body_occup, MAX_STRING_LENGTH ) ) info=1;
 
   if( CONSTRUCT_TRANSITION( *constants_p, buffer, constants_p->excited_many_body_state ) ) info=1;
 
