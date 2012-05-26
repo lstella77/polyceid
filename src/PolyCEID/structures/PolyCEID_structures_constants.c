@@ -981,7 +981,7 @@ int PolyCEID_constants_copy( constants_p constants_p, const constants constants 
 
 
   /* general */
-  if( !strcpy( constants_p->output_label, constants.output_label ) ) info=1;
+  if( !strncpy( constants_p->output_label, constants.output_label, MAX_STRING_LENGTH ) ) info=1;
 
   constants_p->seed                       = constants.seed;
 
@@ -1053,13 +1053,13 @@ int PolyCEID_constants_copy( constants_p constants_p, const constants constants 
 
   constants_p->initial_ionic_state             = constants.initial_ionic_state;
 
-  if( !strcpy( constants_p->initial_condition_type, constants.initial_condition_type ) ) info=1;
+  if( !strncpy( constants_p->initial_condition_type, constants.initial_condition_type, MAX_STRING_LENGTH ) ) info=1;
 
   if( !strcmp( constants.initial_condition_type, "pure" ) ){
 
-    if( !strcpy( constants_p->initial_many_body_occup, constants.initial_many_body_occup ) ) info=1;
+    if( !strncpy( constants_p->initial_many_body_occup, constants.initial_many_body_occup, MAX_STRING_LENGTH ) ) info=1;
 
-    if( !strcpy( constants_p->excited_many_body_occup, constants.excited_many_body_occup ) ) info=1;
+    if( !strncpy( constants_p->excited_many_body_occup, constants.excited_many_body_occup, MAX_STRING_LENGTH ) ) info=1;
 
     if( RVECTOR_COPY( constants_p->initial_many_body_state, constants.initial_many_body_state ) ) info=1;
 

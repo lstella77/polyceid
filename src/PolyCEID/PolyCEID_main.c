@@ -159,12 +159,11 @@ int main( int argc, char* argv[] ){
       }
 
 #ifdef __DEBUG__
-
+      
       fprintf( stdout, "# N_levels_many_saved = %d\n", N_levels_many_saved );
       fprintf( stdout, "# N_levels_many       = %d\n", constants.N_levels_many );
       fprintf( stdout, "\n" );
 
-      /* initial writing */
       if( !info ){
       
         fprintf( stdout, "# constants [at the beginning]\n" );
@@ -192,6 +191,7 @@ int main( int argc, char* argv[] ){
          
       }
      
+     
       if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
        
       if( STATE_VERBOSE_PRINT( stdout, state ) ) info=1;
@@ -200,7 +200,7 @@ int main( int argc, char* argv[] ){
        
       fprintf( stdout, "\n" );
       fflush( stdout );
-
+      
 #endif /* __DEBUG__ */
 
 
