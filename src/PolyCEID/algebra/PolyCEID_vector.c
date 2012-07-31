@@ -141,7 +141,7 @@ int __my_vector_print( FILE* file_p, const vector vec ){
 
   dim = vec.vector_dim;
 
-  if( fwrite( ( const void* ) &dim, sizeof( dim ), 1, file_p ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
   for( i=0; i<dim; i++ ){
 
@@ -392,7 +392,7 @@ int __my_vector_array_print( FILE* fp, vector_array az ){
 
   dim = az.dim;
 
-  if( fwrite( ( const void* ) &dim, sizeof( dim ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   for( i=0; i<dim; i++){
 
@@ -595,7 +595,7 @@ int __my_ivector_read( FILE* file_p, ivector_p vec_p ){
 int  __my_ivector_print( FILE* file_p, const ivector vec ){
 
   /* dummies */
-  int dim;
+  int i, dim;
   int info=0;
 
 
@@ -603,9 +603,13 @@ int  __my_ivector_print( FILE* file_p, const ivector vec ){
 
   dim = vec.ivector_dim;
 
-  if( fwrite( ( const void* ) &dim, sizeof( dim ), 1, file_p ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  if( fwrite( ( const void* ) &vec.ivector, sizeof( vec.ivector ), dim, file_p ) < 1 ) info=1;
+  for( i=0; i<dim; i++ ){
+
+    if( fwrite( ( const void* ) &vec.ivector, sizeof( int ), 1, file_p ) < 1 ) info=1;
+
+  }
 
 
   return info;
@@ -828,7 +832,7 @@ int __my_rvector_read( FILE* file_p, rvector_p vec_p ){
 int __my_rvector_print( FILE* file_p, const rvector vec ){
 
   /* dummies */
-  int dim;
+  int i, dim;
   int info=0;
 
 
@@ -836,9 +840,13 @@ int __my_rvector_print( FILE* file_p, const rvector vec ){
 
   dim = vec.rvector_dim;
 
-  if( fwrite( ( const void* ) &dim, sizeof( dim ), 1, file_p ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
-  if( fwrite( ( const void* ) &vec.rvector, sizeof( vec.rvector ), 1, file_p ) < 1 ) info=1;
+  for( i=0; i<dim; i++ ){
+
+    if( fwrite( ( const void* ) &vec.rvector, sizeof( double ), 1, file_p ) < 1 ) info=1;
+
+  }
 
 
   return info;

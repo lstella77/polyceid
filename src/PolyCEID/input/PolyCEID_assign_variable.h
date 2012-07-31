@@ -94,9 +94,9 @@ int _assign_double_variable( list_p, char*, int, double*, double* );
  * its value
  *
  */
-int _assign_string_variable( list_p, char*, char*, char* );
+int _assign_string_variable( list_p, char*, char*, char*, int );
 
-#define ASSING_STRING_VARIABLE( lp, name, sp, sdp )  FUNCTION_CHECK_NEW( _assign_string_variable( (lp), (name), (sp), (sdp) ) )
+#define ASSING_STRING_VARIABLE( lp, name, sp, sdp, max )  FUNCTION_CHECK_NEW( _assign_string_variable( (lp), (name), (sp), (sdp), (max) ) )
 
 /* FUNCTION: _assign_stringcat_variable
  *
@@ -112,9 +112,9 @@ int _assign_string_variable( list_p, char*, char*, char* );
  * its value
  *
  */
-int _assign_stringcat_variable( list_p, char*, char*, char* );
+int _assign_stringcat_variable( list_p, char*, char*, char*, int );
 
-#define ASSING_STRINGCAT_VARIABLE( lp, name, sp, sdp )  FUNCTION_CHECK_NEW( _assign_stringcat_variable( (lp), (name), (sp), (sdp) ) )
+#define ASSING_STRINGCAT_VARIABLE( lp, name, sp, sdp, max )  FUNCTION_CHECK_NEW( _assign_stringcat_variable( (lp), (name), (sp), (sdp), (max) ) )
 
 /* FUNCTION: _assign_flag_variable
  *
