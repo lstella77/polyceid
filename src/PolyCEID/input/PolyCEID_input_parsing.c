@@ -61,7 +61,7 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
   if( !strncpy( constants_p->output_label, "noname", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "output_label"
-  if( ASSING_STRING_VARIABLE( &input_list, "output_label", constants_p->output_label, constants_p->output_label ) ) info=1;
+  if( ASSING_STRING_VARIABLE( &input_list, "output_label", constants_p->output_label, constants_p->output_label, MAX_STRING_LENGTH ) ) info=1;
 
 
   // extracting "flag_restart"
@@ -246,21 +246,21 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
  if( !strncpy( constants_p->initial_condition_type, "pure", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "initial_condition_type"
-  if( ASSING_STRING_VARIABLE( &input_list, "initial_condition_type", constants_p->initial_condition_type, constants_p->initial_condition_type ) ) info=1;
+  if( ASSING_STRING_VARIABLE( &input_list, "initial_condition_type", constants_p->initial_condition_type, constants_p->initial_condition_type, MAX_STRING_LENGTH ) ) info=1;
 
 
   // setting default for "initial_many_body_occup"
   if( !strncpy( constants_p->initial_many_body_occup, "0-0", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "initial_many_body_occup"
-  if( ASSING_STRINGCAT_VARIABLE( &input_list, "initial_many_body_occup", constants_p->initial_many_body_occup, constants_p->initial_many_body_occup ) ) info=1;
+  if( ASSING_STRINGCAT_VARIABLE( &input_list, "initial_many_body_occup", constants_p->initial_many_body_occup, constants_p->initial_many_body_occup, MAX_STRING_LENGTH ) ) info=1;
 
 
   // setting default for "excited_many_body_occup"
   if( !strncpy( constants_p->excited_many_body_occup, "1-1", MAX_STRING_LENGTH ) ) info=1;
 
   // extracting "excited_many_body_occup"
-  if( ASSING_STRINGCAT_VARIABLE( &input_list, "excited_many_body_occup", constants_p->excited_many_body_occup, constants_p->excited_many_body_occup ) ) info=1;
+  if( ASSING_STRINGCAT_VARIABLE( &input_list, "excited_many_body_occup", constants_p->excited_many_body_occup, constants_p->excited_many_body_occup, MAX_STRING_LENGTH ) ) info=1;
 
 
   // setting default for "seed"
@@ -453,7 +453,7 @@ int hamiltonian_parsing( list_p list_p, constants_p constants_p ){
 
   
   // extracting "class"
-  if( ASSING_STRING_VARIABLE( list_p, "class", constants_p->hamiltonian.class, NULL ) ) info=1;
+  if( ASSING_STRING_VARIABLE( list_p, "class", constants_p->hamiltonian.class, NULL, MAX_STRING_LENGTH ) ) info=1;
 
 
   // setting default for "N_par_node"
@@ -872,7 +872,7 @@ int assign_initial_condition_atoms( list_p list_p, constants_p constants_p ){
     if( !strncpy( initial_atoms_p->names[ N_atoms_check ], "noname", ATOM_NAME_LENGTH ) ) info=1;
 
     // extracting "name"
-    if( ASSING_STRING_VARIABLE( entry_found_p->sublist_p, "name", initial_atoms_p->names[ N_atoms_check ], initial_atoms_p->names[ N_atoms_check ] ) ) info=1;
+    if( ASSING_STRING_VARIABLE( entry_found_p->sublist_p, "name", initial_atoms_p->names[ N_atoms_check ], initial_atoms_p->names[ N_atoms_check ], ATOM_NAME_LENGTH ) ) info=1;
 
     // extracting "mass"    
     if( ASSING_DOUBLE_VARIABLE( entry_found_p->sublist_p, "mass", 1, &mass, NULL ) ) info=1;

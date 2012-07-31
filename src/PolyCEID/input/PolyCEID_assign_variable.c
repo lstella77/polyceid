@@ -255,13 +255,16 @@ int _assign_double_variable( list_p list_p, char* name, int n, double* value_p, 
  * its value
  *
  */
-int _assign_string_variable( list_p list_p, char* name, char* value_p, char* default_value_p ){
+int _assign_string_variable( list_p list_p, char* name, char* value_p, char* default_value_p, int max_length ){
 
   /* dummies */
   entry_p  entry_found_p=NULL;  
   entry_p  dummy_entry_p=NULL;
   int      info=0;
 
+
+  // consistency check
+  max_length = MIN( max_length, MAX_NAME_LENGTH );
 
   // search for the variable
   entry_found_p = LIST_SEARCH( list_p, name );
@@ -271,7 +274,7 @@ int _assign_string_variable( list_p list_p, char* name, char* value_p, char* def
     S_ECHO( "Using default value for variable:", name );
 
     value_p[ 0 ] = '\0';
-    strncat( value_p, dummy_entry_p->field.name, MAX_NAME_LENGTH );
+    strncat( value_p, dummy_entry_p->field.name, max_length );
 
   }
   else{
@@ -291,8 +294,14 @@ int _assign_string_variable( list_p list_p, char* name, char* value_p, char* def
 
       dummy_entry_p = entry_found_p->sublist_p->first_entry_p; 
 
+      fprintf( stdout, "--\n" );
       value_p[ 0 ] = '\0';
-      strncat( value_p, dummy_entry_p->field.name, MAX_NAME_LENGTH );
+      fprintf( stdout, "max_length = %d\n", max_length );
+      fprintf( stdout, "The length of the string is; %d\n", (int) strlen(value_p) );
+      strncat( value_p, dummy_entry_p->field.name, max_length );
+      fprintf( stdout, "The length of the string is; %d\n", (int) strlen(value_p) );
+      fprintf( stdout, "--\n" );
+      //strncpy( value_p, dummy_entry_p->field.name, max_length );
 
       // cut the entry
       ENTRY_CUT( entry_found_p );
@@ -319,13 +328,16 @@ int _assign_string_variable( list_p list_p, char* name, char* value_p, char* def
  * its value
  *
  */
-int _assign_stringcat_variable( list_p list_p, char* name, char* value_p, char* default_value_p ){
+int _assign_stringcat_variable( list_p list_p, char* name, char* value_p, char* default_value_p, int max_length ){
 
   /* dummies */
   entry_p  entry_found_p=NULL;  
   entry_p  dummy_entry_p=NULL;
   int      info=0;
 
+
+  // consistency check
+  max_length = MIN( max_length, MAX_NAME_LENGTH );
 
   // search for the variable
   entry_found_p = LIST_SEARCH( list_p, name );
@@ -335,7 +347,7 @@ int _assign_stringcat_variable( list_p list_p, char* name, char* value_p, char* 
     S_ECHO( "Using default value for variable:", name );
 
     value_p[ 0 ] = '\0';
-    strncat( value_p, dummy_entry_p->field.name, MAX_NAME_LENGTH );
+    strncat( value_p, dummy_entry_p->field.name, max_length );
 
   }
   else{
@@ -359,7 +371,7 @@ int _assign_stringcat_variable( list_p list_p, char* name, char* value_p, char* 
 
       while( dummy_entry_p ){  
 
-        strncat( value_p, dummy_entry_p->field.name, MAX_NAME_LENGTH );
+        strncat( value_p, dummy_entry_p->field.name, max_length );
 
         dummy_entry_p = dummy_entry_p->next_entry_p;
 
