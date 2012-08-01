@@ -49,9 +49,6 @@ int PolyCEID_atoms_allocate( int np, int* pp, atoms_p atoms_p ){
 
   N_coor  = N_atoms *sdim;
 
-  fprintf( stdout, "<--- ATOM_NAME_LENGTH = %d\n", ATOM_NAME_LENGTH );
-  fflush( stdout );
-
   // allocating atom names
   atoms_p->names = ( char** ) calloc( (size_t) N_atoms, sizeof( char* ) );
 
@@ -327,17 +324,11 @@ int PolyCEID_atoms_compare( const atoms atoms1, const atoms atoms2 ){
 int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
 
   /* dummies */
-  int i, k;
+  int i;
   int info=0;
 
 
-  fprintf( stdout, "<--- ATOM_NAME_LENGTH = %d\n", ATOM_NAME_LENGTH );
-  fflush( stdout );
-
   for( i=0; i<atoms_p->N_atoms; i++ ){
-
-    for( k=0; k<ATOM_NAME_LENGTH; k++ ) fprintf( stdout, "%c\n", atoms_p->names[ i ][ k ] );
-    fflush( stdout );
 
     if( fread( ( void* ) atoms_p->names[ i ], sizeof( char ), ATOM_NAME_LENGTH, fp ) < 1 ) info=1;
 	  
@@ -377,18 +368,12 @@ int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
 int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
 
   /* dummies */
-  int k, i;
+  int i;
   int info=0;
 
 
-  fprintf( stdout, "---> ATOM_NAME_LENGTH = %d\n", ATOM_NAME_LENGTH );
-  fflush( stdout );
-
   /* names */
   for( i=0; i<atoms.N_atoms; i++ ){
-
-    for( k=0; k<ATOM_NAME_LENGTH; k++ ) fprintf( stdout, "%c\n", atoms.names[ i ][ k ] );
-    fflush( stdout );
 
     if( fwrite( ( const void* ) atoms.names[ i ], sizeof( char ), ATOM_NAME_LENGTH, fp ) < 1 ) info=1;
 	  

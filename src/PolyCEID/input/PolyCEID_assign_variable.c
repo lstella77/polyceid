@@ -294,13 +294,8 @@ int _assign_string_variable( list_p list_p, char* name, char* value_p, char* def
 
       dummy_entry_p = entry_found_p->sublist_p->first_entry_p; 
 
-      fprintf( stdout, "--\n" );
       value_p[ 0 ] = '\0';
-      fprintf( stdout, "max_length = %d\n", max_length );
-      fprintf( stdout, "The length of the string is; %d\n", (int) strlen(value_p) );
       strncat( value_p, dummy_entry_p->field.name, max_length );
-      fprintf( stdout, "The length of the string is; %d\n", (int) strlen(value_p) );
-      fprintf( stdout, "--\n" );
       //strncpy( value_p, dummy_entry_p->field.name, max_length );
 
       // cut the entry

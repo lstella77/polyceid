@@ -249,9 +249,13 @@ int main( int argc, char* argv[] ){
 
           constants.flag_restart = flag_restart;
 
+#ifdef __DEBUG__
+      
 	  fprintf( stdout, "# ----> config after restart\n" );      
           if( CONFIG_VERBOSE_PRINT( stdout, config_def ) ) info=1;
           fflush( stdout );
+
+#endif /* __DEBUG__ */
 
         }
 
