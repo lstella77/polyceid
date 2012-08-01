@@ -143,7 +143,7 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
 
 
   /* time */
-  if( fread( ( void* ) &config_p->time, sizeof( config_p->time ), 1, fp ) < 1 ) info=1;
+  if( fread( ( void* ) &config_p->time, sizeof( double ), 1, fp ) < 1 ) info=1;
 
 
 #ifdef __DEBUG__
@@ -227,7 +227,7 @@ int PolyCEID_config_print( FILE* fp, const config config ){
 
 
   /* time */
-  if( fwrite( ( const void* ) &config.time, sizeof( config.time ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &config.time, sizeof( double ), 1, fp ) < 1 ) info=1;
 
 
   /* atoms */

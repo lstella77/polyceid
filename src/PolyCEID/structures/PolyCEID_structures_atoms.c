@@ -339,7 +339,7 @@ int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
     for( k=0; k<ATOM_NAME_LENGTH; k++ ) fprintf( stdout, "%c\n", atoms_p->names[ i ][ k ] );
     fflush( stdout );
 
-    if( fread( ( void* ) &atoms_p->names[ i ], sizeof( ATOM_NAME_LENGTH  ), 1, fp ) < 1 ) info=1;
+    if( fread( ( void* ) atoms_p->names[ i ], sizeof( char ), ATOM_NAME_LENGTH, fp ) < 1 ) info=1;
 	  
   }
 
@@ -347,9 +347,9 @@ int PolyCEID_atoms_read( FILE* fp, atoms_p atoms_p ){
 
   if( RVECTOR_READ( fp, atoms_p->masses_aux ) )       info=1;
 
-  if( fread( ( void* ) &atoms_p->mass_tot, sizeof( atoms_p->mass_tot ), 1, fp ) < 1 ) info=1;
+  if( fread( ( void* ) &atoms_p->mass_tot, sizeof( double ), 1, fp ) < 1 ) info=1;
 
-  if( fread( ( void* ) &atoms_p->mass_ave, sizeof( atoms_p->mass_ave ), 1, fp ) < 1 ) info=1;
+  if( fread( ( void* ) &atoms_p->mass_ave, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   if( RVECTOR_READ( fp, atoms_p->positions ) )        info=1;
 
@@ -390,7 +390,7 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
     for( k=0; k<ATOM_NAME_LENGTH; k++ ) fprintf( stdout, "%c\n", atoms.names[ i ][ k ] );
     fflush( stdout );
 
-    if( fwrite( ( const void* ) &atoms.names[ i ], sizeof( ATOM_NAME_LENGTH ), 1, fp ) < 1 ) info=1;
+    if( fwrite( ( const void* ) atoms.names[ i ], sizeof( char ), ATOM_NAME_LENGTH, fp ) < 1 ) info=1;
 	  
   }
 
@@ -401,10 +401,10 @@ int PolyCEID_atoms_print( FILE* fp, const atoms atoms ){
   if( RVECTOR_PRINT( fp, atoms.masses_aux ) )          info=1;
 
   /* masses_tot */
-  if( fwrite( ( const void* ) &atoms.mass_tot, sizeof( atoms.mass_tot ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &atoms.mass_tot, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* masses_ave */
-  if( fwrite( ( const void* ) &atoms.mass_ave, sizeof( atoms.mass_ave ), 1, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) &atoms.mass_ave, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* positions */
   if( RVECTOR_PRINT( fp, atoms.positions ) )           info=1;

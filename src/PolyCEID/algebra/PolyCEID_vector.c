@@ -115,7 +115,7 @@ int __my_vector_read( FILE* file_p, vector_p vec_p ){
 
   if( ( FILE_CHECK( file_p, __my_vector_print ) ) || (VECTOR_CHECK( *vec_p ) ) ) info=1;
 
-  if( fread( ( void* ) &dim, sizeof( dim ), 1, file_p ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
   if( dim != vec_p->vector_dim ) info=1;
 
@@ -366,7 +366,7 @@ int __my_vector_array_read( FILE* fp, vector_array_p ap ){
 
   if( FILE_CHECK( fp, __my_vector_array_copy ) ) info=1;
 
-  if( fread( ( void* ) &dim, sizeof( dim ), 1, fp ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, fp ) < 1 ) info=1;
 
   ap->dim = dim;
 
@@ -575,17 +575,21 @@ int       __my_ivector_compare_mute( const ivector vec1, const ivector vec2  ){
 int __my_ivector_read( FILE* file_p, ivector_p vec_p ){
 
   /* dummies */
-  int dim;
+  int i, dim;
   int info=0;
 
 
   if( ( FILE_CHECK( file_p, __my_ivector_print ) ) || ( IVECTOR_CHECK( *vec_p ) ) ) info=1;
 
-  if( fread( ( void* ) &dim, sizeof( dim ), 1, file_p ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
   if( dim != vec_p->ivector_dim ) info=1;
 
-  if( fread( ( void* ) &vec_p->ivector, sizeof( vec_p->ivector ), 1, file_p ) < 1 ) info=1;
+  for( i=0; i<dim; i++ ){
+
+    if( fread( ( void* ) &vec_p->ivector[ i ], sizeof( int ), 1, file_p ) < 1 ) info=1;
+
+  }
 
 
   return info;
@@ -607,7 +611,7 @@ int  __my_ivector_print( FILE* file_p, const ivector vec ){
 
   for( i=0; i<dim; i++ ){
 
-    if( fwrite( ( const void* ) &vec.ivector, sizeof( int ), 1, file_p ) < 1 ) info=1;
+    if( fwrite( ( const void* ) &vec.ivector[ i ], sizeof( int ), 1, file_p ) < 1 ) info=1;
 
   }
 
@@ -812,17 +816,21 @@ int       __my_rvector_compare( const rvector vec1, const rvector vec2  ){
 int __my_rvector_read( FILE* file_p, rvector_p vec_p ){
 
   /* dummies */
-  int dim;
+  int i, dim;
   int info=0;
 
 
   if( ( FILE_CHECK( file_p, __my_rvector_print ) ) || ( RVECTOR_CHECK( *vec_p ) ) ) info=1;
 
-  if( fread( ( void* ) &dim, sizeof( dim ), 1, file_p ) < 1 ) info=1;
+  if( fread( ( void* ) &dim, sizeof( int ), 1, file_p ) < 1 ) info=1;
 
   if( dim != vec_p->rvector_dim ) info=1;
   
-  if( fread( ( void* ) &vec_p->rvector, sizeof( vec_p->rvector ), 1, file_p ) < 1 ) info=1;
+  for( i=0; i<dim; i++ ){
+
+    if( fread( ( void* ) &vec_p->rvector[ i ], sizeof( double ), 1, file_p ) < 1 ) info=1;
+
+  }
 
 
   return info;
@@ -844,7 +852,7 @@ int __my_rvector_print( FILE* file_p, const rvector vec ){
 
   for( i=0; i<dim; i++ ){
 
-    if( fwrite( ( const void* ) &vec.rvector, sizeof( double ), 1, file_p ) < 1 ) info=1;
+    if( fwrite( ( const void* ) &vec.rvector[ i ], sizeof( double ), 1, file_p ) < 1 ) info=1;
 
   }
 
