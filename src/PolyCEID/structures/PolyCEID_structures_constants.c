@@ -173,7 +173,7 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
 
   /* general */
-  if( fread( ( void* ) &constants_p->output_label, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+  if( fread( ( void* ) constants_p->output_label, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   if( fread( ( void* ) &constants_p->flag_restart, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
@@ -249,13 +249,13 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
   if( fread( ( void* ) &constants_p->initial_ionic_state, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fread( ( void* ) &constants_p->initial_condition_type, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+  if( fread( ( void* ) constants_p->initial_condition_type, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   if( !strcmp( constants_p->initial_condition_type, "pure" ) ){
 
-    if( fread( ( void* ) &constants_p->initial_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+    if( fread( ( void* ) constants_p->initial_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
-    if( fread( ( void* ) &constants_p->excited_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+    if( fread( ( void* ) constants_p->excited_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
     if( RVECTOR_READ( fp, constants_p->initial_many_body_state ) ) info=1;
 
@@ -347,7 +347,7 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
   int info=0;
 
   /* general */
-  if( fwrite( ( const void* ) &constants.output_label, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) constants.output_label, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   if( fwrite( ( const void* ) &constants.flag_restart, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
 
@@ -423,13 +423,13 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
   if( fwrite( ( const void* ) &constants.initial_ionic_state, sizeof( int ), 1, fp ) < 1 ) info=1;
 
-  if( fwrite( ( const void* ) &constants.initial_condition_type, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) constants.initial_condition_type, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   if( !strcmp( constants.initial_condition_type, "pure" ) ){
 
-    if( fwrite( ( const void* ) &constants.initial_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+    if( fwrite( ( const void* ) constants.initial_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
-    if( fwrite( ( const void* ) &constants.excited_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+    if( fwrite( ( const void* ) constants.excited_many_body_occup , sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
     if( RVECTOR_PRINT( fp, constants.initial_many_body_state ) ) info=1;
 

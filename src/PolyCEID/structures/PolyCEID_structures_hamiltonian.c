@@ -141,7 +141,7 @@ int PolyCEID_hamiltonian_read( FILE* fp, hamiltonian_p hamiltonian_p ){
 
 
   /* class */
-  if( fread( ( void* ) &hamiltonian_p->class, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+  if( fread( ( void* ) hamiltonian_p->class, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   /* N_nodes */
   if( fread( ( void* ) &hamiltonian_p->N_nodes, sizeof( int ), 1, fp ) < 1 ) info=1;
@@ -222,7 +222,7 @@ int PolyCEID_hamiltonian_print( FILE* fp, const hamiltonian hamiltonian ){
 
 
   /* class */
-  if( fwrite( ( const void* ) &hamiltonian.class, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
+  if( fwrite( ( const void* ) hamiltonian.class, sizeof( char ), MAX_STRING_LENGTH, fp ) < 1 ) info=1;
 
   /* N_nodes */
   if( fwrite( ( const void* ) &hamiltonian.N_nodes, sizeof( int ), 1, fp ) < 1 ) info=1;
