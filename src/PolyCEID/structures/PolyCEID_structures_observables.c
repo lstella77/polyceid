@@ -173,10 +173,6 @@ int PolyCEID_observables_read( FILE* fp, observables_p observables_p ){
 
   }  
 
-  if( fread( ( void* ) &observables_p->kinetic_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
-
-  if( fread( ( void* ) &observables_p->potential_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
-
   if( fread( ( void* ) &observables_p->total_energy_system, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   if( is_thermostat_observables ){
@@ -237,12 +233,6 @@ int PolyCEID_observables_print( FILE* fp, const observables observables ){
     if( RVECTOR_PRINT( fp, observables.potential_energy_thermostat ) ) info=1;
 
   }  
-
-  /* correction to the kinetic energy of the system */
-  if( fwrite( ( const void* ) &observables.kinetic_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
-
-  /* correction to the potential energy of the system */
-  if( fwrite( ( const void* ) &observables.potential_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* total energy of the system */
   if( fwrite( ( const void* ) &observables.total_energy_system, sizeof( double ), 1, fp ) < 1 ) info=1;
@@ -327,18 +317,6 @@ int PolyCEID_observables_verbose_print( FILE* fp, const observables observables 
     if( RVECTOR_PRINT_PLUS( fp, observables.potential_energy_thermostat ) ) info=1;
 
   }  
-
-  /* correction to the kinetic energy of system */
-  fprintf( fp, "#------------------------------------------#\n" );
-  fprintf( fp, "# kinetic_energy_system_correction:\n" );
-
-  if( fprintf( fp, "# "DOUBLE_FORMAT"\n", observables.kinetic_energy_system_correction ) < 1 ) info=1;
-
-  /* correction to the potential energy of system */
-  fprintf( fp, "#------------------------------------------#\n" );
-  fprintf( fp, "# potential_energy_system_correction:\n" );
-
-  if( fprintf( fp, "# "DOUBLE_FORMAT"\n", observables.potential_energy_system_correction ) < 1 ) info=1;
 
   /* total energy of system */
   fprintf( fp, "#------------------------------------------#\n" );
@@ -431,10 +409,6 @@ int PolyCEID_observables_copy( observables_p observables_p, const observables ob
     if( RVECTOR_COPY( observables_p->potential_energy_thermostat, observables.potential_energy_thermostat ) );
 
   }  
-
-  observables_p->kinetic_energy_system_correction              = observables.kinetic_energy_system_correction;
-
-  observables_p->potential_energy_system_correction            = observables.potential_energy_system_correction;
 
   observables_p->total_energy_system                           = observables.total_energy_system;
 

@@ -232,7 +232,11 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
       if( PRINT_START_FILE( constants, *state_p, *config_def_p ) ) info=1;
 
+#ifdef __DEBUG__
+
       fprintf( stdout, "#   Saved!\n" );
+
+#endif /* __DEBUG__ */
 
     } /* end step_counter conditional */
 
@@ -291,9 +295,9 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
     if( PRINT_START_FILE( constants, *state_p, *config_def_p ) ) info=1;
 
-    fprintf( stdout, "#   Saved!\n" );
-
 #ifdef __DEBUG__
+
+    fprintf( stdout, "#   Saved!\n" );
 
     fprintf( stdout, "# ----> config after restart\n" );      
     if( CONFIG_VERBOSE_PRINT( stdout, *config_def_p ) ) info=1;

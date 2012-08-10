@@ -65,8 +65,8 @@ int energies_update( const constants constants, state_p state_p, config_p config
   kinetic_energy_thermostat_p          = &(state_p->observables.kinetic_energy_thermostat);
   potential_energy_thermostat_p        = &(state_p->observables.potential_energy_thermostat);
   
-  kinetic_energy_system_correction_p   = &(state_p->observables.kinetic_energy_system_correction);
-  potential_energy_system_correction_p = &(state_p->observables.potential_energy_system_correction);
+  kinetic_energy_system_correction_p   = &(config_p->kinetic_energy_system_correction);
+  potential_energy_system_correction_p = &(config_p->potential_energy_system_correction);
   
   total_energy_system_p                = &(state_p->observables.total_energy_system);
   pseudo_energy_system_p               = &(state_p->observables.pseudo_energy_system);

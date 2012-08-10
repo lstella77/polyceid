@@ -99,7 +99,7 @@ int compute_kinetic_energy_corrections( const constants constants, state_p state
   dummy_matrix1_p                    = &(state_p->dummy_matrix1);
   ar_p                               = &(state_p->phonons.ar);
   ap_p                               = &(state_p->phonons.ap);
-  kinetic_energy_system_correction_p = &(state_p->observables.kinetic_energy_system_correction);
+  kinetic_energy_system_correction_p = &(config_p->kinetic_energy_system_correction);
 
 
   if( N_chain ){
@@ -1910,7 +1910,7 @@ int compute_potential_energy_corrections( const constants constants, state_p sta
   dummy_matrix2_p                       = &(state_p->dummy_matrix2);
   ar_p                                  = &(state_p->phonons.ar);
   ap_p                                  = &(state_p->phonons.ap);
-  potential_energy_system_correction_p  = &(state_p->observables.potential_energy_system_correction);
+  potential_energy_system_correction_p  = &(config_p->potential_energy_system_correction);
 
 
   if( N_chain ){

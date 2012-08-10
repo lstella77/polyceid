@@ -171,25 +171,22 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
 
   if( ATOMS_VERBOSE_PRINT( stdout, config_p->atoms ) ) info=1;
 
+  fflush( stdout );
 
 #endif /* __DEBUG__ */
-
 
   /* thermostat */
   if( is_thermostat_config ){
 	  
     if( THERMOSTAT_READ( fp, config_p->thermostat ) ) info=1;
 
-
 #ifdef __DEBUG__
-
 
     /* thermostat */
     fprintf( stdout, "#------------------------------------------#\n" );
     fprintf( stdout, "# thermostat [restart]:\n");
 
     if( THERMOSTAT_VERBOSE_PRINT( stdout, config_p->thermostat ) ) info=1;
-
 
 #endif /* __DEBUG__ */
 
@@ -210,6 +207,13 @@ int PolyCEID_config_read( FILE* fp, config_p config_p ){
   if( ELECTRONS_VERBOSE_PRINT( stdout, config_p->electrons ) ) info=1;
 
 #endif /* __DEBUG__ */
+
+
+  /* kinetic energy corrections */
+  if( fread( ( void* ) &config_p->kinetic_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
+
+  /* potential energy corrections */
+  if( fread( ( void* ) &config_p->potential_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
 
 
   return info;
@@ -244,6 +248,13 @@ int PolyCEID_config_print( FILE* fp, const config config ){
 
   /* electrons */
   if( ELECTRONS_PRINT( fp, config.electrons ) ) info=1;
+
+
+  /* kinetic energy corrections */
+  if( fwrite( ( const void* ) &config.kinetic_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
+
+  /* potential energy corrections */
+  if( fwrite( ( const void* ) &config.potential_energy_system_correction, sizeof( double ), 1, fp ) < 1 ) info=1;
 
 
   return info;
@@ -292,6 +303,18 @@ int PolyCEID_config_verbose_print( FILE* fp, const config config ){
   if( ELECTRONS_VERBOSE_PRINT( fp, config.electrons ) ) info=1;
 
 
+  /* kinetic energy correction */
+  fprintf( fp, "#------------------------------------------#\n" );
+  fprintf( fp, "# kinetic energy system correction:\n");
+
+  if( fprintf( fp, "# "DOUBLE_FORMAT"\n", config.kinetic_energy_system_correction ) < 1 ) info=1;
+
+  /* potential energy correction */
+  fprintf( fp, "#------------------------------------------#\n" );
+  fprintf( fp, "# potential energy system correction:\n");
+
+  if( fprintf( fp, "# "DOUBLE_FORMAT"\n", config.potential_energy_system_correction ) < 1 ) info=1;
+
   fflush( fp );
 
 
@@ -329,6 +352,13 @@ int PolyCEID_config_copy( config_p config_p, const config config ){
   if( ELECTRONS_COPY( config_p->electrons, config.electrons ) ) info=1;
 
 
+  /* kinetic energy correction */
+  config_p->kinetic_energy_system_correction = config.kinetic_energy_system_correction;
+
+  /* potential energy correction */
+  config_p->potential_energy_system_correction = config.potential_energy_system_correction;
+
+
   return info;
 
 }
@@ -343,6 +373,15 @@ int PolyCEID_config_compare( const config config1, const config config2 ){
   int info=0;
 
 
+  if( fabs( config1.time -config2.time ) > EPS ){ 
+
+    fprintf( stderr, "ERROR: time's are not equals\n" );
+    fflush( stderr );
+
+    info=1;
+
+  }
+
   if( ATOMS_COMPARE( config1.atoms, config2.atoms ) ) info=1;
 
   if( is_thermostat_config ){
@@ -352,6 +391,27 @@ int PolyCEID_config_compare( const config config1, const config config2 ){
   }
 
   if( ELECTRONS_COMPARE( config1.electrons, config2.electrons ) ) info=1;
+
+
+  /* kinetic energy correction */
+  if( fabs( config1.kinetic_energy_system_correction -config2.kinetic_energy_system_correction ) > EPS ){ 
+
+    fprintf( stderr, "ERROR: kinetic_energy_system_correction's are not equals\n" );
+    fflush( stderr );
+
+    info=1;
+
+  }
+
+  /* potential energy correction */
+  if( fabs( config1.potential_energy_system_correction -config2.potential_energy_system_correction ) > EPS ){ 
+
+    fprintf( stderr, "ERROR: potential_energy_system_correction's are not equals\n" );
+    fflush( stderr );
+
+    info=1;
+
+  }
 
 
   return info;
