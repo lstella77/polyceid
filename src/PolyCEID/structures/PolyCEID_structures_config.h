@@ -50,7 +50,11 @@ typedef struct{
   thermostat   thermostat; 
   //
   electrons    electrons;
+  //
+  double   kinetic_energy_system_correction;
 
+  double   potential_energy_system_correction;
+  
 } PolyCEID_config;
 
 

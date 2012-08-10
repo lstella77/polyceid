@@ -50,9 +50,6 @@ typedef struct{
   rvector  kinetic_energy_thermostat;   //[N_chain+1]
   rvector  potential_energy_thermostat; //[N_chain+1]
   
-  double   kinetic_energy_system_correction;
-  double   potential_energy_system_correction;
-  
   double   total_energy_system;
   
   double   pseudo_energy_system;
