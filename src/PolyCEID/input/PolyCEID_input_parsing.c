@@ -219,7 +219,7 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
 
 
   // setting default for "skip_save"
-  constants_p->skip_save = 2000;
+  constants_p->skip_save = 10;
 
   // extracting "skip_save"
   if( ASSING_INT_VARIABLE( &input_list, "skip_save", 1, &constants_p->skip_save,  &constants_p->skip_save ) ) info=1;
