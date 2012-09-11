@@ -40,7 +40,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
   double              time_length;
   /* state */
   long unsigned int*  step_counter_p;
-  double              time;
+  double              time_loc;
   /* dummies */
   int  info=0;
 
@@ -51,7 +51,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
   time_length           =  constants.time_length;
 
   step_counter_p        = &(state_p->step_counter);
-  time                  =  config_def_p->time;
+  time_loc              =  config_def_p->time;
 
 
 #ifdef __DEBUG_PLUS__
@@ -111,7 +111,7 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
   /*--------------------------------
    -------MAIN INTEGRATOR LOOP------
    ---------------------------------*/
-  while( ( time_length -time ) > EPS ){
+  while( ( time_length -time_loc ) > EPS ){
 
 
 #ifdef __DEBUG__
@@ -171,9 +171,11 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
       
     /* time increasing */
-    config_def_p->time = time +dt;
+    config_def_p->time = time_loc +dt;
 
-    time = config_def_p->time;
+    config_tmp_p->time = config_def_p->time;
+
+    time_loc = config_def_p->time;
 
 
     /* energy corrections */
@@ -184,6 +186,9 @@ int global_CEID_integrator( const constants constants, state_p state_p, config_p
 
     if( COMPUTE_POTENTIAL_ENERGY_CORRECTIONS( constants, *state_p, *config_def_p ) ) info=1;
 
+    config_tmp_p->kinetic_energy_system_correction   = config_def_p->kinetic_energy_system_correction;
+
+    config_tmp_p->potential_energy_system_correction = config_def_p->potential_energy_system_correction;
 
 #endif /* __NO_ENERGY_CORRECTION__ */
 
