@@ -167,14 +167,14 @@ int input_parsing( FILE* fp, constants_p constants_p, int counter, rvector initi
     if( ASSING_INT_VARIABLE( &input_list, "N_chain_steps", 1, &constants_p->N_chain_steps,  &constants_p->N_chain_steps ) ) info=1;
 
 
-    // setting default for "temperature"
-    constants_p->temperature=ZERO;
-
-    // extracting "temperature"
-    if( ASSING_DOUBLE_VARIABLE( &input_list, "temperature", 1, &constants_p->temperature, &constants_p->temperature ) ) info=1;
-
-
   } /* end N_chain */
+
+
+  // setting default for "temperature"
+  constants_p->temperature=ZERO;
+
+  // extracting "temperature"
+  if( ASSING_DOUBLE_VARIABLE( &input_list, "temperature", 1, &constants_p->temperature, &constants_p->temperature ) ) info=1;
 
 
   // setting default for "relevant_modes"

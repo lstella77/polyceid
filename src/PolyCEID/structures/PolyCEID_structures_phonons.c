@@ -46,7 +46,7 @@ int PolyCEID_phonons_allocate( int np, int* pp, phonons_p phonons_p ){
 
 
   /* initial_condition_atoms */
-  if( VECTOR_ALLOCATE( sqrt_max_rho_index, phonons_p->initial_condition_atoms ) ) info=1;
+  if( MATRIX_ALLOCATE( sqrt_max_rho_index, sqrt_max_rho_index, phonons_p->initial_condition_atoms ) ) info=1;
 
   /* original_hessian */
   if( MATRIX_ALLOCATE( N_coor, N_coor, phonons_p->original_hessian ) ) info=1;
@@ -130,7 +130,7 @@ int PolyCEID_phonons_free( phonons_p phonons_p ){
   if( MATRIX_FREE( phonons_p->original_hessian ) ) info=1;
 
   /* initial_condition_atoms */
-  if( VECTOR_FREE( phonons_p->initial_condition_atoms ) ) info=1;
+  if( MATRIX_FREE( phonons_p->initial_condition_atoms ) ) info=1;
 
 
   return info;
@@ -147,7 +147,7 @@ int PolyCEID_phonons_read( FILE* fp, phonons_p phonons_p ){
   int info=0;
 
 
-  if( VECTOR_READ( fp, phonons_p->initial_condition_atoms ) ) info=1;
+  if( MATRIX_READ( fp, phonons_p->initial_condition_atoms ) ) info=1;
 
   if( MATRIX_READ( fp, phonons_p->original_hessian ) ) info=1;
 
@@ -187,7 +187,7 @@ int PolyCEID_phonons_print( FILE* fp, const phonons phonons ){
 
 
   /* phonons */
-  if( VECTOR_PRINT( fp, phonons.initial_condition_atoms ) ) info=1;
+  if( MATRIX_PRINT( fp, phonons.initial_condition_atoms ) ) info=1;
 
   if( MATRIX_PRINT( fp, phonons.original_hessian ) ) info=1;
 
@@ -230,7 +230,7 @@ int PolyCEID_phonons_verbose_print( FILE* fp, const phonons phonons ){
   fprintf( fp, "#------------------------------------------#\n" );
   fprintf( fp, "# initial_condition_atoms:\n" );
 
-  if( VECTOR_PRINT_PLUS( fp, phonons.initial_condition_atoms ) ) info=1;
+  if( MATRIX_PRINT_PLUS( fp, phonons.initial_condition_atoms ) ) info=1;
 
   /* original_hessian */
   fprintf( fp, "#------------------------------------------#\n" );
@@ -316,7 +316,7 @@ int PolyCEID_phonons_copy( phonons_p phonons_p, const phonons phonons ){
   int info=0;
 
 
-  if( VECTOR_COPY( phonons_p->initial_condition_atoms, phonons.initial_condition_atoms ) ) info=1;
+  if( MATRIX_COPY( phonons_p->initial_condition_atoms, phonons.initial_condition_atoms ) ) info=1;
 
   if( MATRIX_COPY( phonons_p->original_hessian, phonons.original_hessian ) ) info=1;
 

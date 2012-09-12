@@ -283,9 +283,9 @@ int PolyCEID_constants_read( FILE* fp, constants_p constants_p ){
 
     if( RVECTOR_READ( fp, constants_p->thermostat_masses ) ) info=1;
 
-    if( fread( ( void* ) &constants_p->temperature, sizeof( double ), 1, fp ) < 1 ) info=1;
-
   }
+
+  if( fread( ( void* ) &constants_p->temperature, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* observables */
   if( fread( ( void* ) &constants_p->flag_observable_all, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
@@ -457,9 +457,9 @@ int PolyCEID_constants_print( FILE* fp, const constants constants ){
 
     if( RVECTOR_PRINT( fp, constants.thermostat_masses ) ) info=1;
 
-    if( fwrite( ( const void* ) &constants.temperature, sizeof( double ), 1, fp ) < 1 ) info=1;
-
   }
+
+  if( fwrite( ( const void* ) &constants.temperature, sizeof( double ), 1, fp ) < 1 ) info=1;
 
   /* observables */
   if( fwrite( ( const void* ) &constants.flag_observable_all, sizeof( unsigned short ), 1, fp ) < 1 ) info=1;
@@ -938,12 +938,6 @@ int PolyCEID_constants_verbose_print( FILE* fp, const constants constants ){
 
     if( RVECTOR_PRINT_PLUS( fp, constants.thermostat_masses ) ) info=1;
 
-    /* temperature */
-    fprintf( fp, "#------------------------------------------#\n" );
-    fprintf( fp, "# temperature:\n" );
-
-    if( fprintf( fp, "# "DOUBLE_FORMAT"\n", constants.temperature ) < 1 ) info=1;
-
     /* N_chain_steps */
     fprintf( fp, "#------------------------------------------#\n" );
     fprintf( fp, "# N_chain_steps:\n" );
@@ -951,6 +945,12 @@ int PolyCEID_constants_verbose_print( FILE* fp, const constants constants ){
     if( fprintf( fp, "# %d\n", constants.N_chain_steps ) < 1 ) info=1;
 
   }  
+
+  /* temperature */
+  fprintf( fp, "#------------------------------------------#\n" );
+  fprintf( fp, "# temperature:\n" );
+
+  if( fprintf( fp, "# "DOUBLE_FORMAT"\n", constants.temperature ) < 1 ) info=1;
 
   /* output_label */
   fprintf( fp, "#------------------------------------------#\n" );
@@ -1085,11 +1085,11 @@ int PolyCEID_constants_copy( constants_p constants_p, const constants constants 
 	  
     if( RVECTOR_COPY( constants_p->thermostat_masses, constants.thermostat_masses ) ) info=1;
 
-    constants_p->temperature     = constants.temperature;
-
     constants_p->N_chain_steps   = constants.N_chain_steps;
 
   }  
+
+  constants_p->temperature     = constants.temperature;
 
   constants_p->flag_observable_all = constants.flag_observable_all;
 
