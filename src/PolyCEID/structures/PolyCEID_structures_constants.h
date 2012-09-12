@@ -147,6 +147,7 @@ typedef struct{
   int                  N_chain;                     //
   int                  N_chain_steps;               //
   rvector              thermostat_masses;           //
+  //
   double               temperature;                 //
   /* observables */
   unsigned short int   flag_observable_all;

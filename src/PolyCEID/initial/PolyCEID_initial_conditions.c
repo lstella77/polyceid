@@ -49,7 +49,7 @@ int initial_condition_rho( const constants constants, state_p state_p, config_p 
   matrix_array_p  rho_p;
   matrix_array_p  initial_state_recorded_p;
   matrix_array_p  excited_state_recorded_p;
-  vector_p        initial_condition_atoms_p;
+  matrix_p        initial_condition_atoms_p;
   /* dummies */
   int             i; 
   int             j;
@@ -120,13 +120,13 @@ int initial_condition_rho( const constants constants, state_p state_p, config_p 
 	
 	index = RHO_INDEX_AUX( i, j );
 
-	dummy = CMPLX_PRODUCT( ( initial_condition_atoms_p->vector[ i ] ), CONJ( initial_condition_atoms_p->vector[ j ] ) );
-
 	/* 
 	   WARNING: Here I make use of the excited many-body electronic state, 
 	   while the atomic coefficients have been calculated by means of the initial one 
 	*/
-	
+
+        dummy = initial_condition_atoms_p->matrix[ index ];
+
 	if( MATRIX_SCALAR_PRODUCT( *initial_rho_electron_p, dummy, rho_p->array[ index ] ) ) info=1;
 	
 	if( info ) break;
@@ -194,7 +194,7 @@ int initial_condition_rho( const constants constants, state_p state_p, config_p 
 	
 	index = RHO_INDEX_AUX( i, j );
 
-	dummy = CMPLX_PRODUCT( ( initial_condition_atoms_p->vector[ i ] ), CONJ( initial_condition_atoms_p->vector[ j ] ) );  //WARNING: That's the excited state! 
+	dummy = initial_condition_atoms_p->matrix[ index ];
 
 	/* 
 	   WARNING: Here I make use of the excited many-body electronic state, 
@@ -265,17 +265,26 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
   /* constants */
   int             sqrt_max_rho_index;
   int             initial_ionic_state;
+  double          temperature;
   /* state */
-  vector_p        initial_condition_atoms_p;
+  matrix_p        initial_condition_atoms_p;
   /* dummies */
+  complex         trace;
+  complex         dummy;
+  int             i, j, k;
   int             index;
   int             info=0;
 
 
   sqrt_max_rho_index         =  constants.sqrt_max_rho_index;
   initial_ionic_state        =  constants.initial_ionic_state;
+  temperature                =  constants.temperature;
 
   initial_condition_atoms_p  = &(state_p->phonons.initial_condition_atoms);
+
+  // set to zero
+  MATRIX_ZERO( *initial_condition_atoms_p );
+
 
 #ifdef __DEBUG_PLUS__
 
@@ -315,12 +324,41 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
 
 
   /* copy the coefficients */
-  for( index=0; index<sqrt_max_rho_index; index++ ){
+  for( i=0; i<sqrt_max_rho_index; i++ ){
+      
+    for( j=0; j<sqrt_max_rho_index; j++ ){
+	
+      index = RHO_INDEX_AUX( i, j );
 
-    initial_condition_atoms_p->vector[ index ] = 
-      eigenvectors.matrix[ RHO_INDEX_AUX( index, initial_ionic_state ) ];
+      if( temperature < EPS ){
 
-  } /* index loop */
+        dummy = CMPLX_PRODUCT( ( eigenvectors.matrix[ RHO_INDEX_AUX( i, initial_ionic_state ) ] ), CONJ( eigenvectors.matrix[ RHO_INDEX_AUX( j, initial_ionic_state ) ] ) );
+
+        initial_condition_atoms_p->matrix[ index ] = CMPLX_SUM( initial_condition_atoms_p->matrix[ index ], dummy ); // WARNING: overwriting
+
+      }
+      else{
+
+        for( k=0; k<sqrt_max_rho_index; k++ ){
+	
+          dummy = CMPLX_PRODUCT( ( eigenvectors.matrix[ RHO_INDEX_AUX( i, k ) ] ), CONJ( eigenvectors.matrix[ RHO_INDEX_AUX( j, k ) ] ) );
+
+          dummy =  CMPLX_PRODUCT( dummy, CMPLX( exp( -eigenvalues.rvector[ k ] /( BOLTZMANN_K *temperature ) ) ) ); // WARNING: overwriting 
+
+          initial_condition_atoms_p->matrix[ index ] = CMPLX_SUM( initial_condition_atoms_p->matrix[ index ], dummy ); // WARNING: overwriting
+
+        } /* k loop*/
+
+      } /* conditional */
+
+    } /* j loop */
+
+  } /* i loop */
+
+  // normalise
+  trace = MATRIX_TRACE( *initial_condition_atoms_p );
+
+  MATRIX_SCALAR_DIVISION( *initial_condition_atoms_p, trace, *initial_condition_atoms_p ); // WARNING: overwriting
 
 
 #ifdef __DEBUG_PLUS__

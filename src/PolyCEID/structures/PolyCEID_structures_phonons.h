@@ -42,7 +42,7 @@
 typedef struct{
 
   /* phonons */
-  vector              initial_condition_atoms;           // [sqrt_max_rho_index] 
+  matrix              initial_condition_atoms;           // [sqrt_max_rho_index,sqrt_max_rho_index] 
   matrix              original_hessian;                  // [N_coor,N_coor]
   matrix              canonical_transform;               // [N_coor,N_coor]
   rvector             canonical_frequencies;             // [N_coor]
