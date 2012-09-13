@@ -169,14 +169,10 @@ int initialise_state( const constants constants, state_p state_p, config_p confi
 
 
   /* initialise energy correction */
-  if( !constants.flag_restart ){
+  config_def_p->kinetic_energy_system_correction   = 0.0e0;
 
-    config_def_p->kinetic_energy_system_correction   = 0.0e0;
-
-    config_def_p->potential_energy_system_correction = 0.0e0;
+  config_def_p->potential_energy_system_correction = 0.0e0;
   
-  }
-
 
   if( !info ){
 
