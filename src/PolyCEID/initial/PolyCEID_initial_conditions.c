@@ -269,6 +269,7 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
   /* state */
   matrix_p        initial_condition_atoms_p;
   /* dummies */
+  double          egs;
   complex         trace;
   complex         dummy;
   int             i, j, k;
@@ -322,6 +323,8 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
 
 #endif /* __DEBUG_PLUS__ */
 
+  // to seta scale of the energies and avoid overflows
+  egs = eigenvalues.rvector[ 0 ];
 
   /* copy the coefficients */
   for( i=0; i<sqrt_max_rho_index; i++ ){
@@ -343,7 +346,7 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
 	
           dummy = CMPLX_PRODUCT( ( eigenvectors.matrix[ RHO_INDEX_AUX( i, k ) ] ), CONJ( eigenvectors.matrix[ RHO_INDEX_AUX( j, k ) ] ) );
 
-          dummy =  CMPLX_PRODUCT( dummy, CMPLX( exp( -eigenvalues.rvector[ k ] /( BOLTZMANN_K *temperature ) ) ) ); // WARNING: overwriting 
+          dummy =  CMPLX_PRODUCT( dummy, CMPLX( exp( -( eigenvalues.rvector[ k ] -egs )/( BOLTZMANN_K *temperature ) ) ) ); // WARNING: overwriting 
 
           initial_condition_atoms_p->matrix[ index ] = CMPLX_SUM( initial_condition_atoms_p->matrix[ index ], dummy ); // WARNING: overwriting
 
