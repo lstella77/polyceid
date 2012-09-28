@@ -164,15 +164,15 @@ int print_single_level_populations_adiabatic( const constants, const state, cons
 
 //------------------------------------------
 
-int print_nonadiabatic_couplings( const constants, const state, const config );
+int print_nonadiabaticity( const constants, const state, const config );
 
-#define PRINT_NONADIABATIC_COUPLINGS( co, st, cf ) FUNCTION_CHECK( print_nonadiabatic_couplings( (co), (st), (cf) ), print_nonadiabatic_couplings ) 
+#define PRINT_NONADIABATICITY( co, st, cf ) FUNCTION_CHECK( print_nonadiabaticity( (co), (st), (cf) ), print_nonadiabaticity ) 
 
 //------------------------------------------
 
-int print_nonadiabatic_rates( const constants, const state, const config );
+int print_nonadiabatic_couplings( const constants, const state, const config );
 
-#define PRINT_NONADIABATIC_RATES( co, st, cf ) FUNCTION_CHECK( print_nonadiabatic_rates( (co), (st), (cf) ), print_nonadiabatic_rates ) 
+#define PRINT_NONADIABATIC_COUPLINGS( co, st, cf ) FUNCTION_CHECK( print_nonadiabatic_couplings( (co), (st), (cf) ), print_nonadiabatic_couplings ) 
 
 //------------------------------------------
 

@@ -155,11 +155,11 @@ int PolyCEID_state_allocate( int np, int* pp, state_p state_p ){
   /* ionic_density_eigenvectors */
   if( MATRIX_ALLOCATE( sqrt_max_rho_index, sqrt_max_rho_index, state_p->ionic_density_eigenvectors ) ) info=1;
 
-  /* nonadiabatic_coupling */
-  if( RVECTOR_ALLOCATE( N_coor, state_p->nonadiabatic_coupling ) ) info=1;
+  /* nonadiabaticity */
+  if( RVECTOR_ALLOCATE( N_coor, state_p->nonadiabaticity ) ) info=1;
 
-  /* nonadiabatic_rate */
-  if( RVECTOR_ALLOCATE( N_coor, state_p->nonadiabatic_rate ) ) info=1;
+  /* nonadiabatic_coupling */
+  if( RVECTOR_ALLOCATE( N_coor *N_levels_many *N_levels_many, state_p->nonadiabatic_coupling ) ) info=1;
 
   /* phonons */
   pp_phonons[0] = N_coor;
@@ -337,11 +337,11 @@ int PolyCEID_state_free( state_p state_p ){
   /* phonons */
   if( PHONONS_FREE( state_p->phonons ) ) info=1;
 
-  /* nonadiabatic_rate */
-  if( RVECTOR_FREE( state_p->nonadiabatic_rate ) ) info=1;
-
   /* nonadiabatic_coupling */
   if( RVECTOR_FREE( state_p->nonadiabatic_coupling ) ) info=1;
+
+  /* nonadiabaticity */
+  if( RVECTOR_FREE( state_p->nonadiabaticity ) ) info=1;
 
   /* ionic_density_eigenvectors */
   if( MATRIX_FREE( state_p->ionic_density_eigenvectors ) )      info=1;
@@ -556,11 +556,11 @@ int PolyCEID_state_read( FILE* fp, state_p state_p ){
   /* ionic_density_eigenvectors */
   if( MATRIX_READ( fp, state_p->ionic_density_eigenvectors ) )      info=1;
 
+  /* nonadiabaticity */
+  if( RVECTOR_READ( fp, state_p->nonadiabaticity ) )                info=1;
+
   /* nonadiabatic_coupling */
   if( RVECTOR_READ( fp, state_p->nonadiabatic_coupling ) )          info=1;
-
-  /* nonadiabatic_rate */
-  if( RVECTOR_READ( fp, state_p->nonadiabatic_rate ) )              info=1;
 
   /* phonons */
   if( PHONONS_READ( fp, state_p->phonons ) ) info=1;
@@ -690,11 +690,11 @@ int PolyCEID_state_print( FILE* fp, const state state ){
   /* ionic_density_eigenvectors */
   if( MATRIX_PRINT( fp, state.ionic_density_eigenvectors ) )      info=1;
 
+  /* nonadiabaticity */
+  if( RVECTOR_PRINT( fp, state.nonadiabaticity ) )                info=1;
+
   /* nonadiabatic_coupling */
   if( RVECTOR_PRINT( fp, state.nonadiabatic_coupling ) )          info=1;
-
-  /* nonadiabatic_rate */
-  if( RVECTOR_PRINT( fp, state.nonadiabatic_rate ) )              info=1;
 
   /* phonons */
   if( PHONONS_PRINT( fp, state.phonons ) ) info=1;
@@ -924,17 +924,17 @@ int PolyCEID_state_verbose_print( FILE* fp, const state state ){
 
   if( MATRIX_PRINT_PLUS( fp, state.ionic_density_eigenvectors ) )      info=1;
 
+  /* nonadiabaticity */
+  fprintf( fp, "#------------------------------------------#\n" );
+  fprintf( fp, "# nonadiabaticity:\n");
+
+  if( RVECTOR_PRINT_PLUS( fp, state.nonadiabaticity ) )       info=1;
+
   /* nonadiabatic_coupling */
   fprintf( fp, "#------------------------------------------#\n" );
   fprintf( fp, "# nonadiabatic_coupling:\n");
 
   if( RVECTOR_PRINT_PLUS( fp, state.nonadiabatic_coupling ) ) info=1;
-
-  /* nonadiabatic_rate */
-  fprintf( fp, "#------------------------------------------#\n" );
-  fprintf( fp, "# nonadiabatic_rate:\n");
-
-  if( RVECTOR_PRINT_PLUS( fp, state.nonadiabatic_rate ) ) info=1;
 
   /* rho_norm */
   fprintf( fp, "#------------------------------------------#\n" );
@@ -1084,11 +1084,11 @@ int PolyCEID_state_copy( state_p state_p, const state state ){
   /* ionic_density_eigenvectors */
   if( MATRIX_COPY( state_p->ionic_density_eigenvectors, state.ionic_density_eigenvectors ) )            info=1;
 
+  /* nonadiabaticity */
+  state_p->nonadiabaticity = state.nonadiabaticity;
+
   /* nonadiabatic_coupling */
   state_p->nonadiabatic_coupling = state.nonadiabatic_coupling;
-
-  /* nonadiabatic_rate */
-  state_p->nonadiabatic_rate = state.nonadiabatic_rate;
 
   /* rho_norm */
   state_p->rho_norm = state.rho_norm;
