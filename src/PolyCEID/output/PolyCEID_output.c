@@ -52,8 +52,8 @@ FILE*      adiabatic_PES_many_fp;
 FILE*      adiabatic_PES_single_fp;
 FILE*      single_level_populations_Ehrenfest_fp;
 FILE*      single_level_populations_adiabatic_fp;
+FILE*      nonadiabaticity_fp;
 FILE*      nonadiabatic_couplings_fp;
-FILE*      nonadiabatic_rates_fp;
 FILE*      one_body_electronic_density_matrix_fp;
 FILE*      one_body_electronic_density_matrix_Ehrenfest_fp;
 FILE*      one_body_electronic_hole_matrix_fp;
@@ -209,17 +209,11 @@ int print_observables( const constants constants, const state state, const confi
 
   if( constants.flag_observable_all || constants.flag_observable_nonadiabatic_couplings ){
 
+    if( PRINT_NONADIABATICITY( constants, state, config ) )                     info=1; 
+
     if( PRINT_NONADIABATIC_COUPLINGS( constants, state, config ) )              info=1; 
 
   }  
-
-  /*
-  if( constants.flag_observable_all ){
-
-    if( PRINT_NONADIABATIC_RATES( constants, state, config ) )                  info=1; 
-
-  }
-  */
 
   if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
 
@@ -1295,35 +1289,35 @@ int print_single_level_populations_adiabatic( const constants constants, const s
 
 //------------------------------------------
 
-int print_nonadiabatic_couplings( const constants constants, const state state, const config config ){
+int print_nonadiabaticity( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_coor;
   /* state */
   double    time;
-  const rvector* nonadiabatic_coupling_p;
+  const rvector* nonadiabaticity_p;
   /* dummies */
   int       i;
   int       info=0;
 
 
-  N_coor                  =  constants.N_coor;
+  N_coor            =  constants.N_coor;
 
-  time                    =  config.time;
-  nonadiabatic_coupling_p = &(state.nonadiabatic_coupling);
+  time              =  config.time;
+  nonadiabaticity_p = &(state.nonadiabaticity);
 
 
-  fprintf( nonadiabatic_couplings_fp, "%le  ", time );
+  fprintf( nonadiabaticity_fp, "%le  ", time );
 
   for( i=0; i<N_coor-1; i++ ){
 
-    fprintf( nonadiabatic_couplings_fp, DOUBLE_FORMAT"  ", nonadiabatic_coupling_p->rvector[ i ] );
+    fprintf( nonadiabaticity_fp, DOUBLE_FORMAT"  ", nonadiabaticity_p->rvector[ i ] );
 
   }
 
-  fprintf( nonadiabatic_couplings_fp, DOUBLE_FORMAT"\n", nonadiabatic_coupling_p->rvector[ i ] );
+  fprintf( nonadiabaticity_fp, DOUBLE_FORMAT"\n", nonadiabaticity_p->rvector[ i ] );
 
-  fflush( nonadiabatic_couplings_fp );
+  fflush( nonadiabaticity_fp );
 
 
   return info;
@@ -1332,35 +1326,40 @@ int print_nonadiabatic_couplings( const constants constants, const state state, 
 
 //------------------------------------------
 
-int print_nonadiabatic_rates( const constants constants, const state state, const config config ){
+int print_nonadiabatic_couplings( const constants constants, const state state, const config config ){
 
   /* constants */
   int       N_coor;
+  int       N_levels_many;
   /* state */
   double    time;
-  const rvector* nonadiabatic_rate_p;
+  const rvector* nonadiabatic_coupling_p;
   /* dummies */
+  int       dim;
   int       i;
   int       info=0;
 
 
   N_coor                  =  constants.N_coor;
+  N_levels_many           =  constants.N_levels_many;
 
   time                    =  config.time;
-  nonadiabatic_rate_p     = &(state.nonadiabatic_rate);
+  nonadiabatic_coupling_p = &(state.nonadiabatic_coupling);
 
 
-  fprintf( nonadiabatic_rates_fp, "%le  ", time );
+  fprintf( nonadiabatic_couplings_fp, "%le  ", time );
 
-  for( i=0; i<N_coor-1; i++ ){
+  dim = N_coor *N_levels_many *N_levels_many;
 
-    fprintf( nonadiabatic_rates_fp, DOUBLE_FORMAT"  ", nonadiabatic_rate_p->rvector[ i ] );
+  for( i=0; i<dim-1; i++ ){
+
+    fprintf( nonadiabatic_couplings_fp, DOUBLE_FORMAT"  ", nonadiabatic_coupling_p->rvector[ i ] );
 
   }
 
-  fprintf( nonadiabatic_rates_fp, DOUBLE_FORMAT"\n", nonadiabatic_rate_p->rvector[ i ] );
+  fprintf( nonadiabatic_couplings_fp, DOUBLE_FORMAT"\n", nonadiabatic_coupling_p->rvector[ i ] );
 
-  fflush( nonadiabatic_rates_fp );
+  fflush( nonadiabatic_couplings_fp );
 
 
   return info;
@@ -2492,26 +2491,19 @@ int output_files_opening( const constants constants ){
   }
 
 
-  /* nonadiabatic_couplings file */
   if( constants.flag_observable_all || constants.flag_observable_nonadiabatic_couplings ){
 
+    /* nonadiabaticity file */
+    sprintf( buffer, "nonadiabaticity_%s.dat", constants.output_label );
+
+    OPEN_FILE( nonadiabaticity_fp, buffer );	
+
+    /* nonadiabatic_couplings file */
     sprintf( buffer, "nonadiabatic_couplings_%s.dat", constants.output_label );
 
     OPEN_FILE( nonadiabatic_couplings_fp, buffer );	
 
   }
-
-
-  /* nonadiabatic_rates file */
-  /*
-  if( constants.flag_observable_all ){
-
-      sprintf( buffer, "nonadiabatic_rates_%s.dat", constants.output_label );
-
-      OPEN_FILE( nonadiabatic_rates_fp, buffer );	
-
-  }
-  */
 
 
   if( constants.flag_observable_all || constants.flag_observable_density_matrix ){
@@ -2831,26 +2823,19 @@ int output_files_closing( const constants constants ){
   }
 
 
-  /* nonadiabatic_couplings file */
   if( constants.flag_observable_all || constants.flag_observable_nonadiabatic_couplings ){
 
+    /* nonadiabaticity file */
+    sprintf( buffer, "nonadiabaticity_%s.dat", constants.output_label );
+
+    CLOSE_FILE( nonadiabaticity_fp, buffer );	
+
+    /* nonadiabatic_couplings file */
     sprintf( buffer, "nonadiabatic_couplings_%s.dat", constants.output_label );
 
     CLOSE_FILE( nonadiabatic_couplings_fp, buffer );	
 
   }
-
-
-  /* nonadiabatic_rates file */
-  /*
-  if( constants.flag_observable_all ){
-
-      sprintf( buffer, "nonadiabatic_rates_%s.dat", constants.output_label );
-
-      CLOSE_FILE( nonadiabatic_rates_fp, buffer );	
-
-  }
-  */
 
 
   if( constants.flag_observable_all || constants.flag_observable_density_matrix ){

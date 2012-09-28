@@ -331,8 +331,6 @@ int initialise_state( const constants constants, state_p state_p, config_p confi
     // WARNING: it needs the transformed Hamiltonian!
     if( COMPUTE_NONADIABATICITY( constants, *state_p, *config_tmp_p ) ) info=1;
 
-    // if( COMPUTE_NONADIABATIC_RATE( constants, *state_p, *config_tmp_p ) ) info=1;
-
   }
 
 

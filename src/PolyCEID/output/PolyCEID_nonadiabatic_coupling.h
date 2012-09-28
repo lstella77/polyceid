@@ -42,25 +42,7 @@ int compute_nonadiabaticity( constants, state_p, config_p );
 
 //------------------------------------------
 
-int compute_nonadiabatic_rate( constants, state_p, config_p );
-
-#define COMPUTE_NONADIABATIC_RATE( co, st, cf ) FUNCTION_CHECK( compute_nonadiabatic_rate( (co), &(st), &(cf) ), compute_nonadiabatic_rate )
-
-//------------------------------------------
-
 /* utilities */
-
-//------------------------------------------
-
-double line_shape( double, double ); 
-
-#define LINE_SHAPE( e, de )   line_shape( (e), (de) )
-
-//------------------------------------------
-
-double FC_factor( double, double, double, double ); 
-
-#define FC_FACTOR( dE, E_ph, lambda, temp )   FC_factor( (dE), (E_ph), (lambda), (temp) )
 
 //------------------------------------------
 
@@ -70,21 +52,9 @@ int compute_adiabatic_populations( const constants, state_p, config_p, matrix_p,
 
 //------------------------------------------
 
-int compute_adiabatic_density_matrix( const constants, state_p, config_p, matrix_p, matrix_p );
-
-#define COMPUTE_ADIABATIC_DENSITY_MATRIX( co, st, cf, astates, matrix ) FUNCTION_CHECK(  compute_adiabatic_density_matrix( (co), &(st), &(cf), &(astates), &(matrix) ),  compute_adiabatic_density_matrix )
-
-//------------------------------------------
-
 int compute_nonadiabatic_forces( const constants, state_p, config_p, matrix_p, int, matrix_p );
 
 #define COMPUTE_NONADIABATIC_FORCES( co, st, cf, astates, mode, forces ) FUNCTION_CHECK(  compute_nonadiabatic_forces( (co), &(st), &(cf), &(astates), (mode), &(forces) ),  compute_nonadiabatic_forces )
-
-//------------------------------------------
-
-int compute_adiabatic_potentials( const constants, state_p, config_p, matrix_p, int, rvector_p );
-
-#define COMPUTE_ADIABATIC_POTENTIALS( co, st, cf, astates, mode, potentials ) FUNCTION_CHECK(  compute_adiabatic_potentials( (co), &(st), &(cf), &(astates), (mode), &(potentials) ),  compute_nonadiabatic_potentials )
 
 //------------------------------------------
 

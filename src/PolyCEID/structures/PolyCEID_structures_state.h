@@ -92,8 +92,8 @@ typedef struct{
   rvector               ionic_density_eigenvalues;                        //[sqrt_max_rho_index]
   matrix                ionic_density_eigenvectors;                       //[sqrt_max_rho_index,sqrt_max_rho_index]
   //
-  rvector               nonadiabatic_coupling;                            //[N_coor]
-  rvector               nonadiabatic_rate;                                //[N_coor]
+  rvector               nonadiabaticity;                                  //[N_coor]
+  rvector               nonadiabatic_coupling;                            //[N_coor*N_levels_many*N_levels_many]
   //
   phonons               phonons;
   //

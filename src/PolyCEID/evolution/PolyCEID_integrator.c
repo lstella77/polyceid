@@ -412,8 +412,6 @@ int single_step_CEID_integrator( const constants constants, state_p state_p, con
       // WARNING! It needs the transformed Hamiltonian!
       if( COMPUTE_NONADIABATICITY( constants, *state_p, *config_tmp_p ) ) info=1;
       
-      // if( COMPUTE_NONADIABATIC_RATE( constants, *state_p, *config_tmp_p ) ) info=1;
-      
     }
 
 #ifndef __DEBUG__ 
