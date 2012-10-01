@@ -125,11 +125,12 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
         // loop on the possible final many-body electronic states
         for( j=0; j<N_levels_many; j++ ){ // loop over the final sattes
 
-          index = i_coor *N_levels_many *N_levels_many +i *N_levels_many +j; 
+          // The vectorised index
+	  index = i_coor *N_levels_many *N_levels_many +i *N_levels_many +j; 
 
           if( i == j ){
 
-              nonadiabaticity_p->rvector[ index ] = ZERO;
+              nonadiabatic_coupling_p->rvector[ index ] = ZERO;
 
 	  }
           else{
@@ -137,11 +138,11 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
             // energy difference [adiabatic]
             delta_E = ( dummy_rvector_p->rvector[ j ] ) -( dummy_rvector_p->rvector[ i ] );
 
-            // BUGFIX: conical intersections: delta_E = 0 although i != j
-            if( fabs( delta_E ) > EPS ){
+            // BUGFIX: frustrated hops excluded. Is that what we want?
+	    if( fabs( delta_E ) > EPS && delta_E < ONEO2 *( momenta_new.rvector[ i_coor ] ) *( momenta_new.rvector[ i_coor ] ) /( masses_aux_p->rvector[ i_coor ] ) ){
 
               // BUGFIX: hbar missing?
-              nonadiabaticity_p->rvector[ index ] = CMPLX_NORM( nonadiabatic_forces.matrix[ ELECTRON_MANY_INDEX( i, j ) ] ) /fabs( delta_E ); // WARNING: overwriting
+              nonadiabatic_coupling_p->rvector[ index ] = HBAR *CMPLX_NORM( nonadiabatic_forces.matrix[ ELECTRON_MANY_INDEX( i, j ) ] ) /fabs( delta_E ); // WARNING: overwriting
 
 	    }     
 
@@ -150,7 +151,7 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
           if( adiabatic_populations.rvector[ i ] > EPS ){
 
             // updating the sum (coupling)
-            nonadiabaticity_p->rvector[ i_coor ] += HBAR *nonadiabaticity_p->rvector[ index ] *adiabatic_populations.rvector[ i ]; // WARNING: overwriting
+            nonadiabaticity_p->rvector[ i_coor ] += nonadiabatic_coupling_p->rvector[ index ] *adiabatic_populations.rvector[ i ]; // WARNING: overwriting
 
           }
 
@@ -160,7 +161,7 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
 
       // giving the right dimensions [eV]
       // OSQRT2 *( ap_p->rvector[ i_coor ] ) is the zero-point momentum for mode i_coor
-      nonadiabaticity_p->rvector[ i_coor ] *= TWO *sqrt( ONEO2 *( ( ap_p->rvector[ i_coor ] ) *( ap_p->rvector[ i_coor ] ) ) +( momenta_new.rvector[ i_coor ] ) *( momenta_new.rvector[ i_coor ] ) ) /( masses_aux_p->rvector[ i_coor ] );
+      nonadiabaticity_p->rvector[ i_coor ] *= TWO /HBAR *sqrt( ONEO2 *( ( ap_p->rvector[ i_coor ] ) *( ap_p->rvector[ i_coor ] ) ) +( momenta_new.rvector[ i_coor ] ) *( momenta_new.rvector[ i_coor ] ) ) /( masses_aux_p->rvector[ i_coor ] );
 
     }
 
