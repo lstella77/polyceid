@@ -116,7 +116,7 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
     if( masses_aux_p->rvector[ i_coor ] > EPS ){
     
       // compute forces and potentials
-      if( COMPUTE_NONADIABATIC_FORCES( constants, *state_p, *config_p, *dummy_matrix1_p, i_coor, nonadiabatic_forces ) )    info=0;
+      if( COMPUTE_NONADIABATIC_FORCES( constants, *state_p, *config_p, *dummy_matrix1_p, i_coor, nonadiabatic_forces ) ) info=0;
 
       // Strategy here is: "sum on the final states and average over the initial ones"
       // loop on the possible many-body electronic inital states
@@ -139,21 +139,21 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
             delta_E = ( dummy_rvector_p->rvector[ j ] ) -( dummy_rvector_p->rvector[ i ] );
 
             // BUGFIX: frustrated hops excluded. Is that what we want?
-	    if( fabs( delta_E ) > EPS && delta_E < ONEO2 *( momenta_new.rvector[ i_coor ] ) *( momenta_new.rvector[ i_coor ] ) /( masses_aux_p->rvector[ i_coor ] ) ){
+	    if( fabs( delta_E ) > EPS ){
 
               // BUGFIX: hbar missing?
               nonadiabatic_coupling_p->rvector[ index ] = HBAR *CMPLX_NORM( nonadiabatic_forces.matrix[ ELECTRON_MANY_INDEX( i, j ) ] ) /fabs( delta_E ); // WARNING: overwriting
 
-	    }     
+	    }
+
+	    if( adiabatic_populations.rvector[ i ] > EPS && delta_E < ONEO2 *( momenta_new.rvector[ i_coor ] ) *( momenta_new.rvector[ i_coor ] ) /( masses_aux_p->rvector[ i_coor ] ) ){
+
+              // updating the sum (coupling)
+              nonadiabaticity_p->rvector[ i_coor ] += nonadiabatic_coupling_p->rvector[ index ] *adiabatic_populations.rvector[ i ]; // WARNING: overwriting
+              
+	    }        
 
 	  }        
-
-          if( adiabatic_populations.rvector[ i ] > EPS ){
-
-            // updating the sum (coupling)
-            nonadiabaticity_p->rvector[ i_coor ] += nonadiabatic_coupling_p->rvector[ index ] *adiabatic_populations.rvector[ i ]; // WARNING: overwriting
-
-          }
 
         } /* end j loop */
 
