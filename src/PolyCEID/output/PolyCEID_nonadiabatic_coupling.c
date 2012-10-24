@@ -50,7 +50,6 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
   int             index;
   int             i, j;
   double          delta_E;
-  double          matrix_element_loc;
   rvector         adiabatic_populations;
   matrix          nonadiabatic_forces;
   rvector         momenta_new;
@@ -128,31 +127,28 @@ int compute_nonadiabaticity( constants constants, state_p state_p, config_p conf
           // The vectorised index
 	  index = i_coor *N_levels_many *N_levels_many +i *N_levels_many +j; 
 
-          if( i == j ){
+          // energy difference [adiabatic]
+          delta_E = ( dummy_rvector_p->rvector[ j ] ) -( dummy_rvector_p->rvector[ i ] );
 
-              nonadiabatic_coupling_p->rvector[ index ] = ZERO;
+          // BUGFIX: frustrated hops excluded. Is that what we want?
+	  if( fabs( delta_E ) > EPS ){
+
+            // BUGFIX: hbar missing?
+            nonadiabatic_coupling_p->rvector[ index ] = HBAR *CMPLX_NORM( nonadiabatic_forces.matrix[ ELECTRON_MANY_INDEX( i, j ) ] ) /fabs( delta_E ); // WARNING: overwriting
 
 	  }
-          else{
+	  else{
 
-            // energy difference [adiabatic]
-            delta_E = ( dummy_rvector_p->rvector[ j ] ) -( dummy_rvector_p->rvector[ i ] );
+            nonadiabatic_coupling_p->rvector[ index ] = ZERO;
 
-            // BUGFIX: frustrated hops excluded. Is that what we want?
-	    if( fabs( delta_E ) > EPS ){
+	  }        
 
-              // BUGFIX: hbar missing?
-              nonadiabatic_coupling_p->rvector[ index ] = HBAR *CMPLX_NORM( nonadiabatic_forces.matrix[ ELECTRON_MANY_INDEX( i, j ) ] ) /fabs( delta_E ); // WARNING: overwriting
+          // BUGFIX: frustrated hops not included
+	  if( adiabatic_populations.rvector[ i ] > EPS && delta_E < ONEO2 *( momenta_new.rvector[ i_coor ] ) *( momenta_new.rvector[ i_coor ] ) /( masses_aux_p->rvector[ i_coor ] ) ){
 
-	    }
-
-	    if( adiabatic_populations.rvector[ i ] > EPS && delta_E < ONEO2 *( momenta_new.rvector[ i_coor ] ) *( momenta_new.rvector[ i_coor ] ) /( masses_aux_p->rvector[ i_coor ] ) ){
-
-              // updating the sum (coupling)
-              nonadiabaticity_p->rvector[ i_coor ] += nonadiabatic_coupling_p->rvector[ index ] *adiabatic_populations.rvector[ i ]; // WARNING: overwriting
+            // updating the sum (coupling)
+            nonadiabaticity_p->rvector[ i_coor ] += nonadiabatic_coupling_p->rvector[ index ] *adiabatic_populations.rvector[ i ]; // WARNING: overwriting
               
-	    }        
-
 	  }        
 
         } /* end j loop */
