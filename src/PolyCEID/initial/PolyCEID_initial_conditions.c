@@ -270,6 +270,7 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
   matrix_p        initial_condition_atoms_p;
   /* dummies */
   double          egs;
+  double          bfactor;
   complex         trace;
   complex         dummy;
   int             i, j, k;
@@ -343,12 +344,18 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
       else{
 
         for( k=0; k<sqrt_max_rho_index; k++ ){
+
+	  bfactor = exp( -( eigenvalues.rvector[ k ] -egs )/( BOLTZMANN_K *temperature ) );
+
+	  if( bfactor > EPS ){
 	
-          dummy = CMPLX_PRODUCT( ( eigenvectors.matrix[ RHO_INDEX_AUX( i, k ) ] ), CONJ( eigenvectors.matrix[ RHO_INDEX_AUX( j, k ) ] ) );
+	    dummy = CMPLX_PRODUCT( ( eigenvectors.matrix[ RHO_INDEX_AUX( i, k ) ] ), CONJ( eigenvectors.matrix[ RHO_INDEX_AUX( j, k ) ] ) );
 
-          dummy =  CMPLX_PRODUCT( dummy, CMPLX( exp( -( eigenvalues.rvector[ k ] -egs )/( BOLTZMANN_K *temperature ) ) ) ); // WARNING: overwriting 
+            dummy =  CMPLX_PRODUCT( dummy, CMPLX( bfactor ) ); // WARNING: overwriting 
 
-          initial_condition_atoms_p->matrix[ index ] = CMPLX_SUM( initial_condition_atoms_p->matrix[ index ], dummy ); // WARNING: overwriting
+            initial_condition_atoms_p->matrix[ index ] = CMPLX_SUM( initial_condition_atoms_p->matrix[ index ], dummy ); // WARNING: overwriting
+
+	  }  
 
         } /* k loop*/
 
