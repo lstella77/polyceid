@@ -269,9 +269,9 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
   /* state */
   matrix_p        initial_condition_atoms_p;
   /* dummies */
+  rvector         bfactor;
   double          egs;
-  double          bfactor;
-  complex         trace;
+  double          pfunction;
   complex         dummy;
   int             i, j, k;
   int             index;
@@ -283,6 +283,9 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
   temperature                =  constants.temperature;
 
   initial_condition_atoms_p  = &(state_p->phonons.initial_condition_atoms);
+
+  // allocate
+  if( RVECTOR_ALLOCATE( sqrt_max_rho_index, bfactor ) ) info=1;
 
   // set to zero
   MATRIX_ZERO( *initial_condition_atoms_p );
@@ -327,6 +330,40 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
   // to seta scale of the energies and avoid overflows
   egs = eigenvalues.rvector[ 0 ];
 
+  pfunction=0.0e0;
+
+  for( k=0; k<sqrt_max_rho_index; k++ ){
+
+     bfactor.rvector[ k ] = exp( -( eigenvalues.rvector[ k ] -egs )/( BOLTZMANN_K *temperature ) );
+
+     if( bfactor.rvector[ k ] > EPS ){
+
+       pfunction += bfactor.rvector[ k ];
+
+     }
+     else{
+
+       bfactor.rvector[ k ] = 0.0e0;
+
+     }        
+
+  } /* k loop*/
+
+  // normalisation
+  for( k=0; k<sqrt_max_rho_index; k++ ){
+
+    bfactor.rvector[ k ] /= pfunction;
+
+  } /* k loop*/
+
+#ifdef __DEBUG__
+
+  fprintf( stdout, "Boltzmann's factors\n" );
+  if( RVECTOR_PRINT_PLUS( stdout, bfactor ) ) info=1; 
+  fprintf( stdout, "\n");
+
+#endif /* __DEBUG__ */
+
   /* copy the coefficients */
   for( i=0; i<sqrt_max_rho_index; i++ ){
       
@@ -345,13 +382,11 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
 
         for( k=0; k<sqrt_max_rho_index; k++ ){
 
-	  bfactor = exp( -( eigenvalues.rvector[ k ] -egs )/( BOLTZMANN_K *temperature ) );
-
-	  if( bfactor > EPS ){
+	  if( bfactor.rvector[ k ] > 0.0e0 ){
 	
 	    dummy = CMPLX_PRODUCT( ( eigenvectors.matrix[ RHO_INDEX_AUX( i, k ) ] ), CONJ( eigenvectors.matrix[ RHO_INDEX_AUX( j, k ) ] ) );
 
-            dummy =  CMPLX_PRODUCT( dummy, CMPLX( bfactor ) ); // WARNING: overwriting 
+            dummy =  CMPLX_PRODUCT( dummy, CMPLX( bfactor.rvector[ k ] ) ); // WARNING: overwriting 
 
             initial_condition_atoms_p->matrix[ index ] = CMPLX_SUM( initial_condition_atoms_p->matrix[ index ], dummy ); // WARNING: overwriting
 
@@ -365,11 +400,9 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
 
   } /* i loop */
 
-  // normalise
-  trace = MATRIX_TRACE( *initial_condition_atoms_p );
 
-  MATRIX_SCALAR_DIVISION( *initial_condition_atoms_p, trace, *initial_condition_atoms_p ); // WARNING: overwriting
-
+  // allocate
+  if( RVECTOR_FREE( bfactor ) ) info=1;
 
 #ifdef __DEBUG_PLUS__
 
