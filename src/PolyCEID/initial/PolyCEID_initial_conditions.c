@@ -336,16 +336,7 @@ int compute_initial_condition_atoms( const constants constants, state_p state_p,
 
      bfactor.rvector[ k ] = exp( -( eigenvalues.rvector[ k ] -egs )/( BOLTZMANN_K *temperature ) );
 
-     if( bfactor.rvector[ k ] > EPS ){
-
-       pfunction += bfactor.rvector[ k ];
-
-     }
-     else{
-
-       bfactor.rvector[ k ] = 0.0e0;
-
-     }        
+     pfunction += bfactor.rvector[ k ];
 
   } /* k loop*/
 
