@@ -22,7 +22,7 @@
 
   Basic install:
 
-    autoreconf -i
+    autoreconf -ivf
 
     ./configure
 
@@ -32,5 +32,5 @@
 
   Few examples can be found in examples.
 
-  Better support will be included asap
+  Better support will be included ASAP.
 
