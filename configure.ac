@@ -23,6 +23,7 @@ AC_INIT([PolyCEID],[0.1],[lorenzo DOT stella77 AT gmail DOT com])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_PROG_AR
 
 AC_ARG_ENABLE([check-symmetries],AC_HELP_STRING([--enable-check-symmetries],[check the symmetries]))
 if test "${enable_check_symmetries}" == ""; then
